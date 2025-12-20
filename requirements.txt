@@ -1,0 +1,7 @@
+kaggle
+pandas
+numpy
+pydicom
+torch
+tqdm
+opencv-python

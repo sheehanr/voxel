@@ -3,3 +3,6 @@ data/
 
 # python
 venv/
+
+# OS
+.DS_Store

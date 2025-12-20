@@ -5,3 +5,5 @@ pydicom
 torch
 tqdm
 opencv-python
+torchvision
+coremltools

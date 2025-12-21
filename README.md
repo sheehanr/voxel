@@ -69,9 +69,12 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 ## Requirements (Placeholders)
 
+* **iOS Development:** Swift X.X.X, Xcode XX.X
+* **Model Engineering:** Python X.X, *see `requirements.txt` for list of Python libraries*
+  * *Note: Discrete NVIDIA GPU is recommended to improve training times.*
 * **Device and Software Version:** Apple iPhone XX or higher running iOS XX.X.X or higher. 
-  * *Apple iPhone XX or higher is recommended to use AI features.*
-  * *Apple iPhone XX or higher is required for biometric authentication.*
+  * *Note: Apple iPhone XX or higher is recommended to use AI features due to RAM limitations.*
+  * *Note: Apple iPhone XX or higher is required for biometric authentication.*
 
 ---
 

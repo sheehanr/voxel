@@ -77,4 +77,12 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 ## License
 
+Distributed under the MIT License. See `LICENSE.txt` for more information. 
 
+--- 
+
+## Contact
+
+Sheehan Rahman -- [Email](mailto:sheehanrahman06@gmail.com) -- [LinkedIn Profile](https://linkedin.com/in/sheehan-rahman)
+
+[Project Link](https://github.com/sheehanr/voxel)

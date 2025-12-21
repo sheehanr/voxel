@@ -38,7 +38,7 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
   * **Comparison Tool:** Engineered a feature allowing for side-by-side observation of imaging studies to view changes over time.
   * **Linked Scrolling *(optional)*:** Implemented a feature enabling CT scans with multiple planes to be viewed and navigated concurrently.
   * **Longitudinal Image Registration *(optional)*:** Leveraged AI to automatically and intelligently highlight changes in medical scans over time.
-* **AI-Powered Radiology Assistant:** Created *VoxeLLM,* an AI-powered assistant that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
+* **Radiology Assistant:** Created *VoxeLLM,* an AI-powered assistant that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
   * **Report-to-Image Linking:** Harnessed AI to highlight and link to locations mentioned in the radiology report (e.g. "slice 42" or "upper right lobe").
 * **HIPAA-Compliant:** Established a HIPAA-compliant architecture incorporating local Large Language Model **(LLM)** processing, on-device storage, and biometric authentication (Touch ID/Face ID) to ensure patient privacy.
 * **User Friendly UI/UX:** Designed a patient-centric **UI/UX**, emphasizing intuitive navigation and a visually engaging, responsive interface consistent with Apple design language.

@@ -53,8 +53,11 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 ## Tech Stack (Projected)
 
-* **Languages:** Python 3.12, Swift 6.2
-* 
+* **Languages:** Swift 6.2.3, Python 3.12
+* **iOS Frameworks:** SwiftUI, CoreML
+* **Python Libraries:** PyTorch, TorchVision, OpenCV, CoreMLTools, Pydicom
+* **Hardware:** NVIDIA RTX 5080 (Training)
+* **Tools:** Xcode 26.2
 
 ---
 

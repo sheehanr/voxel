@@ -1,0 +1,43 @@
+# Voxel: Radiologist in Your Pocket
+
+A patient-centric, HIPAA-compliant iOS app that allows you to view your radiology imaging along with an offline, on-device AI model to simplify radiology reports. 
+*Disclaimer: This app is intended for informational purposes only and does not provide medical advice or diagnoses. Additionally, AI can make mistakes. Always consult a qualified healthcare provider with any questions or concerns. This app is not intended for self-diagnosis or self-treatment and reliance on any information provided by the app is solely at your own risk.*
+
+---
+
+## Link and Screenshots (Placeholders)
+
+**[View Voxel on the App Store (placeholder)](https://www.apple.com/app-store/)**
+
+![Screenshot of _____ on Voxel (placeholder)](screenshots/app1.png)
+![Screenshot of _____ on Voxel (placeholder)](screenshots/app2.png)
+![Screenshot of _____ on Voxel (placeholder)](screenshots/app3.png)
+![Screenshot of _____ on Voxel (placeholder)](screenshots/app4.png)
+![Screenshot of _____ on Voxel (placeholder)](screenshots/app5.png)
+
+---
+
+## Personal Context
+
+Since my cancer diagnosis, I have undergone countless imaging studies, sparking a deep personal interest in radiology. I wanted to analyze my scans outside the doctor's office, but faced significant barriers. The images were DICOM files, which required antiquated software designed for doctors, not patients. Additionally, the reports were full of medical terminology that was impossible to decipher without a medical background.
+
+I realized there was no solution built with the patient in mind. Something that would allow patients like myself to:
+* store scans and reports in one place regardless of provider,
+* view scans and compare them side-by-side to track changes, and
+* understand radiology reports using a local LLM.
+
+Voxel is my answer: a native iOS application designed to enable patients to access their medical scans. *Securely, privately, and intuitively.*
+
+---
+
+## Key Features (Projected)
+
+* **Automatic Sorting:** Developed an automated sorting system for uploaded imaging and radiology reports, classifying them by modality and anatomical region using a fine-tuned Convolutional Neural Network **(CNN)** and Natural Language Processing **(NLP)** Transformer.
+* **Imaging Viewer:** Built a comprehensive imaging viewer capable of displaying 2D (X-Rays) and 3D (MRI, CT) imaging slices with native support for the DICOM (.dcm) file format.
+  * **Comparison Tool:** Engineered a feature allowing for side-by-side observation of imaging studies to view changes over time.
+  * **Linked Scrolling *(optional)*:** Implemented a feature enabling CT scans with multiple planes to be viewed and navigated concurrently.
+  * **Longitudinal Image Registration *(optional)*:** Leveraged AI to automatically highlight changes in medical scans taken at different times.
+* **AI Radiologist:** Created *VoxeLLM,* an AI-powered assistant that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
+  * **Report-to-Image Linking:** Harnessed AI to highlight locations mentioned in the radiology report (e.g. "slice 42" or "upper right lobe").
+* **HIPAA-Compliant:** Established a HIPAA-compliant architecture incorporating local Large Language Model **(LLM)** processing, on-device storage, and biometric authentication (Touch ID/Face ID) to ensure patient privacy.
+* **User Friendly UI/UX:** Designed a patient-centric **UI/UX**, emphasizing intuitive navigation and a visually engaging, responsive interface consistent with Apple design language.

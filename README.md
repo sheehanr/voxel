@@ -1,16 +1,17 @@
-# Voxel: Radiologist in Your Pocket
+# Voxel: Own Your Scans
 
-A patient-centric, HIPAA-compliant iOS app that allows you to view your radiology imaging along with an offline, on-device AI model to simplify radiology reports. 
+A patient-centric, HIPAA-compliant iOS app for viewing medical imaging. Features a secure, offline AI to simplify radiology reports on-device.
+
 *Disclaimer: This app is intended for informational purposes only and does not provide medical advice or diagnoses. Additionally, AI can make mistakes. Always consult a qualified healthcare provider with any questions or concerns. This app is not intended for self-diagnosis or self-treatment and reliance on any information provided by the app is solely at your own risk.*
 
 ---
 
-## Link and Screenshots (Placeholders)
+## Demo & Link (Placeholders)
 
 **[View Voxel on the App Store (placeholder)](https://www.apple.com/app-store/)**
 
-![Screenshot of _____ on Voxel (placeholder)](screenshots/app1.png)
-![Screenshot of _____ on Voxel (placeholder)](screenshots/app2.png)
+![GIF of _____ on Voxel (placeholder)](screenshots/app1.gif)
+![GIF of _____ on Voxel (placeholder)](screenshots/app2.gif)
 ![Screenshot of _____ on Voxel (placeholder)](screenshots/app3.png)
 ![Screenshot of _____ on Voxel (placeholder)](screenshots/app4.png)
 ![Screenshot of _____ on Voxel (placeholder)](screenshots/app5.png)
@@ -32,12 +33,45 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 ## Key Features (Projected)
 
-* **Automatic Sorting:** Developed an automated sorting system for uploaded imaging and radiology reports, classifying them by modality and anatomical region using a fine-tuned Convolutional Neural Network **(CNN)** and Natural Language Processing **(NLP)** Transformer.
+* **Automatic Sorting:** Developed *ScanSort,* an automated sorting system for uploaded imaging and radiology reports, classifying them by type of scan (modality) and anatomical region using a fine-tuned Convolutional Neural Network **(CNN)** and Natural Language Processing **(NLP)** Transformer.
 * **Imaging Viewer:** Built a comprehensive imaging viewer capable of displaying 2D (X-Rays) and 3D (MRI, CT) imaging slices with native support for the DICOM (.dcm) file format.
   * **Comparison Tool:** Engineered a feature allowing for side-by-side observation of imaging studies to view changes over time.
   * **Linked Scrolling *(optional)*:** Implemented a feature enabling CT scans with multiple planes to be viewed and navigated concurrently.
-  * **Longitudinal Image Registration *(optional)*:** Leveraged AI to automatically highlight changes in medical scans taken at different times.
-* **AI Radiologist:** Created *VoxeLLM,* an AI-powered assistant that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
-  * **Report-to-Image Linking:** Harnessed AI to highlight locations mentioned in the radiology report (e.g. "slice 42" or "upper right lobe").
+  * **Longitudinal Image Registration *(optional)*:** Leveraged AI to automatically and intelligently highlight changes in medical scans over time.
+* **AI-Powered Radiology Assistant:** Created *VoxeLLM,* an AI-powered assistant that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
+  * **Report-to-Image Linking:** Harnessed AI to highlight and link to locations mentioned in the radiology report (e.g. "slice 42" or "upper right lobe").
 * **HIPAA-Compliant:** Established a HIPAA-compliant architecture incorporating local Large Language Model **(LLM)** processing, on-device storage, and biometric authentication (Touch ID/Face ID) to ensure patient privacy.
 * **User Friendly UI/UX:** Designed a patient-centric **UI/UX**, emphasizing intuitive navigation and a visually engaging, responsive interface consistent with Apple design language.
+
+---
+
+## Model Engineering (Projected)
+
+*
+
+---
+
+## Tech Stack (Projected)
+
+* **Languages:** Python 3.12, Swift 6.2
+* 
+
+---
+
+## Training Data & Acknowledgements (Projected)
+
+* 
+
+---
+
+## Requirements (Placeholders)
+
+* **Device and Software Version:** Apple iPhone XX or higher running iOS XX.X.X or higher. 
+  * *Apple iPhone XX or higher is recommended to use AI features.*
+  * *Apple iPhone XX or higher is required for biometric authentication.*
+
+---
+
+## License
+
+

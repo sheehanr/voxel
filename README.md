@@ -11,9 +11,13 @@ A patient-centric, HIPAA-compliant iOS app for viewing medical imaging. Features
 **[View Voxel on the App Store (placeholder)](https://www.apple.com/app-store/)**
 
 ![GIF of _____ on Voxel (placeholder)](screenshots/app1.gif)
+
 ![GIF of _____ on Voxel (placeholder)](screenshots/app2.gif)
+
 ![Screenshot of _____ on Voxel (placeholder)](screenshots/app3.png)
+
 ![Screenshot of _____ on Voxel (placeholder)](screenshots/app4.png)
+
 ![Screenshot of _____ on Voxel (placeholder)](screenshots/app5.png)
 
 ---
@@ -53,7 +57,7 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 * **Base Model:** _____
 * **Training:** Transfer learning on XX,XXX+ imaging studies using PyTorch (accelerated by RTX 5080).
-* **Target Classes (incomplete):** Classifies the following XX specific clinical views:
+* **Target Classes *(incomplete)*:** Classifies the following XX specific clinical views:
   * **CT:** Brain, Chest
   * **MRI:** Brain, Knee, Spine
   * **X-Ray:** Chest, Elbow, Femur, Forearm, Hand, Humerus, Knee, Shoulder, Wrist
@@ -102,10 +106,5 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 Distributed under the MIT License. See `LICENSE.txt` for more information. 
 
---- 
-
-## Contact
-
-Sheehan Rahman -- [Email](mailto:sheehanrahman06@gmail.com) -- [LinkedIn Profile](https://linkedin.com/in/sheehan-rahman)
 
 [Project Link](https://github.com/sheehanr/voxel)

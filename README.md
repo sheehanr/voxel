@@ -47,7 +47,27 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 ## Model Engineering (Projected)
 
-*
+### 1. ScanSort (Automatic Sorting)
+
+**Goal:** Classify medical imaging files by modality and anatomical region with >95% accuracy, with graceful handling of unrecognized imaging.
+
+* **Base Model:** _____
+* **Training:** Transfer learning on XX,XXX+ imaging studies using PyTorch (accelerated by RTX 5080).
+* **Target Classes (incomplete):** Classifies the following XX specific clinical views:
+  * **CT:** Brain, Chest
+  * **MRI:** Brain, Knee, Spine
+  * **X-Ray:** Chest, Elbow, Femur, Forearm, Hand, Humerus, Knee, Shoulder, Wrist
+
+### 2. VoxeLLM (Radiology Assistant)
+
+**Goal:** Summarize radiology reports and be able to answer medical queries related to the report while maximizing accuracy and minimizing hallucinations. 
+
+* **Base Model:** _____
+* **Training:** _____ fine-tuning on radiology report and medical datasets.
+* **Optimization:** _____ quantization to reduce memory usage to <XGB.
+* **Deployment:** Converted to CoreML format to utilize Apple Neural Engine (ANE) for offline inference.
+
+* *See "Training Data & Acknowledgements" below to see all datasets used in training.*
 
 ---
 

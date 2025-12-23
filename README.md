@@ -56,11 +56,13 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 **Goal:** Classify medical imaging files by modality and anatomical region with >95% accuracy, with graceful handling of unrecognized imaging.
 
 * **Base Model:** _____
-* **Training:** Transfer learning on XX,XXX+ imaging studies using PyTorch (accelerated by RTX 5080).
-* **Target Classes *(incomplete)*:** Classifies the following XX specific clinical views:
+* **Training:** Transfer learning on 70,000+ imaging studies using PyTorch.
+  * *Achieved a X% reduction in training time by using RTX 5080 (compared to _____).* 
+* **Data Balancing:** Undersampled large datasets at 5,000 images and applied weighted loss techniques to smaller datasets.
+* **Target Classes *(incomplete)*:** Classifies the following 15 specific clinical views:
   * **CT:** Brain, Chest
   * **MRI:** Brain, Knee, Spine
-  * **X-Ray:** Chest, Elbow, Femur, Forearm, Hand, Humerus, Knee, Shoulder, Wrist
+  * **X-Ray:** Chest, Elbow, Femur, Finger, Forearm, Hand, Heel, Humerus, Knee, Shoulder, Wrist
 
 ### 2. VoxeLLM (Radiology Assistant)
 
@@ -68,7 +70,8 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 * **Base Model:** _____
 * **Training:** _____ fine-tuning on radiology report and medical datasets.
-* **Optimization:** _____ quantization to reduce memory usage to <XGB.
+  * *Achieved a X% reduction in training time by using RTX 5080 (compared to _____).* 
+* **Optimization:** _____ quantization to reduce memory usage by X% (from XGB to <XGB).
 * **Deployment:** Converted to CoreML format to utilize Apple Neural Engine (ANE) for offline inference.
 
 * *See "Training Data & Acknowledgements" below to see all datasets used in training.*

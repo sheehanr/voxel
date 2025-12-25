@@ -2,11 +2,10 @@ import os
 
 UNSORTED_PATH = "../../data/unsorted/unifesp/train"
 SORTED_PATH = "../../data/unsorted/unifesp/sorted_train"
-
 CSV_PATH = "../../data/unsorted/unifesp/train.csv"
 TARGET_DIMENSIONS = (256, 256)
 
-# created directory names will match dictionary values
+# desired directory names
 ANATOMICAL_REGIONS = {
     0: "xr_abdomen_unifesp",
     1: "xr_ankle_unifesp",
@@ -35,7 +34,7 @@ ANATOMICAL_REGIONS = {
 
 def create_directories():
     os.makedirs(SORTED_PATH, exist_ok=True)
-    for region in ANATOMICAL_REGIONS.values():  # creates a subdirectory in SORTED_PATH for each anatomical region
+    for region in ANATOMICAL_REGIONS.values():  # subdir for each body part
         os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)
 
 

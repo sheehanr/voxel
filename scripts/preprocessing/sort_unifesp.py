@@ -32,7 +32,16 @@ ANATOMICAL_REGIONS = {
     21: "xr_wrist_unifesp",
 }
 
-# create needed directories if they do not already exist
-os.makedirs(SORTED_PATH, exist_ok=True)
-for region in ANATOMICAL_REGIONS.values():  # creates a subdirectory in SORTED_PATH for each anatomical region
-    os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)
+
+def create_directories():
+    os.makedirs(SORTED_PATH, exist_ok=True)
+    for region in ANATOMICAL_REGIONS.values():  # creates a subdirectory in SORTED_PATH for each anatomical region
+        os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)
+
+
+def main():
+    create_directories()
+
+
+if __name__ == "__main__":
+    main()

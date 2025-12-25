@@ -4,7 +4,7 @@ UNSORTED_PATH = "../../data/unsorted/unifesp/train"
 SORTED_PATH = "../../data/unsorted/unifesp/sorted_train"
 
 CSV_PATH = "../../data/unsorted/unifesp/train.csv"
-TARGET_SIZE = (256, 256)
+TARGET_DIMENSIONS = (256, 256)
 
 ANATOMICAL_REGIONS = {
     0: "Abdomen",
@@ -31,6 +31,7 @@ ANATOMICAL_REGIONS = {
     21: "Wrist",
 }
 
+# create needed directories if they do not already exist
 os.makedirs(SORTED_PATH, exist_ok=True)
-for region in ANATOMICAL_REGIONS.values():
+for region in ANATOMICAL_REGIONS.values():  # creates a subdirectory in SORTED_PATH for each anatomical region
     os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)

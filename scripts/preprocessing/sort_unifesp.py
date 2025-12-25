@@ -31,13 +31,13 @@ ANATOMICAL_REGIONS = {
     21: "xr_wrist_unifesp",
 }
 
-
+# creates needed dirs if not created
 def create_directories():
     os.makedirs(SORTED_PATH, exist_ok=True)
     for region in ANATOMICAL_REGIONS.values():  # subdir for each body part
         os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)
 
-
+# maps each image id from train.csv to full path
 def create_image_map():
     image_map = {}
     for root, dirs, files in os.walk(UNSORTED_PATH):

@@ -103,8 +103,9 @@ To train the model for ScanSort, all imaging study datasets were sourced from [K
 * **[CT Medical Images](https://www.kaggle.com/datasets/kmader/siim-medical-images)** by K Scott Mader
   * Used for: CT Chest
   * Original Source: The Cancer Imaging Archive (TCIA)
-  * Data Citation: Albertina, B., Watson, M., Holback, C., Jarosz, R., Kirk, S., Lee, Y., … Lemmerman, J. (2016). Radiology Data from The Cancer Genome Atlas Lung Adenocarcinoma [TCGA-LUAD] collection. The Cancer Imaging Archive. http://doi.org/10.7937/K9/TCIA.2016.JGNIHEP5
-  * TCIA Citation: Clark K, Vendt B, Smith K, Freymann J, Kirby J, Koppel P, Moore S, Phillips S, Maffitt D, Pringle M, Tarbox L, Prior F. The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository, Journal of Digital Imaging, Volume 26, Number 6, December, 2013, pp 1045-1057. (paper)
+  * Citations: 
+    1. Albertina, B., Watson, M., Holback, C., Jarosz, R., Kirk, S., Lee, Y., … Lemmerman, J. (2016). Radiology Data from The Cancer Genome Atlas Lung Adenocarcinoma [TCGA-LUAD] collection. The Cancer Imaging Archive. http://doi.org/10.7937/K9/TCIA.2016.JGNIHEP5
+    2. Clark K, Vendt B, Smith K, Freymann J, Kirby J, Koppel P, Moore S, Phillips S, Maffitt D, Pringle M, Tarbox L, Prior F. The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository, Journal of Digital Imaging, Volume 26, Number 6, December, 2013, pp 1045-1057. (paper)
   * License: [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 
 * **[Chest CT-Scan images Dataset](https://www.kaggle.com/datasets/mohamedhanyyy/chest-ctscan-images)** by Mohamed Hany
@@ -114,8 +115,8 @@ To train the model for ScanSort, all imaging study datasets were sourced from [K
   
 * **[IQ-OTH/NCCD - Lung Cancer Dataset](https://www.kaggle.com/datasets/adityamahimkar/iqothnccd-lung-cancer-dataset)** by Aditya Mahimkar
   * Used for: CT Chest
-  * Original Source: Mendeley Data from Iraq-Oncology Teaching Hospital/National Center for Cancer Diseases (IQ-OTH/NCCD)
-  * Citation: Alyasriy, Hamdalla; AL-Huseiny, Muayed (2021), “The IQ-OTHNCCD lung cancer dataset”, Mendeley Data, V2, doi: 10.17632/bhmdr45bh2.2
+  * Original Source: Mendeley Data
+  * Citation: Alyasriy, Hamdalla; AL-Huseiny, Muayed (2021), “The IQ-OTHNCCD lung cancer dataset”, Mendeley Data, V2, doi: [10.17632/bhmdr45bh2.2](https://data.mendeley.com/datasets/bhmdr45bh2/2)
   * License: Copyright Original Authors
 
 * **[Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)** by Masoud Nickparvar
@@ -165,6 +166,12 @@ To train the model for ScanSort, all imaging study datasets were sourced from [K
 * **[Knee X-ray 5 Classes](https://www.kaggle.com/datasets/ahmedadel002581/knee-x-ray-5-classes)** by Ahmed Adel Sayed
   * Used for: X-Ray Knee
   * Original Source: Unknown
+  * License: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+
+* **[Multi-Class Knee Osteoporosis X-Ray Dataset](https://www.kaggle.com/datasets/mohamedgobara/multi-class-knee-osteoporosis-x-ray-dataset)** by Mohamed Gobara
+  * Used for: X-Ray Knee
+  * Original Source: Knee Osteoporosis Diagnosis Based on Deep Learning
+  * Citation: Sarhan, A.M., Gobara, M., Yasser, S. et al. Knee Osteoporosis Diagnosis Based on Deep Learning. Int J Comput Intell Syst 17, 241 (2024). https://doi.org/10.1007/s44196-024-00615-4
   * License: [Apache 2.0](https://www.apache.org/licenses/LICENSE-2.0)
 
 * **[Heel Dataset](https://www.kaggle.com/datasets/osamahtaher/heel-dataset)** by Osamah Taher

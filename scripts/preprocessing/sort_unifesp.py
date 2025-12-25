@@ -38,6 +38,17 @@ def create_directories():
         os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)
 
 
+def create_image_map():
+    image_map = {}
+    for root, dirs, files in os.walk(UNSORTED_PATH):
+        for file in files:
+            if file.endswith(".dcm"):
+                image_id = file.split("-")[0]
+                image_map[image_id] = os.path.join(root, file)
+
+    return image_map
+
+
 def main():
     create_directories()
 

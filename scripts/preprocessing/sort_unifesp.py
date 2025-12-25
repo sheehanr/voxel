@@ -1,3 +1,5 @@
+import os
+
 UNSORTED_PATH = "../../data/unsorted/unifesp/train"
 SORTED_PATH = "../../data/unsorted/unifesp/sorted_train"
 
@@ -28,3 +30,7 @@ ANATOMICAL_REGIONS = {
     20: "Thoracic Spine",
     21: "Wrist",
 }
+
+os.makedirs(SORTED_PATH, exist_ok=True)
+for region in ANATOMICAL_REGIONS.values():
+    os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)

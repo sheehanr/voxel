@@ -1,8 +1,12 @@
 import os
 
-UNSORTED_PATH = "../../data/unsorted/unifesp/train"
-SORTED_PATH = "../../data/unsorted/unifesp/sorted_train"
-CSV_PATH = "../../data/unsorted/unifesp/train.csv"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
+
+UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/train")
+SORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/sorted_train")
+CSV_FILE = os.path.join(DATA_DIR, "unsorted/unifesp/train.csv")
+
 TARGET_DIMENSIONS = (256, 256)
 
 # desired directory names
@@ -31,16 +35,18 @@ ANATOMICAL_REGIONS = {
     21: "xr_wrist_unifesp",
 }
 
+
 # creates needed dirs if not created
 def create_directories():
-    os.makedirs(SORTED_PATH, exist_ok=True)
+    os.makedirs(SORTED_DIR, exist_ok=True)
     for region in ANATOMICAL_REGIONS.values():  # subdir for each body part
-        os.makedirs(os.path.join(SORTED_PATH, region), exist_ok=True)
+        os.makedirs(os.path.join(SORTED_DIR, region), exist_ok=True)
+
 
 # maps each image id from train.csv to full path
 def create_image_map():
     image_map = {}
-    for root, dirs, files in os.walk(UNSORTED_PATH):
+    for root, dirs, files in os.walk(UNSORTED_DIR):
         for file in files:
             if file.endswith(".dcm"):
                 image_id = file.split("-")[0]

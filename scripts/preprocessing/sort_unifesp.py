@@ -1,11 +1,16 @@
 import os
 
+import pandas as pd
+from converters import dcm_to_png
+from tqdm import tqdm
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 
 # note that the test folder is not included because it is unlabeled
 UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/train")
 SORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/sorted_train")
+MULTI_DIR = os.path.join(SORTED_DIR, "multi_target")
 CSV_FILE = os.path.join(DATA_DIR, "unsorted/unifesp/train.csv")
 
 
@@ -41,6 +46,7 @@ ANATOMICAL_REGIONS = {
 # creates needed dirs if not created
 def create_dirs():
     os.makedirs(SORTED_DIR, exist_ok=True)
+    os.makedirs(MULTI_DIR, exist_ok=True)
     for region in ANATOMICAL_REGIONS.values():  # subdir for each body part
         os.makedirs(os.path.join(SORTED_DIR, region), exist_ok=True)
 
@@ -57,13 +63,39 @@ def create_img_map():
     return img_map
 
 
-    return image_map
+# move images to named folders
+def sort_imgs(img_map):
+    csv_df = pd.read_csv(CSV_FILE)
+    for index, row_data in tqdm(csv_df.iterrows(), total=len(csv_df)):
+        # verify file existence and get path
+        img_id = row_data["SOPInstanceUID"]
+        short_id = img_id[26:]  # all files have same prefix
+        if img_id not in img_map:
+            continue
+        img_path = img_map[img_id]
+
+        # convert and verify proper image
+        png_img = dcm_to_png(img_path, TARGET_DIMENSIONS)
+        if png_img is None:
+            continue
+
+        # save image based on number of targets
+        target_str = str(row_data["Target"]).strip()
+        targets = target_str.split(" ")
+        if len(targets) > 1:  # multiple anatomical regions
+            save_path = os.path.join(MULTI_DIR, f"{'_'.join(targets)}_{short_id}.png")
+            png_img.save(save_path)
+        else:
+            target = int(targets[0])
+            save_dir = ANATOMICAL_REGIONS[target]
+            save_path = os.path.join(SORTED_DIR, save_dir, f"{short_id}.png")
+            png_img.save(save_path)
 
 
 def main():
     create_dirs()
     img_map = create_img_map()
-    print(len(img_map))  # expected: 1738
+    sort_imgs(img_map)
 
 
 if __name__ == "__main__":

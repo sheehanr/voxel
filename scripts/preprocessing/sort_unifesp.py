@@ -45,7 +45,7 @@ def create_dirs():
         os.makedirs(os.path.join(SORTED_DIR, region), exist_ok=True)
 
 
-# maps each image id from train.csv to full path
+# maps each image id to its full path
 def create_img_map():
     img_map = {}
     for root, dirs, files in os.walk(UNSORTED_DIR):

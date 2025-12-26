@@ -1,9 +1,5 @@
-kaggle
-pandas
 numpy
+pandas
+pillow
 pydicom
-torch
 tqdm
-opencv-python
-torchvision
-coremltools

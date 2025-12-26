@@ -3,6 +3,7 @@ data/
 
 # python
 venv/
+__pycache__
 
 # OS
 .DS_Store

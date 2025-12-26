@@ -57,6 +57,8 @@ def create_image_map():
 
 def main():
     create_directories()
+    image_map = create_image_map()
+    print(len(image_map))
 
 
 if __name__ == "__main__":

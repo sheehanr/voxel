@@ -7,6 +7,8 @@ UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/train")
 SORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/sorted_train")
 CSV_FILE = os.path.join(DATA_DIR, "unsorted/unifesp/train.csv")
 
+# note that the test folder is not included because it is unlabeled
+
 TARGET_DIMENSIONS = (256, 256)
 
 # desired directory names
@@ -58,7 +60,7 @@ def create_image_map():
 def main():
     create_directories()
     image_map = create_image_map()
-    print(len(image_map))
+    print(len(image_map))  # expected: 1738
 
 
 if __name__ == "__main__":

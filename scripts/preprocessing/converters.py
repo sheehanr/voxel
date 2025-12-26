@@ -3,8 +3,8 @@ import pydicom
 from PIL import Image
 
 
-# normalizes DICOM then converts to PNG
-def dcm_to_png(dcm_path):
+# normalizes DICOM then converts to PNG in target size
+def dcm_to_png(dcm_path, target_size=(256, 256)):
     dcm = pydicom.dcmread(dcm_path)
 
     original_pixels = dcm.pixel_array.astype(float)  # convert int to float
@@ -13,4 +13,6 @@ def dcm_to_png(dcm_path):
     normalized_pixels = (normalized_pixels * 255).astype(np.uint8)  # range is 0 to 255
 
     png = Image.fromarray(normalized_pixels)
+    png = png.resize(target_size)
+
     return png

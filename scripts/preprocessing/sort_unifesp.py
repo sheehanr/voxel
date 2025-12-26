@@ -3,11 +3,11 @@ import os
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 
+# note that the test folder is not included because it is unlabeled
 UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/train")
 SORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/sorted_train")
 CSV_FILE = os.path.join(DATA_DIR, "unsorted/unifesp/train.csv")
 
-# note that the test folder is not included because it is unlabeled
 
 TARGET_DIMENSIONS = (256, 256)
 

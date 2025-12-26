@@ -11,7 +11,7 @@ CSV_FILE = os.path.join(DATA_DIR, "unsorted/unifesp/train.csv")
 
 TARGET_DIMENSIONS = (256, 256)
 
-# desired directory names
+# desired dir names
 ANATOMICAL_REGIONS = {
     0: "xr_abdomen_unifesp",
     1: "xr_ankle_unifesp",
@@ -39,28 +39,31 @@ ANATOMICAL_REGIONS = {
 
 
 # creates needed dirs if not created
-def create_directories():
+def create_dirs():
     os.makedirs(SORTED_DIR, exist_ok=True)
     for region in ANATOMICAL_REGIONS.values():  # subdir for each body part
         os.makedirs(os.path.join(SORTED_DIR, region), exist_ok=True)
 
 
 # maps each image id from train.csv to full path
-def create_image_map():
-    image_map = {}
+def create_img_map():
+    img_map = {}
     for root, dirs, files in os.walk(UNSORTED_DIR):
         for file in files:
             if file.endswith(".dcm"):
-                image_id = file.split("-")[0]
-                image_map[image_id] = os.path.join(root, file)
+                img_id = file.split("-")[0]
+                img_map[img_id] = os.path.join(root, file)
+
+    return img_map
+
 
     return image_map
 
 
 def main():
-    create_directories()
-    image_map = create_image_map()
-    print(len(image_map))  # expected: 1738
+    create_dirs()
+    img_map = create_img_map()
+    print(len(img_map))  # expected: 1738
 
 
 if __name__ == "__main__":

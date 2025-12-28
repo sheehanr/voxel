@@ -16,3 +16,11 @@ TARGET_DIMENSIONS = (256, 256)
 def create_dirs():
     os.makedirs(TRAIN_DIR, exist_ok=True)
     os.makedirs(TEST_DIR, exist_ok=True)
+
+
+# loads text files into a list
+def load_text_file(path):
+    with open(path, "r") as f:
+        file_contents = [line.strip() for line in f.readlines()]
+
+    return file_contents

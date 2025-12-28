@@ -13,7 +13,6 @@ SORTED_DIR = os.path.join(DATA_DIR, "unsorted/unifesp/sorted_train")
 MULTI_DIR = os.path.join(SORTED_DIR, "multi_target")
 CSV_FILE = os.path.join(DATA_DIR, "unsorted/unifesp/train.csv")
 
-
 TARGET_DIMENSIONS = (256, 256)
 
 # desired dir names

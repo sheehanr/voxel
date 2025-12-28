@@ -42,7 +42,7 @@ ANATOMICAL_REGIONS = {
 }
 
 
-# creates needed dirs if not created
+# create needed dirs if not already created
 def create_dirs():
     os.makedirs(SORTED_DIR, exist_ok=True)
     os.makedirs(MULTI_DIR, exist_ok=True)
@@ -50,7 +50,7 @@ def create_dirs():
         os.makedirs(os.path.join(SORTED_DIR, region), exist_ok=True)
 
 
-# maps each image id to its full path
+# map each image id to its full path
 def create_img_map():
     img_map = {}
     for root, dirs, files in os.walk(UNSORTED_DIR):

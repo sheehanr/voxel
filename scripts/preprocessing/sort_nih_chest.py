@@ -15,7 +15,7 @@ TEST_SAMPLE_SIZE = 500
 TARGET_DIMENSIONS = (256, 256)
 
 
-# creates needed dirs if not created
+# create needed dirs if not already created
 def create_dirs():
     os.makedirs(TRAIN_DIR, exist_ok=True)
     os.makedirs(TEST_DIR, exist_ok=True)
@@ -29,7 +29,7 @@ def load_text_file(path):
     return file_contents
 
 
-# selects files randomly from list
+# select files randomly from list
 def undersample(file_contents, sample_size):
     return random.sample(file_contents, sample_size)
 

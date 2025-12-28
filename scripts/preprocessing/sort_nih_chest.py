@@ -37,6 +37,8 @@ def undersample(file_contents, sample_size):
 def main():
     random.seed(42)  # ensure same files are selected on each run
     create_dirs()
+    selected_train = undersample(load_text_file(TRAIN_FILE), TRAIN_SAMPLE_SIZE)
+    selected_test = undersample(load_text_file(TEST_FILE), TEST_SAMPLE_SIZE)
 
 
 if __name__ == "__main__":

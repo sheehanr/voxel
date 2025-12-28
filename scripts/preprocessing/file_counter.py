@@ -12,15 +12,9 @@ def print_directory_stats(path):
 
     for item in sorted(os.listdir(path)):
         item_path = os.path.join(path, item)
-
+        
         if os.path.isdir(item_path):
-            count = len(
-                [
-                    f
-                    for f in os.listdir(item_path)
-                    if os.path.isfile(os.path.join(item_path, f))
-                ]
-            )
+            count = len([f for f in os.listdir(item_path) if os.path.isfile(os.path.join(item_path, f))])
             subdir_counts[item] = count
             total_files += count
         elif os.path.isfile(item_path):

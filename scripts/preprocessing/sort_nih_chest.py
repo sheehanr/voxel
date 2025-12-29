@@ -40,28 +40,28 @@ def target_directories():
     return TRAIN_DIR, TEST_DIR
 
 
-# loads text files into a list
-def load_text_file(path):
-    with open(path, "r") as f:
-        file_contents = [line.strip() for line in f.readlines()]
+# load file names from text file into a list
+def load_text_file(txt_path):
+    with open(txt_path, "r") as f:
+        filenames = [line.strip() for line in f.readlines()]
 
-    return file_contents
+    return filenames
 
 
 # select files randomly from list
-def undersample(file_contents, sample_size):
-    return random.sample(file_contents, sample_size)
+def undersample(filenames, sample_size):
+    return random.sample(filenames, sample_size)
 
 
-# sort selected images into correct folders
-def sort_imgs(file_contents, destination):
-    for file in tqdm(file_contents):
-        img_path = os.path.join(UNSORTED_DIR, file)
-        if not os.path.exists(img_path):
+# sort selected files into correct folders
+def sort_imgs(filenames, destination):
+    for filename in tqdm(filenames):
+        filepath = os.path.join(UNSORTED_DIR, filename)
+        if not os.path.exists(filepath):
             continue
 
-        img = standardize_image(img_path, TARGET_DIMENSIONS)
-        save_path = os.path.join(destination, file)
+        img = standardize_image(filepath, TARGET_DIMENSIONS)
+        save_path = os.path.join(destination, filename)
         img.save(save_path)
 
 

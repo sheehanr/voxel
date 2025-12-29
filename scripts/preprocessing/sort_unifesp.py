@@ -42,8 +42,8 @@ ANATOMICAL_REGIONS = {
 }
 
 
-# create needed dirs if not already created
-def create_dirs():
+# create needed directories if needed
+def setup_directories():
     os.makedirs(SORTED_DIR, exist_ok=True)
     os.makedirs(MULTI_DIR, exist_ok=True)
     for region in ANATOMICAL_REGIONS.values():  # subdir for each body part
@@ -71,10 +71,10 @@ def sort_imgs(img_map):
         short_id = img_id[26:]  # all files have same prefix
         if img_id not in img_map:
             continue
-        img_path = img_map[img_id]
+        filepath = img_map[img_id]
 
         # convert and verify proper image
-        png_img = dcm_to_png(img_path, TARGET_DIMENSIONS)
+        png_img = dcm_to_png(filepath, TARGET_DIMENSIONS)
         if png_img is None:
             continue
 
@@ -92,7 +92,7 @@ def sort_imgs(img_map):
 
 
 def main():
-    create_dirs()
+    setup_directories()
     img_map = create_img_map()
     sort_imgs(img_map)
 

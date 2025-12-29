@@ -4,8 +4,8 @@ from PIL import Image
 
 
 # convert to grayscale and resize
-def standardize_image(path, target_size=(256, 256)):
-    img = Image.open(path).convert("L")
+def standardize_image(png_path, target_size=(256, 256)):
+    img = Image.open(png_path).convert("L")
     img = img.resize(target_size)
 
     return img

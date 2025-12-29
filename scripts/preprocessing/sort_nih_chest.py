@@ -67,7 +67,7 @@ def sort_imgs(file_contents, destination):
 
 def main():
     random.seed(42)  # ensure same files are selected on each run
-    target_train_dir, target_test_dir = create_dirs()
+    target_train_dir, target_test_dir = target_directories()
 
     selected_train = undersample(load_text_file(TRAIN_FILE), TRAIN_SAMPLE_SIZE)
     selected_test = undersample(load_text_file(TEST_FILE), TEST_SAMPLE_SIZE)

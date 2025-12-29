@@ -3,7 +3,15 @@ import pydicom
 from PIL import Image
 
 
-# normalize DICOM and convert to PNG in target size
+# convert to grayscale and resize
+def standardize_image(path, target_size=(256, 256)):
+    img = Image.open(path).convert("L")
+    img = img.resize(target_size)
+
+    return img
+
+
+# normalize DICOM and convert to PNG
 def dcm_to_png(dcm_path, target_size=(256, 256)):
     dcm = pydicom.dcmread(dcm_path)
     original_pixels = dcm.pixel_array.astype(float)  # convert int to float
@@ -21,7 +29,7 @@ def dcm_to_png(dcm_path, target_size=(256, 256)):
     normalized_pixels = normalized_pixels / np.max(normalized_pixels)  # range is 0 to 1
     normalized_pixels = (normalized_pixels * 255).astype(np.uint8)  # range is 0 to 255
 
-    png = Image.fromarray(normalized_pixels)
+    png = Image.fromarray(normalized_pixels, mode="L")
     png = png.resize(target_size)
 
     return png

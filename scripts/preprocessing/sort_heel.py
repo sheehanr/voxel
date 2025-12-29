@@ -19,7 +19,7 @@ TARGET_DIMENSIONS = (256, 256)
 
 
 # return paths of target directories
-def target_directories():
+def setup_directories():
     os.makedirs(TRAIN_DIR, exist_ok=True)
     os.makedirs(TEST_DIR, exist_ok=True)
 
@@ -32,6 +32,19 @@ def target_directories():
         return BACKUP_TRAIN_DIR, BACKUP_TEST_DIR
 
     return TRAIN_DIR, TEST_DIR
+
+
+# return list of all image paths
+def list_filepaths(start_dir):
+    all_filepaths = []
+    for subdir in ["heelspur", "normal", "severe"]:
+        subdir_path = os.path.join(UNSORTED_DIR, subdir)
+        for filename in os.listdir(subdir_path):
+            if filename.startswith("."):
+                continue
+            all_filepaths.append(os.path.join(subdir_path, filename))
+
+    return all_filepaths
 
 
 def main():

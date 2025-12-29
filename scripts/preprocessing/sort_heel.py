@@ -32,3 +32,11 @@ def target_directories():
         return BACKUP_TRAIN_DIR, BACKUP_TEST_DIR
 
     return TRAIN_DIR, TEST_DIR
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()

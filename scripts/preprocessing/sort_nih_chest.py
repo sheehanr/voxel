@@ -1,6 +1,9 @@
 import os
 import random
 
+from converters import standardize_image
+from tqdm import tqdm
+
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 
@@ -34,11 +37,25 @@ def undersample(file_contents, sample_size):
     return random.sample(file_contents, sample_size)
 
 
+# sort selected images into correct folders
+def sort_imgs(file_contents, destination):
+    for file in tqdm(file_contents):
+        img_path = os.path.join(UNSORTED_DIR, file)
+        if not os.path.exists(img_path):
+            continue
+
+        img = standardize_image(img_path, TARGET_DIMENSIONS)
+        save_path = os.path.join(destination, file)
+        img.save(save_path)
+
+
 def main():
     random.seed(42)  # ensure same files are selected on each run
     create_dirs()
     selected_train = undersample(load_text_file(TRAIN_FILE), TRAIN_SAMPLE_SIZE)
     selected_test = undersample(load_text_file(TEST_FILE), TEST_SAMPLE_SIZE)
+    sort_imgs(selected_train, TRAIN_DIR)
+    sort_imgs(selected_test, TEST_DIR)
 
 
 if __name__ == "__main__":

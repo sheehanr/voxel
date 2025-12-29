@@ -7,31 +7,31 @@ UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/heel_dataset")
 
 # pytorch class directories
 TRAIN_DIR = os.path.join(DATA_DIR, "train/xr_heel")
-TEST_DIR = os.path.join(DATA_DIR, "test/xr_heel")
+VAL_DIR = os.path.join(DATA_DIR, "val/xr_heel")
 
 # in case class directories are not empty
 BACKUP_TRAIN_DIR = os.path.join(DATA_DIR, "unsorted/heel_dataset/sorted_train")
-BACKUP_TEST_DIR = os.path.join(DATA_DIR, "unsorted/heel_dataset/sorted_test")
+BACKUP_VAL_DIR = os.path.join(DATA_DIR, "unsorted/heel_dataset/sorted_val")
 
 TRAIN_SAMPLE_PERCENT = 0.9
-TEST_SAMPLE_PERCENT = 0.1
+VAL_SAMPLE_PERCENT = 0.1
 TARGET_DIMENSIONS = (256, 256)
 
 
 # return paths of target directories
 def setup_directories():
     os.makedirs(TRAIN_DIR, exist_ok=True)
-    os.makedirs(TEST_DIR, exist_ok=True)
+    os.makedirs(VAL_DIR, exist_ok=True)
 
     # create backups if needed
-    if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(TEST_DIR)) > 0:
-        print("ERROR: Primary train and/or test directory not empty, files will be stored in backup directories")
+    if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(VAL_DIR)) > 0:
+        print("ERROR: Primary train and/or val directory not empty, files will be stored in backup directories")
         os.makedirs(BACKUP_TRAIN_DIR, exist_ok=True)
-        os.makedirs(BACKUP_TEST_DIR, exist_ok=True)
+        os.makedirs(BACKUP_VAL_DIR, exist_ok=True)
 
-        return BACKUP_TRAIN_DIR, BACKUP_TEST_DIR
+        return BACKUP_TRAIN_DIR, BACKUP_VAL_DIR
 
-    return TRAIN_DIR, TEST_DIR
+    return TRAIN_DIR, VAL_DIR
 
 
 # return list of all image paths

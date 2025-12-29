@@ -9,35 +9,35 @@ DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 
 UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/images")
 TRAIN_FILE = os.path.join(DATA_DIR, "unsorted/nih_chest/train_val_list.txt")
-TEST_FILE = os.path.join(DATA_DIR, "unsorted/nih_chest/test_list.txt")
+VAL_FILE = os.path.join(DATA_DIR, "unsorted/nih_chest/test_list.txt")
 
 # pytorch class directories
 TRAIN_DIR = os.path.join(DATA_DIR, "train/xr_chest")
-TEST_DIR = os.path.join(DATA_DIR, "test/xr_chest")
+VAL_DIR = os.path.join(DATA_DIR, "val/xr_chest")
 
 # in case class directories are not empty
 BACKUP_TRAIN_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/sorted_train")
-BACKUP_TEST_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/sorted_test")
+BACKUP_VAL_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/sorted_val")
 
 TRAIN_SAMPLE_SIZE = 5000
-TEST_SAMPLE_SIZE = 500
+VAL_SAMPLE_SIZE = 500
 TARGET_DIMENSIONS = (256, 256)
 
 
 # return paths of target directories
 def target_directories():
     os.makedirs(TRAIN_DIR, exist_ok=True)
-    os.makedirs(TEST_DIR, exist_ok=True)
+    os.makedirs(VAL_DIR, exist_ok=True)
 
     # create backups if needed
-    if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(TEST_DIR)) > 0:
-        print("ERROR: Primary train and/or test directory not empty, files will be stored in backup directories")
+    if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(VAL_DIR)) > 0:
+        print("ERROR: Primary train and/or val directory not empty, files will be stored in backup directories")
         os.makedirs(BACKUP_TRAIN_DIR, exist_ok=True)
-        os.makedirs(BACKUP_TEST_DIR, exist_ok=True)
+        os.makedirs(BACKUP_VAL_DIR, exist_ok=True)
 
-        return BACKUP_TRAIN_DIR, BACKUP_TEST_DIR
+        return BACKUP_TRAIN_DIR, BACKUP_VAL_DIR
 
-    return TRAIN_DIR, TEST_DIR
+    return TRAIN_DIR, VAL_DIR
 
 
 # load file names from text file into a list
@@ -67,13 +67,13 @@ def sort_imgs(filenames, destination):
 
 def main():
     random.seed(42)  # ensure same files are selected on each run
-    target_train_dir, target_test_dir = target_directories()
+    target_train_dir, target_val_dir = target_directories()
 
     selected_train = undersample(load_text_file(TRAIN_FILE), TRAIN_SAMPLE_SIZE)
-    selected_test = undersample(load_text_file(TEST_FILE), TEST_SAMPLE_SIZE)
+    selected_val = undersample(load_text_file(VAL_FILE), VAL_SAMPLE_SIZE)
 
     sort_imgs(selected_train, target_train_dir)
-    sort_imgs(selected_test, target_test_dir)
+    sort_imgs(selected_val, target_val_dir)
 
 
 if __name__ == "__main__":

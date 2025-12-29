@@ -24,8 +24,8 @@ TEST_SAMPLE_SIZE = 500
 TARGET_DIMENSIONS = (256, 256)
 
 
-# create needed dirs if not already created
-def create_dirs():
+# return paths of target directories
+def target_directories():
     os.makedirs(TRAIN_DIR, exist_ok=True)
     os.makedirs(TEST_DIR, exist_ok=True)
 

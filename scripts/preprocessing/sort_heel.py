@@ -1,4 +1,8 @@
 import os
+import random
+
+from converters import standardize_image
+from tqdm import tqdm
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
@@ -54,6 +58,18 @@ def split_dataset(all_filepaths, split_ratio):
     val_filepaths = all_filepaths[train_len:]
 
     return train_filepaths, val_filepaths
+
+
+# standardize images and save to correct directory
+def process_files(filepaths, destination):
+    for filepath in tqdm(filepaths):
+        if not os.path.exists(filepath):
+            continue
+
+        img = standardize_image(filepath, TARGET_DIMENSIONS)
+        filename = os.path.basename(filepath)
+        save_path = os.path.join(destination, filename)
+        img.save(save_path)
 
 
 def main():

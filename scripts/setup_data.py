@@ -27,3 +27,11 @@ def download_datasets():
     }
 
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
+
+
+def main():
+    pass
+
+
+if __name__ == "__main__":
+    main()

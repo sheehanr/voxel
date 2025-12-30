@@ -1,4 +1,5 @@
 import os
+import zipfile
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 from tqdm import tqdm
@@ -61,6 +62,15 @@ def download_datasets():
 
         try:
             api.competition_download_files(dataset_slug, path=target_path)
+
+            # competitions do not support unzip=True
+            zip_name = dataset_slug + ".zip"
+            zip_path = os.path.join(target_path, zip_name)
+
+            if os.path.exists(zip_path):
+                with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                    zip_ref.extractall(target_path)
+                os.remove(zip_path)
         except Exception:
             print(f"\nUnable to download {dir_name}")
             print("\nTry downloading the dataset using the following command in your terminal:")

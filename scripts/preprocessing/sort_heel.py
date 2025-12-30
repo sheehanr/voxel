@@ -18,7 +18,6 @@ BACKUP_TRAIN_DIR = os.path.join(DATA_DIR, "unsorted/heel_dataset/sorted_train")
 BACKUP_VAL_DIR = os.path.join(DATA_DIR, "unsorted/heel_dataset/sorted_val")
 
 TRAIN_SAMPLE_PERCENT = 0.9
-VAL_SAMPLE_PERCENT = 0.1
 TARGET_DIMENSIONS = (256, 256)
 
 
@@ -30,6 +29,7 @@ def setup_directories():
     # create backups if needed
     if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(VAL_DIR)) > 0:
         print("ERROR: Primary train and/or val directory not empty, files will be stored in backup directories")
+
         os.makedirs(BACKUP_TRAIN_DIR, exist_ok=True)
         os.makedirs(BACKUP_VAL_DIR, exist_ok=True)
 
@@ -46,14 +46,17 @@ def list_filepaths():
         for filename in os.listdir(subdir_path):
             if filename.startswith("."):
                 continue
+
             all_filepaths.append(os.path.join(subdir_path, filename))
 
     return all_filepaths
 
 
+# randomly separate files into train and val
 def split_dataset(all_filepaths, split_ratio):
     random.shuffle(all_filepaths)
     train_len = int(len(all_filepaths) * split_ratio)
+
     train_filepaths = all_filepaths[:train_len]
     val_filepaths = all_filepaths[train_len:]
 
@@ -69,6 +72,7 @@ def process_files(filepaths, destination):
         img = standardize_image(filepath, TARGET_DIMENSIONS)
         filename = os.path.basename(filepath)
         save_path = os.path.join(destination, filename)
+
         img.save(save_path)
 
 

@@ -63,7 +63,7 @@ def create_img_map():
 
 
 # move images to named folders
-def sort_imgs(img_map):
+def process_files(img_map):
     csv_df = pd.read_csv(CSV_FILE)
     for index, row_data in tqdm(csv_df.iterrows(), total=len(csv_df)):
         # verify file existence and get path
@@ -94,7 +94,8 @@ def sort_imgs(img_map):
 def main():
     setup_directories()
     img_map = create_img_map()
-    sort_imgs(img_map)
+
+    process_files(img_map)
 
 
 if __name__ == "__main__":

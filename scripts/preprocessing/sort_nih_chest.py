@@ -25,13 +25,14 @@ TARGET_DIMENSIONS = (256, 256)
 
 
 # return paths of target directories
-def target_directories():
+def setup_directories():
     os.makedirs(TRAIN_DIR, exist_ok=True)
     os.makedirs(VAL_DIR, exist_ok=True)
 
     # create backups if needed
     if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(VAL_DIR)) > 0:
         print("ERROR: Primary train and/or val directory not empty, files will be stored in backup directories")
+
         os.makedirs(BACKUP_TRAIN_DIR, exist_ok=True)
         os.makedirs(BACKUP_VAL_DIR, exist_ok=True)
 
@@ -53,8 +54,8 @@ def undersample(filenames, sample_size):
     return random.sample(filenames, sample_size)
 
 
-# sort selected files into correct folders
-def sort_imgs(filenames, destination):
+# standardize images and save to correct directory
+def process_files(filenames, destination):
     for filename in tqdm(filenames):
         filepath = os.path.join(UNSORTED_DIR, filename)
         if not os.path.exists(filepath):
@@ -62,18 +63,19 @@ def sort_imgs(filenames, destination):
 
         img = standardize_image(filepath, TARGET_DIMENSIONS)
         save_path = os.path.join(destination, filename)
+
         img.save(save_path)
 
 
 def main():
-    random.seed(42)  # ensure same files are selected on each run
-    target_train_dir, target_val_dir = target_directories()
+    random.seed(42)
 
+    target_train_dir, target_val_dir = setup_directories()
     selected_train = undersample(load_text_file(TRAIN_FILE), TRAIN_SAMPLE_SIZE)
     selected_val = undersample(load_text_file(VAL_FILE), VAL_SAMPLE_SIZE)
 
-    sort_imgs(selected_train, target_train_dir)
-    sort_imgs(selected_val, target_val_dir)
+    process_files(selected_train, target_train_dir)
+    process_files(selected_val, target_val_dir)
 
 
 if __name__ == "__main__":

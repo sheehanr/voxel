@@ -53,11 +53,11 @@ def setup_directories():
 # map each image id to its full path
 def create_img_map():
     img_map = {}
-    for root, dirs, files in os.walk(UNSORTED_DIR):
-        for file in files:
-            if file.endswith(".dcm"):
-                img_id = file.split("-")[0]
-                img_map[img_id] = os.path.join(root, file)
+    for root, dir_names, filenames in os.walk(UNSORTED_DIR):
+        for f in filenames:
+            if f.endswith(".dcm"):
+                img_id = f.split("-")[0]
+                img_map[img_id] = os.path.join(root, f)
 
     return img_map
 

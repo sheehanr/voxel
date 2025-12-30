@@ -39,20 +39,20 @@ def download_datasets():
 
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
 
-    for dir_name, dataset_slug in tqdm(datasets.items(), desc="Downloading Datasets"):
+    for dir_name, dataset_slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
         target_path = os.path.join(DOWNLOADS_DIR, dir_name)
 
         if os.path.exists(target_path):
-            print(f"Directory {dir_name} already exists, moving to next dataset")
+            print(f"\n{dir_name} already exists, skipping...")
             continue
 
         api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
 
-    for dir_name, dataset_slug in tqdm(competitions.items(), desc="Downloading Datasets"):
+    for dir_name, dataset_slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
         target_path = os.path.join(DOWNLOADS_DIR, dir_name)
 
         if os.path.exists(target_path):
-            print(f"Directory {dir_name} already exists, moving to next dataset")
+            print(f"\n{dir_name} already exists, skipping...")
             continue
 
         try:

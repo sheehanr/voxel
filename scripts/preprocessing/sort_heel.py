@@ -47,6 +47,15 @@ def list_filepaths():
     return all_filepaths
 
 
+def split_dataset(all_filepaths, split_ratio):
+    random.shuffle(all_filepaths)
+    train_len = int(len(all_filepaths) * split_ratio)
+    train_filepaths = all_filepaths[:train_len]
+    val_filepaths = all_filepaths[train_len:]
+
+    return train_filepaths, val_filepaths
+
+
 def main():
     pass
 

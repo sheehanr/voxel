@@ -43,7 +43,7 @@ def download_datasets():
         target_path = os.path.join(DOWNLOADS_DIR, dir_name)
 
         if os.path.exists(target_path):
-            print(f"WARNING: Directory {dir_name} already exists, skipping dataset")
+            print(f"Directory {dir_name} already exists, moving to next dataset")
             continue
 
         api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
@@ -52,13 +52,13 @@ def download_datasets():
         target_path = os.path.join(DOWNLOADS_DIR, dir_name)
 
         if os.path.exists(target_path):
-            print(f"WARNING: Directory {dir_name} already exists, skipping dataset")
+            print(f"Directory {dir_name} already exists, moving to next dataset")
             continue
 
         try:
             api.competition_download_files(dataset_slug, path=target_path)
         except Exception as e:
-            print(f"ERROR: Unable to download {dir_name}: {e}")
+            print(f"{e} — Unable to download {dir_name}")
 
 
 def main():

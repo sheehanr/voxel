@@ -38,6 +38,27 @@ def download_datasets():
 
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
 
+    for dir_name, dataset_slug in datasets.items():
+        target_path = os.path.join(DOWNLOADS_DIR, dir_name)
+
+        if os.path.exists(target_path):
+            print(f"WARNING: Directory {dir_name} already exists, skipping dataset")
+            continue
+
+        api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
+
+    for dir_name, dataset_slug in competitions.items():
+        target_path = os.path.join(DOWNLOADS_DIR, dir_name)
+
+        if os.path.exists(target_path):
+            print(f"WARNING: Directory {dir_name} already exists, skipping dataset")
+            continue
+
+        try:
+            api.competition_download_files(dataset_slug, path=target_path)
+        except Exception as e:
+            print(f"ERROR: Unable to download {dir_name}: {e}")
+
 
 def main():
     pass

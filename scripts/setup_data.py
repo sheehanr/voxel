@@ -46,7 +46,11 @@ def download_datasets():
             print(f"\n{dir_name} already exists, skipping...")
             continue
 
-        api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
+        try:
+            api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
+        except Exception:
+            print(f"\nUnable to download {dir_name}")
+            print("Try downloading the dataset from your terminal or from the dataset webpage (found in README.md)")
 
     for dir_name, dataset_slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
         target_path = os.path.join(DOWNLOADS_DIR, dir_name)

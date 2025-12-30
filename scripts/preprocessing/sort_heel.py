@@ -35,7 +35,7 @@ def setup_directories():
 
 
 # return list of all image paths
-def list_filepaths(start_dir):
+def list_filepaths():
     all_filepaths = []
     for subdir in ["heelspur", "normal", "severe"]:
         subdir_path = os.path.join(UNSORTED_DIR, subdir)

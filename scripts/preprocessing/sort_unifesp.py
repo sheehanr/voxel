@@ -42,7 +42,7 @@ ANATOMICAL_REGIONS = {
 }
 
 
-# create needed directories if needed
+# create directories if needed
 def setup_directories():
     os.makedirs(SORTED_DIR, exist_ok=True)
     os.makedirs(MULTI_DIR, exist_ok=True)

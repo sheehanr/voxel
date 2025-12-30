@@ -5,6 +5,16 @@ from kaggle.api.kaggle_api_extended import KaggleApi
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../data"))
 DOWNLOADS_DIR = os.path.join(DATA_DIR, "downloads")
+TRAIN_DIR = os.path.join(DATA_DIR, "train")
+VAL_DIR = os.path.join(DATA_DIR, "val")
+
+
+# create directories if needed
+def setup_directories():
+    os.makedirs(DATA_DIR, exist_ok=True)
+    os.makedirs(DOWNLOADS_DIR, exist_ok=True)
+    os.makedirs(TRAIN_DIR, exist_ok=True)
+    os.makedirs(VAL_DIR, exist_ok=True)
 
 
 def download_datasets():

@@ -70,7 +70,7 @@ def download_datasets():
 
 
 def main():
-    print("WARNING: This script will download over XXGB of data to your computer.")
+    print("WARNING: This script will download over 90GB of data to your computer.")
     confirm = input("Continue? (y/n): ")
     if confirm.lower() != "y":
         return

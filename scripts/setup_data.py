@@ -51,7 +51,10 @@ def download_datasets():
             api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
         except Exception:
             print(f"\nUnable to download {dir_name}")
-            print("Try downloading the dataset from your terminal or from the dataset webpage (found in README.md)")
+            print("\nTry downloading the dataset using the following command in your terminal:")
+            print(f"kaggle datasets download {dataset_slug}")
+            print("\nOr, download the dataset from the dataset webpage:")
+            print(f"https://www.kaggle.com/datasets/{dataset_slug}")
 
     for dir_name, dataset_slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
         target_path = os.path.join(DOWNLOADS_DIR, dir_name)
@@ -74,9 +77,9 @@ def download_datasets():
         except Exception:
             print(f"\nUnable to download {dir_name}")
             print("\nTry downloading the dataset using the following command in your terminal:")
-            print("kaggle competitions download -c rsna-2024-lumbar-spine-degenerative-classification")
+            print(f"kaggle competitions download -c {dataset_slug}")
             print("\nOr, download the dataset from the competition webpage:")
-            print("https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/data")
+            print(f"https://www.kaggle.com/competitions/{dataset_slug}/data")
 
 
 def main():

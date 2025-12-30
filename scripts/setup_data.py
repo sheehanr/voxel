@@ -57,8 +57,12 @@ def download_datasets():
 
         try:
             api.competition_download_files(dataset_slug, path=target_path)
-        except Exception as e:
-            print(f"{e} — Unable to download {dir_name}")
+        except Exception:
+            print(f"\nUnable to download {dir_name}")
+            print("\nTry downloading the dataset using the following command in your terminal:")
+            print("kaggle competitions download -c rsna-2024-lumbar-spine-degenerative-classification")
+            print("\nOr, download the dataset from the competition webpage:")
+            print("https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification/data")
 
 
 def main():

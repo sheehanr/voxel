@@ -73,7 +73,14 @@ def process_files(filepaths, destination):
 
 
 def main():
-    pass
+    random.seed(42)
+
+    target_train_dir, target_val_dir = setup_directories()
+    all_filepaths = list_filepaths()
+    selected_train, selected_val = split_dataset(all_filepaths, TRAIN_SAMPLE_PERCENT)
+
+    process_files(selected_train, target_train_dir)
+    process_files(selected_val, target_val_dir)
 
 
 if __name__ == "__main__":

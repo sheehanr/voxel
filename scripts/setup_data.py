@@ -61,7 +61,13 @@ def download_datasets():
 
 
 def main():
-    pass
+    print("WARNING: This script will download over XXGB of data to your computer.")
+    confirm = input("Continue? (y/n): ")
+    if confirm.lower() != "y":
+        return
+
+    setup_directories()
+    download_datasets()
 
 
 if __name__ == "__main__":

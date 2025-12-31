@@ -1,7 +1,7 @@
 import os
 
 import pandas as pd
-from converters import dcm_to_png
+from image_utils import dcm_to_png
 from tqdm import tqdm
 
 # note: test folder is not included because it is unlabeled in dataset
@@ -20,7 +20,6 @@ CSV_FILE = os.path.join(DATASET_DIR, "train.csv")
 
 TARGET_DIMENSIONS = (256, 256)
 
-# pytorch class names
 ANATOMICAL_REGIONS = {
     0: "xr_abdomen",
     1: "xr_ankle",
@@ -69,7 +68,7 @@ def create_file_map():
 
 
 # move images to named folders
-def process_files(file_map):
+def process_images(file_map):
     csv_df = pd.read_csv(CSV_FILE)
     for index, row_data in tqdm(csv_df.iterrows(), total=len(csv_df)):
         # verify file existence and get path
@@ -105,9 +104,9 @@ def main():
     print("- All files will be saved in data/train/xr_UNIFESP/xr_[bodypart]")
     print("- Images with multiple targets will be placed in .../xr_UNIFESP/xr_multi_target")
     print("- There is no file or labeling for the test folder so it will be discarded")
-    print("- Manual review and transfer is required before training")
+    print("- Manual review and transfer is required before training\n")
 
-    process_files(file_map)
+    process_images(file_map)
 
 
 if __name__ == "__main__":

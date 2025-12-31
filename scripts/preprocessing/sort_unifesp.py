@@ -100,6 +100,13 @@ def process_files(file_map):
 def main():
     setup_directories()
     file_map = create_file_map()
+
+    print("IMPORTANT NOTES:")
+    print("- All files will be saved in data/train/xr_UNIFESP/xr_[bodypart]")
+    print("- Images with multiple targets will be placed in .../xr_UNIFESP/xr_multi_target")
+    print("- There is no file or labeling for the test folder so it will be discarded")
+    print("- Manual review and transfer is required before training")
+
     process_files(file_map)
 
 

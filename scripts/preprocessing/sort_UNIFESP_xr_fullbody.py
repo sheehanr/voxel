@@ -2,6 +2,7 @@ import os
 
 import pandas as pd
 from image_utils import load_dcm
+from shared import init_multi_dirs
 from tqdm import tqdm
 
 DATASET_NAME = "UNIFESP_xr_fullbody"
@@ -46,23 +47,13 @@ CLASS_MAP = {
 }
 
 
-# create directories if needed
-def setup_directories():
-    os.makedirs(MULTI_TARGET_DST, exist_ok=True)
-
-    # create subdirectory for each body part
-    for region in CLASS_MAP.values():
-        subdir_name = region + SUFFIX  # in case folder is moved
-        os.makedirs(os.path.join(TRAIN_DST, subdir_name), exist_ok=True)
-
-
-# map each image id to its full path
-def create_file_map():
+# get unique image id and map it to its full path
+def map_files():
     file_map = {}
     for root, dirs, files in os.walk(SRC_DIR):
         for f in files:
             if f.endswith(".dcm"):
-                image_id = f.split("-")[0]
+                image_id = f.split("-")[0]  # files end in "-c" which is not part of image id
                 file_map[image_id] = os.path.join(root, f)
 
     return file_map
@@ -71,35 +62,38 @@ def create_file_map():
 # move images to named folders
 def process_images(file_map):
     csv_df = pd.read_csv(TRAIN_CSV)
-    for index, row_data in tqdm(csv_df.iterrows(), total=len(csv_df)):
+    for _, row in tqdm(csv_df.iterrows(), total=len(csv_df)):
         # verify file existence and get path
-        image_id = row_data["SOPInstanceUID"]
+        image_id = row["SOPInstanceUID"]
         short_id = image_id[26:]  # all files have same prefix
         if image_id not in file_map:
             continue
+
         filepath = file_map[image_id]
 
         # convert and verify proper image
-        png_img = load_dcm(filepath)
-        if png_img is None:
+        img = load_dcm(filepath)
+        if img is None:
             continue
 
-        # save image based on number of targets
-        target_str = str(row_data["Target"]).strip()
+        # save image as png based on number of targets
+        target_str = str(row["Target"]).strip()
         targets = target_str.split(" ")
+
         if len(targets) > 1:  # multiple anatomical regions
-            save_path = os.path.join(MULTI_TARGET_DST, f"{'_'.join(targets)}_{short_id}.png")
-            png_img.save(save_path)
+            dst_path = os.path.join(MULTI_TARGET_DST, f"{'_'.join(targets)}_{short_id}.png")
+            img.save(dst_path)
+
         else:
             target = int(targets[0])
-            save_dir = CLASS_MAP[target] + "_UNIFESP"
-            save_path = os.path.join(TRAIN_DST, save_dir, f"{short_id}.png")
-            png_img.save(save_path)
+            dst_dir = CLASS_MAP[target] + SUFFIX
+            dst_path = os.path.join(TRAIN_DST, dst_dir, f"{short_id}.png")
+            img.save(dst_path)
 
 
 def main():
-    setup_directories()
-    file_map = create_file_map()
+    init_multi_dirs([MULTI_TARGET_DST], CLASS_MAP, TRAIN_DST, None, SUFFIX)
+    file_map = map_files()
 
     print("IMPORTANT NOTES:")
     print("- All files will be saved in data/train/xr_UNIFESP/xr_[bodypart]")

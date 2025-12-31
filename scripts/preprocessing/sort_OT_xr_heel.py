@@ -1,7 +1,7 @@
 import os
 import random
 
-from converters import process_image
+from image_utils import process_image
 from shared import get_subdirectories, list_filepaths, setup_directories, split_dataset
 from tqdm import tqdm
 

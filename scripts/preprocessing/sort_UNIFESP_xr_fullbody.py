@@ -14,7 +14,7 @@ TRAIN_DIR = os.path.join(DATA_DIR, "train")
 DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
 UNSORTED_TRAIN_DIR = os.path.join(DATASET_DIR, "train")
 
-# to enable manual review
+# for manual review
 SORTED_TRAIN_DIR = os.path.join(TRAIN_DIR, "xr_UNIFESP")
 MULTI_TARGET_DIR = os.path.join(SORTED_TRAIN_DIR, "xr_multi_target")
 

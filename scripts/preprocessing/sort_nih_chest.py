@@ -62,10 +62,24 @@ def undersample(filenames, sample_size):
     return random.sample(filenames, sample_size)
 
 
+# map each unique filename to its full path
+def create_file_map():
+    file_map = {}
+    for root, dir_names, filenames in os.walk(DATASET_DIR):
+        for f in filenames:
+            if f.endswith(".png"):
+                file_map[f] = os.path.join(root, f)
+
+    return file_map
+
+
 # standardize images and save to correct directory
-def process_files(filenames, destination):
+def process_files(filenames, destination, file_map):
     for filename in tqdm(filenames):
-        filepath = os.path.join(UNSORTED_DIR, filename)
+        if filename not in file_map:
+            continue
+
+        filepath = file_map[filename]
         if not os.path.exists(filepath):
             continue
 
@@ -82,8 +96,10 @@ def main():
     selected_train = undersample(load_text_file(TRAIN_FILE), TRAIN_SAMPLE_SIZE)
     selected_val = undersample(load_text_file(VAL_FILE), VAL_SAMPLE_SIZE)
 
-    process_files(selected_train, target_train_dir)
-    process_files(selected_val, target_val_dir)
+    file_map = create_file_map()
+
+    process_files(selected_train, target_train_dir, file_map)
+    process_files(selected_val, target_val_dir, file_map)
 
 
 if __name__ == "__main__":

@@ -12,17 +12,19 @@ VAL_DIR = os.path.join(DATA_DIR, "val")
 
 
 # create directories if needed
-def setup_directories():
+def init_dirs():
     os.makedirs(DATA_DIR, exist_ok=True)
     os.makedirs(DOWNLOADS_DIR, exist_ok=True)
     os.makedirs(TRAIN_DIR, exist_ok=True)
     os.makedirs(VAL_DIR, exist_ok=True)
 
 
+# create directories and download datasets in them
 def download_datasets():
     api = KaggleApi()
     api.authenticate()
 
+    # dictionary key corresponds to name of directory
     datasets = {
         "TUSEB_ct_brain": "ozguraslank/brain-stroke-ct-dataset",
         "TCIA_ct_chest": "kmader/siim-medical-images",
@@ -40,46 +42,48 @@ def download_datasets():
 
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
 
-    for dir_name, dataset_slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
-        target_path = os.path.join(DOWNLOADS_DIR, dir_name)
+    for dir, slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
+        dst = os.path.join(DOWNLOADS_DIR, dir)
 
-        if os.path.exists(target_path):
-            print(f"\n{dir_name} already exists, skipping...")
+        if os.path.exists(dst):
+            print(f"\n{dir} already exists, skipping...")
             continue
 
         try:
-            api.dataset_download_files(dataset_slug, path=target_path, unzip=True)
+            api.dataset_download_files(slug, path=dst, unzip=True)
+
         except Exception:
-            print(f"\nUnable to download {dir_name}")
+            print(f"\nUnable to download {dir}")
             print("\nTry downloading the dataset using the following command in your terminal:")
-            print(f"kaggle datasets download {dataset_slug}")
+            print(f"kaggle datasets download {slug}")
             print("\nOr, download the dataset from the dataset webpage:")
-            print(f"https://www.kaggle.com/datasets/{dataset_slug}")
+            print(f"https://www.kaggle.com/datasets/{slug}")
 
-    for dir_name, dataset_slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
-        target_path = os.path.join(DOWNLOADS_DIR, dir_name)
+    for dir, slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
+        dst = os.path.join(DOWNLOADS_DIR, dir)
 
-        if os.path.exists(target_path):
-            print(f"\n{dir_name} already exists, skipping...")
+        if os.path.exists(dst):
+            print(f"\n{dir} already exists, skipping...")
             continue
 
         try:
-            api.competition_download_files(dataset_slug, path=target_path)
+            api.competition_download_files(slug, path=dst)
 
             # competitions do not support unzip=True
-            zip_name = dataset_slug + ".zip"
-            zip_path = os.path.join(target_path, zip_name)
+            zip_name = slug + ".zip"
+            zip_path = os.path.join(dst, zip_name)
 
             if os.path.exists(zip_path):
                 with zipfile.ZipFile(zip_path, "r") as zip_ref:
-                    zip_ref.extractall(target_path)
+                    zip_ref.extractall(dst)
                 os.remove(zip_path)
+
         except Exception:
-            print(f"\nUnable to download {dir_name}")
+            print(f"\nUnable to download {dir}")
             print("\nTry downloading the dataset using the following command in your terminal:")
-            print(f"kaggle competitions download -c {dataset_slug}")
+            print(f"kaggle competitions download -c {slug}")
             print("\nOr, download the dataset from the competition webpage:")
-            print(f"https://www.kaggle.com/competitions/{dataset_slug}/data")
+            print(f"https://www.kaggle.com/competitions/{slug}/data")
 
 
 def main():
@@ -88,7 +92,7 @@ def main():
     if confirm.lower() != "y":
         return
 
-    setup_directories()
+    init_dirs()
     download_datasets()
 
 

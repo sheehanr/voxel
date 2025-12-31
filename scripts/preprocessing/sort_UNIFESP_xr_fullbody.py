@@ -1,10 +1,11 @@
 import os
 
 import pandas as pd
-from image_utils import dcm_to_png
+from image_utils import load_dcm
 from tqdm import tqdm
 
 DATASET_NAME = "UNIFESP_xr_fullbody"
+SUFFIX = "_UNIFESP"
 
 # note: test folder is not included because it is unlabeled in dataset
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -12,15 +13,14 @@ DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 TRAIN_DIR = os.path.join(DATA_DIR, "train")
 
 DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
-UNSORTED_TRAIN_DIR = os.path.join(DATASET_DIR, "train")
+SRC_DIR = os.path.join(DATASET_DIR, "train")
 
-# for manual review
-SORTED_TRAIN_DIR = os.path.join(TRAIN_DIR, "xr_UNIFESP")
-MULTI_TARGET_DIR = os.path.join(SORTED_TRAIN_DIR, "xr_multi_target")
+TRAIN_CSV = os.path.join(DATASET_DIR, "train.csv")
 
-CSV_FILE = os.path.join(DATASET_DIR, "train.csv")
+TRAIN_DST = os.path.join(TRAIN_DIR, "xr_UNIFESP")
+MULTI_TARGET_DST = os.path.join(TRAIN_DST, "xr_multi_target")
 
-PYTORCH_CLASSES = {
+CLASS_MAP = {
     0: "xr_abdomen",
     1: "xr_ankle",
     2: "xr_cervical_spine",
@@ -48,19 +48,19 @@ PYTORCH_CLASSES = {
 
 # create directories if needed
 def setup_directories():
-    os.makedirs(MULTI_TARGET_DIR, exist_ok=True)
+    os.makedirs(MULTI_TARGET_DST, exist_ok=True)
 
     # create subdirectory for each body part
-    for region in PYTORCH_CLASSES.values():
-        subdir_name = region + "_UNIFESP"  # in case folder is moved
-        os.makedirs(os.path.join(SORTED_TRAIN_DIR, subdir_name), exist_ok=True)
+    for region in CLASS_MAP.values():
+        subdir_name = region + SUFFIX  # in case folder is moved
+        os.makedirs(os.path.join(TRAIN_DST, subdir_name), exist_ok=True)
 
 
 # map each image id to its full path
 def create_file_map():
     file_map = {}
-    for root, dir_names, filenames in os.walk(UNSORTED_TRAIN_DIR):
-        for f in filenames:
+    for root, dirs, files in os.walk(SRC_DIR):
+        for f in files:
             if f.endswith(".dcm"):
                 image_id = f.split("-")[0]
                 file_map[image_id] = os.path.join(root, f)
@@ -70,7 +70,7 @@ def create_file_map():
 
 # move images to named folders
 def process_images(file_map):
-    csv_df = pd.read_csv(CSV_FILE)
+    csv_df = pd.read_csv(TRAIN_CSV)
     for index, row_data in tqdm(csv_df.iterrows(), total=len(csv_df)):
         # verify file existence and get path
         image_id = row_data["SOPInstanceUID"]
@@ -80,7 +80,7 @@ def process_images(file_map):
         filepath = file_map[image_id]
 
         # convert and verify proper image
-        png_img = dcm_to_png(filepath)
+        png_img = load_dcm(filepath)
         if png_img is None:
             continue
 
@@ -88,12 +88,12 @@ def process_images(file_map):
         target_str = str(row_data["Target"]).strip()
         targets = target_str.split(" ")
         if len(targets) > 1:  # multiple anatomical regions
-            save_path = os.path.join(MULTI_TARGET_DIR, f"{'_'.join(targets)}_{short_id}.png")
+            save_path = os.path.join(MULTI_TARGET_DST, f"{'_'.join(targets)}_{short_id}.png")
             png_img.save(save_path)
         else:
             target = int(targets[0])
-            save_dir = PYTORCH_CLASSES[target] + "_UNIFESP"
-            save_path = os.path.join(SORTED_TRAIN_DIR, save_dir, f"{short_id}.png")
+            save_dir = CLASS_MAP[target] + "_UNIFESP"
+            save_path = os.path.join(TRAIN_DST, save_dir, f"{short_id}.png")
             png_img.save(save_path)
 
 

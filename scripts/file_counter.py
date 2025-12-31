@@ -2,15 +2,15 @@ import os
 import sys
 
 
-def get_size(start_path):
-    total_size = 0
-    for root, dir_names, filenames in os.walk(start_path):
-        for f in filenames:
+def get_size(path):
+    size = 0
+    for root, dirs, files in os.walk(path):
+        for f in files:
             fp = os.path.join(root, f)
             if not os.path.islink(fp):
-                total_size += os.path.getsize(fp)
+                size += os.path.getsize(fp)
 
-    return total_size
+    return size
 
 
 def format_size(size_bytes):
@@ -23,45 +23,50 @@ def format_size(size_bytes):
     return f"{size_bytes:.2f} TB"
 
 
-def print_directory_stats(path):
+def print_dir_stats(path):
     if not os.path.exists(path):
         print(f"Error: Directory '{path}' not found.")
         return
 
-    total_files = 0
-    total_size_bytes = 0
-    subdir_stats = {}
+    file_count = 0
+    total_bytes = 0
+    stats = {}
 
     for item in sorted(os.listdir(path)):
         item_path = os.path.join(path, item)
 
         if os.path.isdir(item_path):
             count = 0
-            for root, dir_names, filenames in os.walk(item_path):
-                count += len(filenames)
+            for root, dirs, files in os.walk(item_path):
+                count += len(files)
 
             size = get_size(item_path)
 
-            subdir_stats[item] = (count, size)
-            total_files += count
-            total_size_bytes += size
+            stats[item] = (count, size)
+            file_count += count
+            total_bytes += size
 
         elif os.path.isfile(item_path):
-            total_files += 1
-            total_size_bytes += os.path.getsize(item_path)
+            file_count += 1
+            total_bytes += os.path.getsize(item_path)
 
     print(f"--- Statistics for: {os.path.basename(path)} ---")
-    print(f"Total Files: {total_files}")
-    print(f"Total Size:  {format_size(total_size_bytes)}")
+    print(f"Total Files: {file_count}")
+    print(f"Total Size:  {format_size(total_bytes)}")
     print("Breakdown:")
 
-    for folder, (count, size) in subdir_stats.items():
+    for folder, (count, size) in stats.items():
         print(f"  - {folder}: {count} files ({format_size(size)})")
 
 
-if __name__ == "__main__":
+def main():
     if len(sys.argv) < 2:
         print("Usage: python3 file_counter.py <path_to_directory>")
-    else:
-        target_dir = sys.argv[1]
-        print_directory_stats(target_dir)
+        return
+
+    path = sys.argv[1]
+    print_dir_stats(path)
+
+
+if __name__ == "__main__":
+    main()

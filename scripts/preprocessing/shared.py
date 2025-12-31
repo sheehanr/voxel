@@ -3,79 +3,87 @@ import random
 
 
 # directory setup for datasets with multiple classes; no return
-def multi_class_setup_directories(dir, classes_dict, subdir_suffix="", sorted_train_dir=dir):
-    os.makedirs(dir, exist_ok=True)
+def init_multi_dirs(dirs_to_create, class_map, train_dst, val_dst=None, suffix=""):
+    for d in dirs_to_create:
+        os.makedirs(d, exist_ok=True)
 
-    for val in classes_dict.values():
-        subdir_name = val + subdir_suffix  # in case folder is moved into main class folders
-        os.makedirs(os.path.join(sorted_train_dir, subdir_name), exist_ok=True)
+    # create subdirectory for each class
+    for val in class_map.values():
+        subdir_name = val + suffix  # in case folder is moved into main class folders
+        os.makedirs(os.path.join(train_dst, subdir_name), exist_ok=True)
+
+    if val_dst is not None:  # for datasets with test/val files and labels
+        for val in class_map.values():
+            subdir_name = val + suffix
+            os.makedirs(os.path.join(val_dst, subdir_name), exist_ok=True)
 
 
 # directory setup for datasets with one class; return paths of target directories
-def setup_directories(pytorch_class, class_subdir, sorted_train_dir, sorted_val_dir):
-    os.makedirs(sorted_train_dir, exist_ok=True)
-    os.makedirs(sorted_val_dir, exist_ok=True)
+def init_single_dir(class_name, class_subdir, train_dst, val_dst):
+    os.makedirs(train_dst, exist_ok=True)
+    os.makedirs(val_dst, exist_ok=True)
 
     print("Where should images be placed?:")
-    print(f"    1. Directly in data/train/{pytorch_class}")
-    print(f"    2. In subdirectory data/train/{pytorch_class}/{class_subdir} (recommended)")
+    print(f"    1. Directly in data/train/{class_name}")
+    print(f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)")
     print("    (Note: option 2 requires manual review and transfer before training)")
     choice = input("Enter 1 or 2: ")
     print("")
 
     if choice != "1":
-        target_train_dir = os.path.join(sorted_train_dir, class_subdir)
-        target_val_dir = os.path.join(sorted_val_dir, class_subdir)
+        backup_train = os.path.join(train_dst, class_subdir)
+        backup_val = os.path.join(val_dst, class_subdir)
 
-        os.makedirs(target_train_dir, exist_ok=True)
-        os.makedirs(target_val_dir, exist_ok=True)
+        os.makedirs(backup_train, exist_ok=True)
+        os.makedirs(backup_val, exist_ok=True)
 
-        return target_train_dir, target_val_dir
+        return backup_train, backup_val
 
     else:
-        return sorted_train_dir, sorted_val_dir
+        return train_dst, val_dst
 
 
-def get_subdirectories(unsorted_dir):
-    return [d for d in os.listdir(unsorted_dir) if os.path.isdir(os.path.join(unsorted_dir, d))]
+# return list of subdirectories of given directory (to use in get_filepaths)
+def get_subdirs(src_dir):
+    return [d for d in os.listdir(src_dir) if os.path.isdir(os.path.join(src_dir, d))]
 
 
-# returns list of all image paths
-def list_filepaths(unsorted_dir, subdirs_list):
-    all_filepaths = []
-    for subdir in subdirs_list:
-        subdir_path = os.path.join(unsorted_dir, subdir)
+# return list of all filepaths from all subdirectories in a given directory
+def get_filepaths(src_dir, subdirs):
+    file_list = []
+    for subdir in subdirs:
+        subdir_path = os.path.join(src_dir, subdir)
         for filename in os.listdir(subdir_path):
             if filename.startswith("."):
                 continue
 
-            all_filepaths.append(os.path.join(subdir_path, filename))
+            file_list.append(os.path.join(subdir_path, filename))
 
-    return all_filepaths
+    return file_list
 
 
 # randomly separate files into train and val
-def split_dataset(all_filepaths, split_ratio=0.9):
-    random.shuffle(all_filepaths)
-    train_len = int(len(all_filepaths) * split_ratio)
+def split_data(file_list, split_ratio=0.9):
+    random.shuffle(file_list)
+    n_train = int(len(file_list) * split_ratio)
 
-    train_filepaths = all_filepaths[:train_len]
-    val_filepaths = all_filepaths[train_len:]
+    train_files = file_list[:n_train]
+    val_files = file_list[n_train:]
 
-    return train_filepaths, val_filepaths
+    return train_files, val_files
 
 
 # map each unique filename to its full path
-def create_file_map(unsorted_dir, extensions=[".png", ".jpg", ".jpeg", ".dcm"]):
+def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
     file_map = {}
-    for root, dir_names, filenames in os.walk(unsorted_dir):
-        for f in filenames:
-            if any(f.lower().endswith(ext) for ext in extensions):
+    for root, dirs, files in os.walk(src_dir):
+        for f in files:
+            if any(f.lower().endswith(ext) for ext in exts):
                 file_map[f] = os.path.join(root, f)
 
     return file_map
 
 
-# select files randomly from list
-def undersample(filenames, sample_size=5500):
-    return random.sample(filenames, sample_size)
+# select randomly from list of filenames (not full path)
+def sample_files(filenames, n=5500):
+    return random.sample(filenames, n)

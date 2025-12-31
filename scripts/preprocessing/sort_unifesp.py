@@ -49,7 +49,6 @@ ANATOMICAL_REGIONS = {
 
 # create directories if needed
 def setup_directories():
-    os.makedirs(SORTED_TRAIN_DIR, exist_ok=True)
     os.makedirs(MULTI_TARGET_DIR, exist_ok=True)
 
     # create subdirectory for each body part

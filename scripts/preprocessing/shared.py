@@ -54,3 +54,19 @@ def split_dataset(all_filepaths, split_ratio=0.9):
     val_filepaths = all_filepaths[train_len:]
 
     return train_filepaths, val_filepaths
+
+
+# map each unique filename to its full path
+def create_file_map(unsorted_dir, extensions=[".png", ".jpg", ".jpeg", ".dcm"]):
+    file_map = {}
+    for root, dir_names, filenames in os.walk(unsorted_dir):
+        for f in filenames:
+            if any(f.lower().endswith(ext) for ext in extensions):
+                file_map[f] = os.path.join(root, f)
+
+    return file_map
+
+
+# select files randomly from list
+def undersample(filenames, sample_size=5500):
+    return random.sample(filenames, sample_size)

@@ -27,7 +27,8 @@ def setup_directories():
 
     print("Where should images be placed?:")
     print("\t1. Directly in data/train/xr_heel")
-    print("\t2. In subfolder data/train/xr_heel/xr_heel_OT (requires manual review and transfer before training)")
+    print("\t2. In subfolder data/train/xr_knee/xr_knee_MD (recommended)")
+    print("\t(Note: option 2 requires manual review and transfer before training)")
     choice = input("Enter 1 or 2: ")
 
     if choice != "1":

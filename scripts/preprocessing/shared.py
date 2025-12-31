@@ -2,7 +2,16 @@ import os
 import random
 
 
-# return paths of target directories
+# directory setup for datasets with multiple classes; no return
+def multi_class_setup_directories(dir, classes_dict, subdir_suffix="", sorted_train_dir=dir):
+    os.makedirs(dir, exist_ok=True)
+
+    for val in classes_dict.values():
+        subdir_name = val + subdir_suffix  # in case folder is moved into main class folders
+        os.makedirs(os.path.join(sorted_train_dir, subdir_name), exist_ok=True)
+
+
+# directory setup for datasets with one class; return paths of target directories
 def setup_directories(pytorch_class, class_subdir, sorted_train_dir, sorted_val_dir):
     os.makedirs(sorted_train_dir, exist_ok=True)
     os.makedirs(sorted_val_dir, exist_ok=True)

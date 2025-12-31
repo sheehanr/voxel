@@ -52,7 +52,8 @@ def setup_directories():
 
     # create subdirectory for each body part
     for region in PYTORCH_CLASSES.values():
-        os.makedirs(os.path.join(SORTED_TRAIN_DIR, region), exist_ok=True)
+        subdir_name = region + "_UNIFESP"  # in case folder is moved
+        os.makedirs(os.path.join(SORTED_TRAIN_DIR, subdir_name), exist_ok=True)
 
 
 # map each image id to its full path
@@ -91,7 +92,7 @@ def process_images(file_map):
             png_img.save(save_path)
         else:
             target = int(targets[0])
-            save_dir = PYTORCH_CLASSES[target]
+            save_dir = PYTORCH_CLASSES[target] + "_UNIFESP"
             save_path = os.path.join(SORTED_TRAIN_DIR, save_dir, f"{short_id}.png")
             png_img.save(save_path)
 

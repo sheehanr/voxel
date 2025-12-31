@@ -4,12 +4,14 @@ import pandas as pd
 from image_utils import dcm_to_png
 from tqdm import tqdm
 
+DATASET_NAME = "UNIFESP_xr_fullbody"
+
 # note: test folder is not included because it is unlabeled in dataset
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 TRAIN_DIR = os.path.join(DATA_DIR, "train")
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads/UNIFESP_xr_fullbody")
+DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
 UNSORTED_TRAIN_DIR = os.path.join(DATASET_DIR, "train")
 
 # to enable manual review
@@ -18,9 +20,7 @@ MULTI_TARGET_DIR = os.path.join(SORTED_TRAIN_DIR, "xr_multi_target")
 
 CSV_FILE = os.path.join(DATASET_DIR, "train.csv")
 
-TARGET_DIMENSIONS = (256, 256)
-
-ANATOMICAL_REGIONS = {
+PYTORCH_CLASSES = {
     0: "xr_abdomen",
     1: "xr_ankle",
     2: "xr_cervical_spine",
@@ -51,7 +51,7 @@ def setup_directories():
     os.makedirs(MULTI_TARGET_DIR, exist_ok=True)
 
     # create subdirectory for each body part
-    for region in ANATOMICAL_REGIONS.values():
+    for region in PYTORCH_CLASSES.values():
         os.makedirs(os.path.join(SORTED_TRAIN_DIR, region), exist_ok=True)
 
 
@@ -79,7 +79,7 @@ def process_images(file_map):
         filepath = file_map[image_id]
 
         # convert and verify proper image
-        png_img = dcm_to_png(filepath, TARGET_DIMENSIONS)
+        png_img = dcm_to_png(filepath)
         if png_img is None:
             continue
 
@@ -91,7 +91,7 @@ def process_images(file_map):
             png_img.save(save_path)
         else:
             target = int(targets[0])
-            save_dir = ANATOMICAL_REGIONS[target]
+            save_dir = PYTORCH_CLASSES[target]
             save_path = os.path.join(SORTED_TRAIN_DIR, save_dir, f"{short_id}.png")
             png_img.save(save_path)
 

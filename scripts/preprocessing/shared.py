@@ -27,6 +27,10 @@ def setup_directories(pytorch_class, class_subdir, sorted_train_dir, sorted_val_
         return sorted_train_dir, sorted_val_dir
 
 
+def get_subdirectories(unsorted_dir):
+    return [d for d in os.listdir(unsorted_dir) if os.path.isdir(os.path.join(unsorted_dir, d))]
+
+
 # returns list of all image paths
 def list_filepaths(unsorted_dir, subdirs_list):
     all_filepaths = []
@@ -50,7 +54,3 @@ def split_dataset(all_filepaths, split_ratio=0.9):
     val_filepaths = all_filepaths[train_len:]
 
     return train_filepaths, val_filepaths
-
-
-def get_subdirectories(unsorted_dir):
-    return [d for d in os.listdir(unsorted_dir) if os.path.isdir(os.path.join(unsorted_dir, d))]

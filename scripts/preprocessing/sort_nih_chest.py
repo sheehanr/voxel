@@ -6,18 +6,17 @@ from tqdm import tqdm
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
+TRAIN_DIR = os.path.join(DATA_DIR, "train")
+VAL_DIR = os.path.join(DATA_DIR, "val")
 
-UNSORTED_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/images")
-TRAIN_FILE = os.path.join(DATA_DIR, "unsorted/nih_chest/train_val_list.txt")
-VAL_FILE = os.path.join(DATA_DIR, "unsorted/nih_chest/test_list.txt")
+DATASET_DIR = os.path.join(DATA_DIR, "downloads/NIH_xr_chest")
 
-# pytorch class directories
-TRAIN_DIR = os.path.join(DATA_DIR, "train/xr_chest")
-VAL_DIR = os.path.join(DATA_DIR, "val/xr_chest")
+# pytorch class names
+SORTED_TRAIN_DIR = os.path.join(TRAIN_DIR, "xr_chest")
+SORTED_VAL_DIR = os.path.join(VAL_DIR, "xr_chest")
 
-# in case class directories are not empty
-BACKUP_TRAIN_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/sorted_train")
-BACKUP_VAL_DIR = os.path.join(DATA_DIR, "unsorted/nih_chest/sorted_val")
+TRAIN_FILE = os.path.join(DATASET_DIR, "train_val_list.txt")
+VAL_FILE = os.path.join(DATASET_DIR, "test_list.txt")
 
 TRAIN_SAMPLE_SIZE = 5000
 VAL_SAMPLE_SIZE = 500

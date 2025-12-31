@@ -13,7 +13,7 @@ DATASET_DIR = os.path.join(DATA_DIR, "downloads/UNIFESP_xr_fullbody")
 UNSORTED_TRAIN_DIR = os.path.join(DATASET_DIR, "train")
 
 # to enable manual review
-SORTED_TRAIN_DIR = os.path.join(TRAIN_DIR, "unifesp")
+SORTED_TRAIN_DIR = os.path.join(TRAIN_DIR, "xr_UNIFESP")
 MULTI_TARGET_DIR = os.path.join(SORTED_TRAIN_DIR, "xr_multi_target")
 
 CSV_FILE = os.path.join(DATASET_DIR, "train.csv")

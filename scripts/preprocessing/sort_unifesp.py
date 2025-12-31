@@ -57,27 +57,27 @@ def setup_directories():
 
 
 # map each image id to its full path
-def create_img_map():
-    img_map = {}
+def create_file_map():
+    file_map = {}
     for root, dir_names, filenames in os.walk(UNSORTED_TRAIN_DIR):
         for f in filenames:
             if f.endswith(".dcm"):
-                img_id = f.split("-")[0]
-                img_map[img_id] = os.path.join(root, f)
+                image_id = f.split("-")[0]
+                file_map[image_id] = os.path.join(root, f)
 
-    return img_map
+    return file_map
 
 
 # move images to named folders
-def process_files(img_map):
+def process_files(file_map):
     csv_df = pd.read_csv(CSV_FILE)
     for index, row_data in tqdm(csv_df.iterrows(), total=len(csv_df)):
         # verify file existence and get path
-        img_id = row_data["SOPInstanceUID"]
-        short_id = img_id[26:]  # all files have same prefix
-        if img_id not in img_map:
+        image_id = row_data["SOPInstanceUID"]
+        short_id = image_id[26:]  # all files have same prefix
+        if image_id not in file_map:
             continue
-        filepath = img_map[img_id]
+        filepath = file_map[image_id]
 
         # convert and verify proper image
         png_img = dcm_to_png(filepath, TARGET_DIMENSIONS)
@@ -99,8 +99,8 @@ def process_files(img_map):
 
 def main():
     setup_directories()
-    img_map = create_img_map()
-    process_files(img_map)
+    file_map = create_file_map()
+    process_files(file_map)
 
 
 if __name__ == "__main__":

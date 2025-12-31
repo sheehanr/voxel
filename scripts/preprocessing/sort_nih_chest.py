@@ -25,19 +25,28 @@ TARGET_DIMENSIONS = (256, 256)
 
 # return paths of target directories
 def setup_directories():
-    os.makedirs(TRAIN_DIR, exist_ok=True)
-    os.makedirs(VAL_DIR, exist_ok=True)
+    os.makedirs(SORTED_TRAIN_DIR, exist_ok=True)
+    os.makedirs(SORTED_VAL_DIR, exist_ok=True)
+
+    target_train_dir = SORTED_TRAIN_DIR
+    target_val_dir = SORTED_VAL_DIR
 
     # create backups if needed
-    if len(os.listdir(TRAIN_DIR)) > 0 or len(os.listdir(VAL_DIR)) > 0:
-        print("ERROR: Primary train and/or val directory not empty, files will be stored in backup directories")
+    if len(os.listdir(SORTED_TRAIN_DIR)) > 0 or len(os.listdir(SORTED_VAL_DIR)) > 0:
+        print("WARNING: data/train/xr_chest or data/val/xr_chest are not empty. What would you like to do?:")
+        print("\t1. Continue with placing the images in those folders")
+        print("\t2. Place the images in data/[...]/xr_chest/xr_chest_NIH")
+        print("\t(Note: option 2 requires manual review and transfer of files into xr_chest before training)")
+        choice = input("Enter 1 or 2: ")
 
-        os.makedirs(BACKUP_TRAIN_DIR, exist_ok=True)
-        os.makedirs(BACKUP_VAL_DIR, exist_ok=True)
+        if choice != "1":
+            target_train_dir = os.path.join(SORTED_TRAIN_DIR, "xr_chest_NIH")
+            target_val_dir = os.path.join(SORTED_VAL_DIR, "xr_chest_NIH")
 
-        return BACKUP_TRAIN_DIR, BACKUP_VAL_DIR
+            os.makedirs(target_train_dir, exist_ok=True)
+            os.makedirs(target_val_dir, exist_ok=True)
 
-    return TRAIN_DIR, VAL_DIR
+    return target_train_dir, target_val_dir
 
 
 # load file names from text file into a list

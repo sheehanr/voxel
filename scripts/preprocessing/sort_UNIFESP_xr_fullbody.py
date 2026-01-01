@@ -87,8 +87,8 @@ def process_images(file_map):
 
         else:
             target = int(targets[0])
-            dst_dir = CLASS_MAP[target] + SUFFIX
-            dst_path = os.path.join(TRAIN_DST, dst_dir, f"{short_id}.png")
+            dst_subdir = CLASS_MAP[target] + SUFFIX
+            dst_path = os.path.join(TRAIN_DST, dst_subdir, f"{short_id}.png")
             img.save(dst_path)
 
 

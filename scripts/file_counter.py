@@ -53,10 +53,14 @@ def print_dir_stats(path):
     print(f"--- Statistics for: {os.path.basename(path)} ---")
     print(f"Total Files: {file_count}")
     print(f"Total Size:  {format_size(total_bytes)}")
-    print("Breakdown:")
 
-    for folder, (count, size) in stats.items():
-        print(f"  - {folder}: {count} files ({format_size(size)})")
+    show_breakdown = input("\nShow breakdown? (y/n): ")
+
+    if show_breakdown.lower() == "y":
+        print("\nBreakdown:")
+
+        for folder, (count, size) in stats.items():
+            print(f"  - {folder}: {count} files ({format_size(size)})")
 
 
 def main():

@@ -2,7 +2,7 @@ import os
 
 import numpy as np
 import pydicom
-from PIL import Image
+from PIL import Image, ImageOps
 
 
 # check if image is inverted and fix if needed
@@ -24,10 +24,11 @@ def inversion_helper(img):
     return img
 
 
-# convert PIL image to grayscale and resize
+# convert image to standardized format
 def standardize_pil(img, img_size=(256, 256)):
-    img = img.convert("L").resize(img_size)
-    img = inversion_helper(img)
+    img = img.convert("L")  # convert to grayscale
+    img = inversion_helper(img)  # check for inversion
+    img = ImageOps.pad(img, img_size, color=0)  # resize and preserve aspect ratio (pad black squares)
 
     return img
 

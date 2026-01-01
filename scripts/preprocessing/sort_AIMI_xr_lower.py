@@ -56,13 +56,30 @@ def process_csv(csv_path):
                     pbar.update(1)
 
 
+def load_allowlist(allowlist_path):
+    if not os.path.exists(allowlist_path):
+        return None
+
+    raw_list = read_text_file(allowlist_path)
+    return set(os.path.basename(f) for f in raw_list)
+
+
 def main():
     print("IMPORTANT NOTES:")
     print("- All files will be saved in data/train/xr_AIMI/xr_[bodypart]_AIMI")
     print("- Manual review and transfer is required before training\n")
 
     init_multi_dirs([TRAIN_DST], CLASS_MAP, TRAIN_DST, None, SUFFIX)
-    process_csv(TRAIN_CSV)
+    allowed_set = load_allowlist(ALLOWLIST)
+
+    if allowed_set is None:
+        print("WARNING: allowlist not found. All files, including duplicates, will be saved.")
+        confirm = input("Continue? (y/n): ")
+        print("")
+        if confirm.lower() != "y":
+            exit()
+
+    process_csv(TRAIN_CSV, allowed_set)
 
 
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ import os
 import random
 
 from image_utils import process_image
-from shared import init_single_dir, map_files, sample_files
+from shared import init_single_dir, map_files, read_text_file, sample_files
 from tqdm import tqdm
 
 DATASET_NAME = "NIH_xr_chest"
@@ -25,14 +25,6 @@ VAL_DST = os.path.join(VAL_DIR, CLASS_NAME)
 
 N_TRAIN = 5000
 N_VAL = 500
-
-
-# return list of files in text file
-def read_text_file(filepath):
-    with open(filepath, "r") as f:
-        filenames = [line.strip() for line in f.readlines()]
-
-    return filenames
 
 
 def main():

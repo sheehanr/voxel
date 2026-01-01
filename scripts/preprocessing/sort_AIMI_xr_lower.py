@@ -31,25 +31,28 @@ CLASS_MAP = {
 def process_csv(csv_path):
     df = pd.read_csv(csv_path, header=None)
 
-    for _, row in tqdm(df.iterrows(), total=len(df), desc="Processing files"):
-        current_dir = str(row[0])
-        class_name = CLASS_MAP[str(row[1])]
+    with tqdm(total=1297, desc="Processing files") as pbar:
+        for _, row in df.iterrows():
+            current_dir = str(row[0])
+            class_name = CLASS_MAP[str(row[1])]
 
-        current_path = os.path.join(SRC_DIR, current_dir)
-        if not os.path.exists(current_path):
-            continue
+            current_path = os.path.join(SRC_DIR, current_dir)
+            if not os.path.exists(current_path):
+                continue
 
-        for root, dirs, files in os.walk(current_path):
-            for f in files:
-                if f.startswith("."):
-                    continue
+            for root, dirs, files in os.walk(current_path):
+                for f in files:
+                    if f.startswith("."):
+                        continue
 
-                filepath = os.path.join(root, f)
-                dst_subdir = class_name + SUFFIX
-                dst_dir = os.path.join(TRAIN_DST, dst_subdir)
+                    filepath = os.path.join(root, f)
+                    dst_subdir = class_name + SUFFIX
+                    dst_dir = os.path.join(TRAIN_DST, dst_subdir)
 
-                prefix = current_dir + "_"
-                process_image(filepath, dst_dir, prefix)
+                    prefix = current_dir + "_"
+                    process_image(filepath, dst_dir, prefix)
+
+                    pbar.update(1)
 
 
 def main():

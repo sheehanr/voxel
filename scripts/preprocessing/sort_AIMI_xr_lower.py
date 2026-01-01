@@ -1,5 +1,10 @@
 import os
 
+import pandas as pd
+from image_utils import process_image
+from shared import init_multi_dirs
+from tqdm import tqdm
+
 DATASET_NAME = "AIMI_xr_lower"
 SUFFIX = "_AIMI"
 
@@ -20,6 +25,31 @@ CLASS_MAP = {
     "XR ANKLE": "xr_ankle",
     "XR FOOT": "xr_foot",
 }
+
+
+# read csv and move files according to label
+def process_csv(csv_path):
+    df = pd.read_csv(csv_path, header=None)
+
+    for _, row in tqdm(df.iterrows(), total=len(df)):
+        current_dir = str(row[0])
+        class_name = CLASS_MAP[str(row[1])]
+
+        current_path = os.path.join(SRC_DIR, current_dir)
+        if not os.path.exists(current_path):
+            continue
+
+        for root, dirs, files in os.walk(current_path):
+            for f in files:
+                if f.startswith("."):
+                    continue
+
+                filepath = os.path.join(root, f)
+                dst_subdir = class_name + SUFFIX
+                dst_dir = os.path.join(TRAIN_DST, dst_subdir)
+
+                prefix = current_dir + "_"
+                process_image(filepath, dst_dir, prefix)
 
 
 def main():

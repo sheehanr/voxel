@@ -53,7 +53,12 @@ def process_csv(csv_path):
 
 
 def main():
-    pass
+    print("IMPORTANT NOTES:")
+    print("- All files will be saved in data/train/xr_AIMI/xr_[bodypart]_AIMI")
+    print("- Manual review and transfer is required before training\n")
+
+    init_multi_dirs([TRAIN_DST], CLASS_MAP, TRAIN_DST, None, SUFFIX)
+    process_csv(TRAIN_CSV)
 
 
 if __name__ == "__main__":

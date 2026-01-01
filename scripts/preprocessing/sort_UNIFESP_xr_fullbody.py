@@ -61,8 +61,8 @@ def map_files():
 
 # move images to named folders
 def process_images(file_map):
-    csv_df = pd.read_csv(TRAIN_CSV)
-    for _, row in tqdm(csv_df.iterrows(), total=len(csv_df)):
+    df = pd.read_csv(TRAIN_CSV)
+    for _, row in tqdm(df.iterrows(), total=len(df)):
         # verify file existence and get path
         image_id = row["SOPInstanceUID"]
         short_id = image_id[26:]  # all files have same prefix

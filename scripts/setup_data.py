@@ -42,28 +42,28 @@ def download_datasets():
 
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
 
-    for dir, slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
-        dst = os.path.join(DOWNLOADS_DIR, dir)
+    for directory, slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
+        dst = os.path.join(DOWNLOADS_DIR, directory)
 
         if os.path.exists(dst):
-            print(f"\n{dir} already exists, skipping...")
+            print(f"\n{directory} already exists, skipping...")
             continue
 
         try:
             api.dataset_download_files(slug, path=dst, unzip=True)
 
         except Exception:
-            print(f"\nUnable to download {dir}")
+            print(f"\nUnable to download {directory}")
             print("\nTry downloading the dataset using the following command in your terminal:")
             print(f"kaggle datasets download {slug}")
             print("\nOr, download the dataset from the dataset webpage:")
             print(f"https://www.kaggle.com/datasets/{slug}")
 
-    for dir, slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
-        dst = os.path.join(DOWNLOADS_DIR, dir)
+    for directory, slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
+        dst = os.path.join(DOWNLOADS_DIR, directory)
 
         if os.path.exists(dst):
-            print(f"\n{dir} already exists, skipping...")
+            print(f"\n{directory} already exists, skipping...")
             continue
 
         try:
@@ -79,7 +79,7 @@ def download_datasets():
                 os.remove(zip_path)
 
         except Exception:
-            print(f"\nUnable to download {dir}")
+            print(f"\nUnable to download {directory}")
             print("\nTry downloading the dataset using the following command in your terminal:")
             print(f"kaggle competitions download -c {slug}")
             print("\nOr, download the dataset from the competition webpage:")

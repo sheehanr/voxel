@@ -94,8 +94,8 @@ def process_images(file_map):
 
 def main():
     print("IMPORTANT NOTES:")
-    print("- All files will be saved in data/train/xr_UNIFESP/xr_[bodypart]")
-    print("- Images with multiple targets will be placed in .../xr_UNIFESP/xr_multi_target")
+    print("- Images with a single target will be saved in data/train/xr_UNIFESP/xr_[bodypart]_UNIFESP")
+    print("- Images with multiple targets will be saved in .../xr_UNIFESP/xr_multi_target")
     print("- There is no file or labeling for the test folder so it will be discarded")
     print("- Manual review and transfer is required before training\n")
 

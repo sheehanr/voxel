@@ -44,12 +44,12 @@ def main():
 
     file_map = map_files(SRC_DIR)
 
-    for filename in tqdm(train_files):
+    for filename in tqdm(train_files, desc="Processing train files"):
         if filename in file_map:
             filepath = file_map[filename]
             process_image(filepath, train_dst)
 
-    for filename in tqdm(val_files):
+    for filename in tqdm(val_files, desc="Processing val files"):
         if filename in file_map:
             filepath = file_map[filename]
             process_image(filepath, val_dst)

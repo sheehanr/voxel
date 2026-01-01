@@ -31,7 +31,7 @@ CLASS_MAP = {
 def process_csv(csv_path):
     df = pd.read_csv(csv_path, header=None)
 
-    for _, row in tqdm(df.iterrows(), total=len(df)):
+    for _, row in tqdm(df.iterrows(), total=len(df), desc="Processing files"):
         current_dir = str(row[0])
         class_name = CLASS_MAP[str(row[1])]
 

@@ -59,7 +59,7 @@ def download_datasets():
             print("\nOr, download the dataset from the dataset webpage:")
             print(f"https://www.kaggle.com/datasets/{slug}")
 
-    for directory, slug in tqdm(competitions.items(), desc="\nDownloading Datasets"):
+    for directory, slug in tqdm(competitions.items(), desc="\nDownloading Competition Datasets"):
         dst = os.path.join(DOWNLOADS_DIR, directory)
 
         if os.path.exists(dst):

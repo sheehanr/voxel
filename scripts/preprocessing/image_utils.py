@@ -31,6 +31,7 @@ def load_dcm(dcm_path):
     return img
 
 
+# load, process, and save image
 def process_image(filepath, dst_dir, img_size=(256, 256)):
     if not os.path.exists(filepath):
         return

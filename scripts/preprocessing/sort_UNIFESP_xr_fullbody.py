@@ -1,7 +1,7 @@
 import os
 
 import pandas as pd
-from image_utils import load_dcm
+from image_utils import load_dcm, standardize_pil
 from shared import init_multi_dirs
 from tqdm import tqdm
 
@@ -73,6 +73,7 @@ def process_images(file_map):
 
         # convert and verify proper image
         img = load_dcm(filepath)
+        img = standardize_pil(img)
         if img is None:
             continue
 
@@ -92,14 +93,14 @@ def process_images(file_map):
 
 
 def main():
-    init_multi_dirs([MULTI_TARGET_DST], CLASS_MAP, TRAIN_DST, None, SUFFIX)
-    file_map = map_files()
-
     print("IMPORTANT NOTES:")
     print("- All files will be saved in data/train/xr_UNIFESP/xr_[bodypart]")
     print("- Images with multiple targets will be placed in .../xr_UNIFESP/xr_multi_target")
     print("- There is no file or labeling for the test folder so it will be discarded")
     print("- Manual review and transfer is required before training\n")
+
+    init_multi_dirs([MULTI_TARGET_DST], CLASS_MAP, TRAIN_DST, None, SUFFIX)
+    file_map = map_files()
 
     process_images(file_map)
 

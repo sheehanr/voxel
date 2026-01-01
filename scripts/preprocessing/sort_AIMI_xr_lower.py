@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 from image_utils import process_image
-from shared import init_multi_dirs
+from shared import init_multi_dirs, read_text_file
 from tqdm import tqdm
 
 DATASET_NAME = "AIMI_xr_lower"
@@ -16,6 +16,7 @@ DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
 SRC_DIR = DATASET_DIR
 
 TRAIN_CSV = os.path.join(DATASET_DIR, "labels.csv")
+ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/AIMI_xr_lower_allowlist.txt")
 
 TRAIN_DST = os.path.join(TRAIN_DIR, "xr_AIMI")
 

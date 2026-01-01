@@ -32,7 +32,7 @@ def load_dcm(dcm_path):
 
 
 # load, process, and save image
-def process_image(filepath, dst_dir, img_size=(256, 256)):
+def process_image(filepath, dst_dir, prefix=None, img_size=(256, 256)):
     if not os.path.exists(filepath):
         return
 
@@ -51,6 +51,10 @@ def process_image(filepath, dst_dir, img_size=(256, 256)):
 
     if img is None:  # incorrect extension or bad file
         return
+
+    # add prefix if needed
+    if prefix is not None:
+        filename = prefix + filename
 
     # standardize and save as png
     dst_name = filename + ".png"

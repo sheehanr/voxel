@@ -25,7 +25,9 @@ def init_single_dir(class_name, class_subdir, train_dst, val_dst):
 
     print("Where should images be placed?:")
     print(f"    1. Directly in data/train/{class_name}")
-    print(f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)")
+    print(
+        f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)"
+    )
     print("    (Note: option 2 requires manual review and transfer before training)")
     choice = input("Enter 1 or 2: ")
     print("")
@@ -87,3 +89,11 @@ def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
 # select randomly from list of filenames (not full path)
 def sample_files(filenames, n=5500):
     return random.sample(filenames, n)
+
+
+# return list of files in text file
+def read_text_file(filepath):
+    with open(filepath, "r") as f:
+        filenames = [line.strip() for line in f.readlines()]
+
+    return filenames

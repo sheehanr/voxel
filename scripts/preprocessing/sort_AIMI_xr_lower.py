@@ -29,10 +29,11 @@ CLASS_MAP = {
 
 
 # read csv and move files according to label
-def process_csv(csv_path):
+def process_csv(csv_path, allowed_set):
     df = pd.read_csv(csv_path, header=None)
 
-    with tqdm(total=1297, desc="Processing files") as pbar:
+    pbar_total = len(allowed_set) if allowed_set else 1297
+    with tqdm(total=pbar_total, desc="Processing files") as pbar:
         for _, row in df.iterrows():
             current_dir = str(row[0])
             class_name = CLASS_MAP[str(row[1])]
@@ -45,6 +46,11 @@ def process_csv(csv_path):
                 for f in files:
                     if f.startswith("."):
                         continue
+
+                    if allowed_set is not None:
+                        candidate_name = f"{current_dir}_{os.path.splitext(f)[0]}.png"
+                        if candidate_name not in allowed_set:
+                            continue
 
                     filepath = os.path.join(root, f)
                     dst_subdir = class_name + SUFFIX

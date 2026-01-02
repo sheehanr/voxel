@@ -83,7 +83,7 @@ def main():
         confirm = input("Continue? (y/n): ")
         print("")
         if confirm.lower() != "y":
-            exit()
+            return
 
     process_csv(TRAIN_CSV, allowed_set)
 

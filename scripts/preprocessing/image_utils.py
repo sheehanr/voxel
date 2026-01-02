@@ -10,15 +10,15 @@ def inversion_helper(img):
     arr = np.array(img)
     corners = np.concatenate(
         [
-            arr[:10, :10].flatten(),
-            arr[:10, -10:].flatten(),
-            arr[-10:, :10].flatten(),
-            arr[-10:, -10:].flatten(),
+            arr[:20, :20].flatten(),
+            arr[:20, -20:].flatten(),
+            arr[-20:, :20].flatten(),
+            arr[-20:, -20:].flatten(),
         ]
     )
 
     # invert if corners are white
-    if np.mean(corners) > 127:
+    if np.median(corners) > 127:
         img = Image.fromarray(255 - arr)
 
     return img

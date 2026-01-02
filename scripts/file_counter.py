@@ -25,7 +25,7 @@ def format_size(size_bytes):
 
 def print_dir_stats(path):
     if not os.path.exists(path):
-        print(f"Error: Directory '{path}' not found.")
+        print(f"ERROR [print_dir_stats]: Directory '{path}' not found.")
         return
 
     file_count = 0

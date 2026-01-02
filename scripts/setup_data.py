@@ -53,7 +53,7 @@ def download_datasets():
             api.dataset_download_files(slug, path=dst, unzip=True)
 
         except Exception:
-            print(f"\nUnable to download {directory}")
+            print(f"\nERROR [download_datasets]: Unable to download {directory}")
             print("\nTry downloading the dataset using the following command in your terminal:")
             print(f"kaggle datasets download {slug}")
             print("\nOr, download the dataset from the dataset webpage:")
@@ -79,7 +79,7 @@ def download_datasets():
                 os.remove(zip_path)
 
         except Exception:
-            print(f"\nUnable to download {directory}")
+            print(f"\nERROR [download_datasets]: Unable to download {directory}")
             print("\nTry downloading the dataset using the following command in your terminal:")
             print(f"kaggle competitions download -c {slug}")
             print("\nOr, download the dataset from the competition webpage:")

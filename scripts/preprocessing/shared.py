@@ -34,9 +34,10 @@ def init_single_dir(class_name, class_subdir, train_dst, val_dst):
 
 
 # directory setup for datasets with multiple classes; no return
-def init_multi_dirs(dirs_to_create, class_map, train_dst, val_dst=None, suffix=""):
-    for d in dirs_to_create:
-        os.makedirs(d, exist_ok=True)
+def init_multi_dirs(class_map, train_dst, val_dst=None, suffix=""):
+    os.makedirs(train_dst, exist_ok=True)
+    if val_dst is not None:
+        os.makedirs(val_dst, exist_ok=True)
 
     # create subdirectory for each class
     for val in class_map.values():

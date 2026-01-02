@@ -72,10 +72,10 @@ def load_allowlist(allowlist_path):
 
 def main():
     print("IMPORTANT NOTES:")
-    print("- All files will be saved in data/train/xr_AIMI/xr_[bodypart]_AIMI")
+    print(f"- All files will be saved in data/train/xr_AIMI/xr_[bodypart]{SUFFIX}")
     print("- Manual review and transfer is required before training\n")
 
-    init_multi_dirs([TRAIN_DST], CLASS_MAP, TRAIN_DST, None, SUFFIX)
+    init_multi_dirs(CLASS_MAP, TRAIN_DST, None, SUFFIX)
     allowed_set = load_allowlist(ALLOWLIST)
 
     if allowed_set is None:

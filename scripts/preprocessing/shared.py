@@ -42,11 +42,14 @@ def multi_dst_prompt(modality, suffix):
 
 
 # directory setup for datasets with multiple classes; return maps of target directories
-def init_multi_dirs(class_map, train_dir, val_dir=None, modality="", suffix=""):
+def init_multi_dirs(class_map, train_dir, val_dir=None, modality="", suffix="", prompt=True):
     train_dst_map = {}
     val_dst_map = {}
 
-    choice = multi_dst_prompt(modality, suffix)
+    if prompt:
+        choice = multi_dst_prompt(modality, suffix)
+    else:
+        choice = "3"
 
     for class_name in class_map.values():
         if choice == "1":

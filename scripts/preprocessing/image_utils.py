@@ -4,6 +4,8 @@ import numpy as np
 import pydicom
 from PIL import Image, ImageOps
 
+IMG_SIZE = (256, 256)
+
 
 # check if image is inverted and fix if needed
 def inversion_helper(img):
@@ -25,7 +27,7 @@ def inversion_helper(img):
 
 
 # convert image to standardized format
-def standardize_pil(img, img_size=(256, 256)):
+def standardize_pil(img, img_size=IMG_SIZE):
     img = img.convert("L")  # convert to grayscale
     img = inversion_helper(img)  # check for inversion
     img = ImageOps.pad(img, img_size, color=0)  # resize and preserve aspect ratio (pad black squares)
@@ -68,7 +70,7 @@ def load_dcm(dcm_path):
 
 
 # load, process, and save image
-def process_image(filepath, dst_dir, prefix=None, img_size=(256, 256)):
+def process_image(filepath, dst_dir, prefix=None, img_size=IMG_SIZE):
     if not os.path.exists(filepath):
         return
 

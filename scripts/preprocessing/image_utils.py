@@ -62,7 +62,7 @@ def load_dcm(dcm_path):
 
     # return PIL image
     if normalized_pixels is None:
-        return
+        return None
 
     img = Image.fromarray(normalized_pixels)
     return img

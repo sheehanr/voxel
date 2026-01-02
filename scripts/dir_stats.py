@@ -69,7 +69,7 @@ def print_dir_stats(path, file_count, total_bytes, stats):
 
 def main():
     if len(sys.argv) < 2:
-        print("Usage: python3 file_counter.py <path_to_directory>")
+        print("Usage: python3 dir_stats.py <path_to_directory>")
         return
 
     path = sys.argv[1]

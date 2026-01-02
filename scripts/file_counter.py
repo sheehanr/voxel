@@ -23,10 +23,10 @@ def format_size(size_bytes):
     return f"{size_bytes:.2f} TB"
 
 
-def print_dir_stats(path):
+def get_dir_stats(path):
     if not os.path.exists(path):
         print(f"ERROR [print_dir_stats]: Directory '{path}' not found.")
-        return
+        return -1, -1, {}
 
     file_count = 0
     total_bytes = 0
@@ -50,8 +50,12 @@ def print_dir_stats(path):
             file_count += 1
             total_bytes += os.path.getsize(item_path)
 
-    print(f"--- Statistics for: {os.path.basename(path)} ---")
-    print(f"Total Files: {file_count}")
+    return file_count, total_bytes, stats
+
+
+def print_dir_stats(path, file_count, total_bytes, stats):
+    print(f"\n--- Statistics for: {os.path.basename(path)} ---")
+    print(f"\nTotal Files: {file_count}")
     print(f"Total Size:  {format_size(total_bytes)}")
 
     show_breakdown = input("\nShow breakdown? (y/n): ")
@@ -69,7 +73,9 @@ def main():
         return
 
     path = sys.argv[1]
-    print_dir_stats(path)
+    file_count, total_bytes, stats = get_dir_stats(path)
+    if file_count > -1:
+        print_dir_stats(path, file_count, total_bytes, stats)
 
 
 if __name__ == "__main__":

@@ -3,10 +3,10 @@ import random
 
 
 # prompt user for destination of files
-def dst_prompt(class_name, class_subdir):
+def dst_prompt(class_name, suffix):
     print("Where should images be placed?:")
     print(f"    1. Directly in data/train/{class_name}")
-    print(f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)")
+    print(f"    2. In subdirectory data/train/{class_name}/{class_name}{suffix} (recommended)")
     print("    (Note: option 2 requires manual review and transfer before training)")
 
     choice = input("Enter 1 or 2: ")
@@ -16,11 +16,12 @@ def dst_prompt(class_name, class_subdir):
 
 
 # directory setup for datasets with one class; return paths of target directories
-def init_single_dir(class_name, class_subdir, train_dst, val_dst):
+def init_single_dir(class_name, train_dst, val_dst, suffix=""):
     os.makedirs(train_dst, exist_ok=True)
     os.makedirs(val_dst, exist_ok=True)
 
-    if dst_prompt(class_name, class_subdir) != "1":
+    if dst_prompt(class_name, suffix) != "1":
+        class_subdir = f"{class_name}{suffix}"
         backup_train = os.path.join(train_dst, class_subdir)
         backup_val = os.path.join(val_dst, class_subdir)
 

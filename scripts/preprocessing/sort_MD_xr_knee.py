@@ -7,7 +7,7 @@ from tqdm import tqdm
 
 DATASET_NAME = "MD_xr_knee"
 CLASS_NAME = "xr_knee"
-CLASS_SUBDIR = "xr_knee_MD"
+SUFFIX = "_MD"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
@@ -31,7 +31,7 @@ VAL_DST = os.path.join(VAL_DIR, CLASS_NAME)
 def main():
     random.seed(42)
 
-    train_dst, val_dst = init_single_dir(CLASS_NAME, CLASS_SUBDIR, TRAIN_DST, VAL_DST)
+    train_dst, val_dst = init_single_dir(CLASS_NAME, TRAIN_DST, VAL_DST, SUFFIX)
     subdirs = get_subdirs(SRC_DIR)
     file_list = get_filepaths(SRC_DIR, subdirs)
     train_files, val_files = split_data(file_list)

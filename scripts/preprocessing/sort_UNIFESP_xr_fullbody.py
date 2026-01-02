@@ -99,7 +99,7 @@ def main():
     print("- There is no file or labeling for the test folder so it will be discarded")
     print("- Manual review and transfer is required before training\n")
 
-    init_multi_dirs(CLASS_MAP, TRAIN_DST, None, SUFFIX)
+    init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX, False)
     os.makedirs(MULTI_TARGET_DST, exist_ok=True)
     file_map = map_files()
 

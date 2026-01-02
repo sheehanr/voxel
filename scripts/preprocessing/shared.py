@@ -15,6 +15,18 @@ def dst_prompt(class_name, suffix):
     return choice
 
 
+# directory setup prompt for datasets with multiple classes
+def multi_dst_prompt(modality, suffix):
+    print(f"\nSelect destination for ALL '{modality}_*' classes:")
+    print(f"  [1] MERGE:   data/train/{modality}_[class]")
+    print(f"  [2] REVIEW IN CLASS: data/train/{modality}_[class]/{modality}_[class]{suffix}")
+    print(f"  [3] REVIEW IN DATASET: data/train/{modality}{suffix}/{modality}_[class]{suffix}")
+
+    choice = input("\nChoice (1/2/3): ").strip()
+    print("")
+    return choice
+
+
 # directory setup for datasets with one class; return paths of target directories
 def init_single_dir(class_name, train_dir, val_dir, suffix=""):
     if dst_prompt(class_name, suffix) != "1":
@@ -31,21 +43,33 @@ def init_single_dir(class_name, train_dir, val_dir, suffix=""):
     return train_dst, val_dst
 
 
-# directory setup for datasets with multiple classes; no return
-def init_multi_dirs(class_map, train_dst, val_dst=None, suffix=""):
-    os.makedirs(train_dst, exist_ok=True)
-    if val_dst is not None:
-        os.makedirs(val_dst, exist_ok=True)
+# directory setup for datasets with multiple classes; return maps of target directories
+def init_multi_dirs(class_map, train_dir, val_dir=None, modality="", suffix=""):
+    train_dst_map = {}
+    val_dst_map = {}
 
-    # create subdirectory for each class
-    for val in class_map.values():
-        subdir_name = val + suffix  # in case folder is moved into main class folders
-        os.makedirs(os.path.join(train_dst, subdir_name), exist_ok=True)
+    choice = multi_dst_prompt(modality, suffix)
 
-    if val_dst is not None:  # for datasets with test/val files and labels
-        for val in class_map.values():
-            subdir_name = val + suffix
-            os.makedirs(os.path.join(val_dst, subdir_name), exist_ok=True)
+    for class_name in class_map.values():
+        if choice == "1":
+            sub_path = class_name
+        elif choice == "2":
+            sub_path = os.path.join(class_name, f"{class_name}{suffix}")
+        else:
+            sub_path = os.path.join(f"{modality}{suffix}", f"{class_name}{suffix}")
+
+        # create train dir
+        train_dst = os.path.join(train_dir, sub_path)
+        os.makedirs(train_dst, exist_ok=True)
+        train_dst_map[class_name] = train_dst
+
+        # create train dir if needed
+        if val_dir is not None:
+            val_dst = os.path.join(val_dir, sub_path)
+            os.makedirs(val_dst, exist_ok=True)
+            val_dst_map[class_name] = val_dst
+
+    return train_dst_map, val_dst_map
 
 
 # return list of files in text file

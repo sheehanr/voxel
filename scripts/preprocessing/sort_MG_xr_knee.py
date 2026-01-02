@@ -2,7 +2,7 @@ import os
 import random
 
 from image_utils import process_image
-from shared import get_filepaths, get_subdirs, init_single_dir, split_data
+from shared import get_filepaths, init_single_dir, split_data
 from tqdm import tqdm
 
 DATASET_NAME = "MG_xr_knee"
@@ -25,7 +25,7 @@ def main():
     random.seed(42)
 
     train_dst, val_dst = init_single_dir(CLASS_NAME, CLASS_SUBDIR, TRAIN_DST, VAL_DST)
-    subdirs = get_subdirs(SRC_DIR)
+    subdirs = ["Normal", "Osteoporosis"]
     file_list = get_filepaths(SRC_DIR, subdirs)
     train_files, val_files = split_data(file_list)
 

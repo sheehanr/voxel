@@ -18,19 +18,25 @@ def init_multi_dirs(dirs_to_create, class_map, train_dst, val_dst=None, suffix="
             os.makedirs(os.path.join(val_dst, subdir_name), exist_ok=True)
 
 
+# prompt user for destination of files
+def dst_prompt(class_name, class_subdir):
+    print("Where should images be placed?:")
+    print(f"    1. Directly in data/train/{class_name}")
+    print(f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)")
+    print("    (Note: option 2 requires manual review and transfer before training)")
+
+    choice = input("Enter 1 or 2: ")
+    print("")
+
+    return choice
+
+
 # directory setup for datasets with one class; return paths of target directories
 def init_single_dir(class_name, class_subdir, train_dst, val_dst):
     os.makedirs(train_dst, exist_ok=True)
     os.makedirs(val_dst, exist_ok=True)
 
-    print("Where should images be placed?:")
-    print(f"    1. Directly in data/train/{class_name}")
-    print(f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)")
-    print("    (Note: option 2 requires manual review and transfer before training)")
-    choice = input("Enter 1 or 2: ")
-    print("")
-
-    if choice != "1":
+    if dst_prompt(class_name, class_subdir) != "1":
         backup_train = os.path.join(train_dst, class_subdir)
         backup_val = os.path.join(val_dst, class_subdir)
 

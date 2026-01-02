@@ -51,11 +51,19 @@ def init_single_dir(class_name, class_subdir, train_dst, val_dst):
 
 # return list of subdirectories of given directory
 def get_subdirs(src_dir):
+    if not os.path.exists(src_dir):
+        print(f"ERROR [get_subdirs]: {src_dir} not found")
+        return []
+
     return [d for d in os.listdir(src_dir) if os.path.isdir(os.path.join(src_dir, d))]
 
 
 # return list of all filepaths from all subdirectories in a given directory
 def get_filepaths(src_dir, subdirs):
+    if not os.path.exists(src_dir):
+        print(f"ERROR [get_filepaths]: {src_dir} not found")
+        return []
+
     file_list = []
 
     for subdir in subdirs:
@@ -82,6 +90,10 @@ def split_data(file_list, split_ratio=0.9):
 
 # map each unique filename to its full path
 def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
+    if not os.path.exists(src_dir):
+        print(f"ERROR [map_files]: {src_dir} not found")
+        return {}
+
     file_map = {}
 
     for root, dirs, files in os.walk(src_dir):
@@ -99,6 +111,10 @@ def sample_files(filenames, n=5500):
 
 # return list of files in text file
 def read_text_file(filepath):
+    if not os.path.exists(filepath):
+        print(f"ERROR [read_text_file]: {filepath} not found")
+        return []
+
     with open(filepath, "r") as f:
         filenames = [line.strip() for line in f.readlines()]
 

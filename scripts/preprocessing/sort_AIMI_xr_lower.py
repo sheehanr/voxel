@@ -64,6 +64,7 @@ def process_csv(csv_path, allowed_set):
 
 def load_allowlist(allowlist_path):
     if not os.path.exists(allowlist_path):
+        print(f"ERROR [load_allowlist]: {allowlist_path} not found")
         return None
 
     raw_list = read_text_file(allowlist_path)

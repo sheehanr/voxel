@@ -16,22 +16,19 @@ def dst_prompt(class_name, suffix):
 
 
 # directory setup for datasets with one class; return paths of target directories
-def init_single_dir(class_name, train_dst, val_dst, suffix=""):
-    os.makedirs(train_dst, exist_ok=True)
-    os.makedirs(val_dst, exist_ok=True)
-
+def init_single_dir(class_name, train_dir, val_dir, suffix=""):
     if dst_prompt(class_name, suffix) != "1":
         class_subdir = f"{class_name}{suffix}"
-        backup_train = os.path.join(train_dst, class_subdir)
-        backup_val = os.path.join(val_dst, class_subdir)
+        train_dst = os.path.join(train_dir, class_subdir)
+        val_dst = os.path.join(val_dir, class_subdir)
 
-        os.makedirs(backup_train, exist_ok=True)
-        os.makedirs(backup_val, exist_ok=True)
+    train_dst = os.path.join(train_dir, class_name)
+    val_dst = os.path.join(val_dir, class_name)
 
-        return backup_train, backup_val
+    os.makedirs(train_dir, exist_ok=True)
+    os.makedirs(val_dir, exist_ok=True)
 
-    else:
-        return train_dst, val_dst
+    return train_dst, val_dst
 
 
 # directory setup for datasets with multiple classes; no return

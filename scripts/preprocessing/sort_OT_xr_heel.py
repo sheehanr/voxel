@@ -17,14 +17,11 @@ VAL_DIR = os.path.join(DATA_DIR, "val")
 DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
 SRC_DIR = os.path.join(DATASET_DIR, "all_category/all_category")
 
-TRAIN_DST = os.path.join(TRAIN_DIR, CLASS_NAME)
-VAL_DST = os.path.join(VAL_DIR, CLASS_NAME)
-
 
 def main():
     random.seed(42)
 
-    train_dst, val_dst = init_single_dir(CLASS_NAME, TRAIN_DST, VAL_DST, SUFFIX)
+    train_dst, val_dst = init_single_dir(CLASS_NAME, TRAIN_DIR, VAL_DIR, SUFFIX)
     subdirs = get_subdirs(SRC_DIR)
     file_list = get_filepaths(SRC_DIR, subdirs)
     train_files, val_files = split_data(file_list)

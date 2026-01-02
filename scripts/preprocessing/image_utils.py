@@ -56,14 +56,11 @@ def load_dcm(dcm_path):
     dcm = pydicom.dcmread(dcm_path)
     pixels = dcm.pixel_array
 
-    # fix inverted images
-    if dcm.PhotometricInterpretation == "MONOCHROME1":
+    if dcm.PhotometricInterpretation == "MONOCHROME1":  # fix inverted images
         pixels = np.max(pixels) - pixels
 
     normalized_pixels = normalize_pixels(pixels)
-
-    # return PIL image
-    if normalized_pixels is None:
+    if normalized_pixels is None:  # empty image
         return None
 
     return Image.fromarray(normalized_pixels)
@@ -72,10 +69,12 @@ def load_dcm(dcm_path):
 # load, process, and save image
 def process_image(filepath, dst_dir, prefix=None, img_size=IMG_SIZE):
     if not os.path.exists(filepath):
+        print(f"ERROR [process_image]: {filepath} not found")
         return
 
-    img = None
+    os.makedirs(dst_dir, exist_ok=True)
     filename, ext = os.path.splitext(os.path.basename(filepath))
+    img = None
 
     # handle according to file extension
     if ext == ".dcm":

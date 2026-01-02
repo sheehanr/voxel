@@ -18,7 +18,7 @@ def dst_prompt(class_name, suffix):
 # directory setup prompt for datasets with multiple classes
 def multi_dst_prompt(modality, suffix):
     print(f"\nSelect destination for ALL '{modality}_*' classes:")
-    print(f"  [1] MERGE:   data/train/{modality}_[class]")
+    print(f"  [1] MERGE: data/train/{modality}_[class]")
     print(f"  [2] REVIEW IN CLASS: data/train/{modality}_[class]/{modality}_[class]{suffix}")
     print(f"  [3] REVIEW IN DATASET: data/train/{modality}{suffix}/{modality}_[class]{suffix}")
 

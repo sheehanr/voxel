@@ -49,7 +49,7 @@ def init_single_dir(class_name, class_subdir, train_dst, val_dst):
         return train_dst, val_dst
 
 
-# return list of subdirectories of given directory (to use in get_filepaths)
+# return list of subdirectories of given directory
 def get_subdirs(src_dir):
     return [d for d in os.listdir(src_dir) if os.path.isdir(os.path.join(src_dir, d))]
 
@@ -57,6 +57,7 @@ def get_subdirs(src_dir):
 # return list of all filepaths from all subdirectories in a given directory
 def get_filepaths(src_dir, subdirs):
     file_list = []
+
     for subdir in subdirs:
         subdir_path = os.path.join(src_dir, subdir)
         for filename in os.listdir(subdir_path):
@@ -82,6 +83,7 @@ def split_data(file_list, split_ratio=0.9):
 # map each unique filename to its full path
 def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
     file_map = {}
+
     for root, dirs, files in os.walk(src_dir):
         for f in files:
             if any(f.lower().endswith(ext) for ext in exts):

@@ -47,6 +47,15 @@ CLASS_MAP = {
 }
 
 
+# print information about data placement
+def important_info():
+    print("IMPORTANT INFO:")
+    print("- Single target images saved in data/train/xr_UNIFESP/xr_[bodypart]_UNIFESP")
+    print("- Multi target images saved in data/train/xr_UNIFESP/xr_multi_target")
+    print("- Test data ignored (no labels provided)")
+    print("- Manual review is required before training\n")
+
+
 # get unique image id and map it to its full path
 def map_files():
     file_map = {}
@@ -93,12 +102,7 @@ def process_images(file_map):
 
 
 def main():
-    print("IMPORTANT NOTES:")
-    print("- Images with a single target will be saved in data/train/xr_UNIFESP/xr_[bodypart]_UNIFESP")
-    print("- Images with multiple targets will be saved in .../xr_UNIFESP/xr_multi_target")
-    print("- There is no file or labeling for the test folder so it will be discarded")
-    print("- Manual review and transfer is required before training\n")
-
+    important_info()
     init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX, False)
     os.makedirs(MULTI_TARGET_DST, exist_ok=True)
     file_map = map_files()

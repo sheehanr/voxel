@@ -2,16 +2,14 @@ import os
 import random
 
 
-# prompt user for destination of files
-def dst_prompt(class_name, suffix):
-    print("Where should images be placed?:")
-    print(f"    1. Directly in data/train/{class_name}")
-    print(f"    2. In subdirectory data/train/{class_name}/{class_name}{suffix} (recommended)")
-    print("    (Note: option 2 requires manual review and transfer before training)")
+# directory setup prompt for datasets with one class
+def single_dst_prompt(class_name, suffix):
+    print(f"\nSelect destination for '{class_name}' dataset:")
+    print(f"  [1] MERGE: data/train/{class_name}")
+    print(f"  [2] REVIEW IN CLASS: data/train/{class_name}/{class_name}{suffix}")
 
-    choice = input("Enter 1 or 2: ")
+    choice = input("\nChoice (1/2): ").strip()
     print("")
-
     return choice
 
 
@@ -29,7 +27,7 @@ def multi_dst_prompt(modality, suffix):
 
 # directory setup for datasets with one class; return paths of target directories
 def init_single_dir(class_name, train_dir, val_dir, suffix=""):
-    if dst_prompt(class_name, suffix) != "1":
+    if single_dst_prompt(class_name, suffix) != "1":
         class_subdir = f"{class_name}{suffix}"
         train_dst = os.path.join(train_dir, class_subdir)
         val_dst = os.path.join(val_dir, class_subdir)

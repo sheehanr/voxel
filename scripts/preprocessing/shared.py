@@ -2,22 +2,6 @@ import os
 import random
 
 
-# directory setup for datasets with multiple classes; no return
-def init_multi_dirs(dirs_to_create, class_map, train_dst, val_dst=None, suffix=""):
-    for d in dirs_to_create:
-        os.makedirs(d, exist_ok=True)
-
-    # create subdirectory for each class
-    for val in class_map.values():
-        subdir_name = val + suffix  # in case folder is moved into main class folders
-        os.makedirs(os.path.join(train_dst, subdir_name), exist_ok=True)
-
-    if val_dst is not None:  # for datasets with test/val files and labels
-        for val in class_map.values():
-            subdir_name = val + suffix
-            os.makedirs(os.path.join(val_dst, subdir_name), exist_ok=True)
-
-
 # prompt user for destination of files
 def dst_prompt(class_name, class_subdir):
     print("Where should images be placed?:")
@@ -47,6 +31,50 @@ def init_single_dir(class_name, class_subdir, train_dst, val_dst):
 
     else:
         return train_dst, val_dst
+
+
+# directory setup for datasets with multiple classes; no return
+def init_multi_dirs(dirs_to_create, class_map, train_dst, val_dst=None, suffix=""):
+    for d in dirs_to_create:
+        os.makedirs(d, exist_ok=True)
+
+    # create subdirectory for each class
+    for val in class_map.values():
+        subdir_name = val + suffix  # in case folder is moved into main class folders
+        os.makedirs(os.path.join(train_dst, subdir_name), exist_ok=True)
+
+    if val_dst is not None:  # for datasets with test/val files and labels
+        for val in class_map.values():
+            subdir_name = val + suffix
+            os.makedirs(os.path.join(val_dst, subdir_name), exist_ok=True)
+
+
+# return list of files in text file
+def read_text_file(filepath):
+    if not os.path.exists(filepath):
+        print(f"ERROR [read_text_file]: {filepath} not found")
+        return []
+
+    with open(filepath, "r") as f:
+        filenames = [line.strip() for line in f.readlines()]
+
+    return filenames
+
+
+# map each unique filename to its full path
+def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
+    if not os.path.exists(src_dir):
+        print(f"ERROR [map_files]: {src_dir} not found")
+        return {}
+
+    file_map = {}
+
+    for root, dirs, files in os.walk(src_dir):
+        for f in files:
+            if any(f.lower().endswith(ext) for ext in exts):
+                file_map[f] = os.path.join(root, f)
+
+    return file_map
 
 
 # return list of subdirectories of given directory
@@ -88,34 +116,6 @@ def split_data(file_list, split_ratio=0.9):
     return train_files, val_files
 
 
-# map each unique filename to its full path
-def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
-    if not os.path.exists(src_dir):
-        print(f"ERROR [map_files]: {src_dir} not found")
-        return {}
-
-    file_map = {}
-
-    for root, dirs, files in os.walk(src_dir):
-        for f in files:
-            if any(f.lower().endswith(ext) for ext in exts):
-                file_map[f] = os.path.join(root, f)
-
-    return file_map
-
-
 # select randomly from list of filenames (not full path)
 def sample_files(filenames, n=5500):
     return random.sample(filenames, n)
-
-
-# return list of files in text file
-def read_text_file(filepath):
-    if not os.path.exists(filepath):
-        print(f"ERROR [read_text_file]: {filepath} not found")
-        return []
-
-    with open(filepath, "r") as f:
-        filenames = [line.strip() for line in f.readlines()]
-
-    return filenames

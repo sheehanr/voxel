@@ -64,8 +64,7 @@ def load_dcm(dcm_path):
     if normalized_pixels is None:
         return None
 
-    img = Image.fromarray(normalized_pixels)
-    return img
+    return Image.fromarray(normalized_pixels)
 
 
 # load, process, and save image
@@ -73,11 +72,8 @@ def process_image(filepath, dst_dir, prefix=None, img_size=(256, 256)):
     if not os.path.exists(filepath):
         return
 
-    # split file into name and extension
-    file = os.path.basename(filepath)
-    filename = os.path.splitext(file)[0]
-    ext = os.path.splitext(file)[1].lower()
     img = None
+    filename, ext = os.path.splitext(os.path.basename(filepath))
 
     # handle according to file extension
     if ext == ".dcm":
@@ -89,12 +85,12 @@ def process_image(filepath, dst_dir, prefix=None, img_size=(256, 256)):
     if img is None:  # incorrect extension or bad file
         return
 
-    # add prefix if needed
-    if prefix is not None:
-        filename = prefix + filename
+    # get destination path
+    if prefix:
+        filename = f"{prefix}{filename}"
+    dst_name = f"{filename}.png"
+    dst_path = os.path.join(dst_dir, dst_name)
 
     # standardize and save as png
-    dst_name = filename + ".png"
-    dst_path = os.path.join(dst_dir, dst_name)
     img = standardize_pil(img, img_size)
     img.save(dst_path)

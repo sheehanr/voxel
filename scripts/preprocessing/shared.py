@@ -13,18 +13,6 @@ def single_dst_prompt(class_name, suffix):
     return choice
 
 
-# directory setup prompt for datasets with multiple classes
-def multi_dst_prompt(modality, suffix):
-    print(f"\nSelect destination for ALL '{modality}_*' classes:")
-    print(f"  [1] MERGE: data/train/{modality}_[class]")
-    print(f"  [2] REVIEW IN CLASS: data/train/{modality}_[class]/{modality}_[class]{suffix}")
-    print(f"  [3] REVIEW IN DATASET: data/train/{modality}{suffix}/{modality}_[class]{suffix}")
-
-    choice = input("\nChoice (1/2/3): ").strip()
-    print("")
-    return choice
-
-
 # directory setup for datasets with one class; return paths of target directories
 def init_single_dir(class_name, train_dir, val_dir, suffix=""):
     if single_dst_prompt(class_name, suffix) != "1":
@@ -39,6 +27,18 @@ def init_single_dir(class_name, train_dir, val_dir, suffix=""):
     os.makedirs(val_dir, exist_ok=True)
 
     return train_dst, val_dst
+
+
+# directory setup prompt for datasets with multiple classes
+def multi_dst_prompt(modality, suffix):
+    print(f"\nSelect destination for ALL '{modality}_*' classes:")
+    print(f"  [1] MERGE: data/train/{modality}_[class]")
+    print(f"  [2] REVIEW IN CLASS: data/train/{modality}_[class]/{modality}_[class]{suffix}")
+    print(f"  [3] REVIEW IN DATASET: data/train/{modality}{suffix}/{modality}_[class]{suffix}")
+
+    choice = input("\nChoice (1/2/3): ").strip()
+    print("")
+    return choice
 
 
 # directory setup for datasets with multiple classes; return maps of target directories

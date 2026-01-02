@@ -25,9 +25,7 @@ def init_single_dir(class_name, class_subdir, train_dst, val_dst):
 
     print("Where should images be placed?:")
     print(f"    1. Directly in data/train/{class_name}")
-    print(
-        f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)"
-    )
+    print(f"    2. In subdirectory data/train/{class_name}/{class_subdir} (recommended)")
     print("    (Note: option 2 requires manual review and transfer before training)")
     choice = input("Enter 1 or 2: ")
     print("")

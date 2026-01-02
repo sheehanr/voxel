@@ -6,6 +6,7 @@ from shared import init_multi_dirs, read_text_file
 from tqdm import tqdm
 
 DATASET_NAME = "AIMI_xr_lower"
+MODALITY = "xr"
 SUFFIX = "_AIMI"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +30,7 @@ CLASS_MAP = {
 
 
 # read csv and move files according to label
-def process_csv(csv_path, allowed_set):
+def process_csv(csv_path, allowed_set, dst_map):
     df = pd.read_csv(csv_path, header=None)
 
     pbar_total = len(allowed_set) if allowed_set else 1297
@@ -52,9 +53,11 @@ def process_csv(csv_path, allowed_set):
                         if candidate_name not in allowed_set:
                             continue
 
+                    if class_name not in dst_map:
+                        continue
+
                     filepath = os.path.join(root, f)
-                    dst_subdir = class_name + SUFFIX
-                    dst_dir = os.path.join(TRAIN_DST, dst_subdir)
+                    dst_dir = dst_map[class_name]
 
                     prefix = current_dir + "_"
                     process_image(filepath, dst_dir, prefix)
@@ -76,7 +79,7 @@ def main():
     print(f"- All files will be saved in data/train/xr_AIMI/xr_[bodypart]{SUFFIX}")
     print("- Manual review and transfer is required before training\n")
 
-    init_multi_dirs(CLASS_MAP, TRAIN_DST, None, SUFFIX)
+    train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, MODALITY, SUFFIX)
     allowed_set = load_allowlist(ALLOWLIST)
 
     if allowed_set is None:
@@ -86,7 +89,7 @@ def main():
         if confirm.lower() != "y":
             return
 
-    process_csv(TRAIN_CSV, allowed_set)
+    process_csv(TRAIN_CSV, allowed_set, train_dst_map)
 
 
 if __name__ == "__main__":

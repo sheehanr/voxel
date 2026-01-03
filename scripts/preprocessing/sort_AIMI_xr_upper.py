@@ -1,6 +1,9 @@
 import os
 
+import pandas as pd
+from image_utils import process_image
 from shared import init_multi_dirs
+from tqdm import tqdm
 
 DATASET_NAME = "AIMI_xr_upper"
 SUFFIX = "_AIMI"
@@ -25,6 +28,35 @@ CLASS_MAP = {
     "XR_SHOULDER": "xr_shoulder",
     "XR_WRIST": "xr_wrist",
 }
+
+
+def process_row(row, class_map, dataset_dir, dst_map):
+    relative_path = row[0]
+    parts = relative_path.split("/")
+    raw_class_name = parts[2]
+    raw_patient_id = parts[3]
+    raw_study_id = parts[4]
+
+    if raw_class_name not in class_map:
+        return
+
+    class_name = class_map[raw_class_name]
+    patient_id = raw_patient_id[7:]  # patient00001 -> 00001
+    study_id = f"{raw_study_id[0]}{raw_study_id[5]}{raw_study_id[7]}"  # study1_positive -> s1p
+
+    filepath = os.path.join(dataset_dir, relative_path)
+    dst_dir = dst_map[class_name]
+
+    prefix = f"{patient_id}_{study_id}_"
+    process_image(filepath, dst_dir, prefix)
+
+
+def process_csv(csv_path, dataset_dir, class_map, dst_map, tqdm_desc="Processing files"):
+    df = pd.read_csv(csv_path, header=None)
+
+    with tqdm(df.iterrows(), total=len(df), desc=tqdm_desc):
+        for _, row in df.iterrows():
+            process_row(row, class_map, dataset_dir, dst_map)
 
 
 def main():

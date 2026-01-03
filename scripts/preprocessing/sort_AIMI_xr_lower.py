@@ -36,7 +36,8 @@ def load_allowlist(allowlist_path):
 
 
 # loop through the directory that corresponds with the current row of csv
-def process_file(filename, root, current_dir, class_name, allowed_set, dst_map, pbar):
+def process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar):
+    filename = os.path.basename(filepath)
     if filename.startswith("."):
         return
 
@@ -48,9 +49,7 @@ def process_file(filename, root, current_dir, class_name, allowed_set, dst_map, 
     if class_name not in dst_map:
         return
 
-    filepath = os.path.join(root, filename)
     dst_dir = dst_map[class_name]
-
     prefix = current_dir + "_"
     process_image(filepath, dst_dir, prefix)
 
@@ -58,7 +57,7 @@ def process_file(filename, root, current_dir, class_name, allowed_set, dst_map, 
 
 
 # each row of csv contains the directory name
-def process_dir(row, allowed_set, dst_map, pbar, class_map, src_dir):
+def process_dir(row, src_dir, class_map, dst_map, allowed_set, pbar):
     current_dir = str(row[0])
     class_name = class_map[str(row[1])]
 
@@ -68,16 +67,17 @@ def process_dir(row, allowed_set, dst_map, pbar, class_map, src_dir):
 
     for root, dirs, files in os.walk(current_path):
         for f in files:
-            process_file(f, root, current_dir, class_name, allowed_set, dst_map, pbar)
+            filepath = os.path.join(root, f)
+            process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar)
 
 
-def process_csv(csv_path, allowed_set, dst_map, class_map, src_dir):
+def process_csv(csv_path, src_dir, class_map, dst_map, allowed_set):
     df = pd.read_csv(csv_path, header=None)
 
     pbar_total = len(allowed_set) if allowed_set else 1297
     with tqdm(total=pbar_total, desc="Processing files") as pbar:
         for _, row in df.iterrows():
-            process_dir(row, allowed_set, dst_map, pbar, class_map, src_dir)
+            process_dir(row, src_dir, class_map, dst_map, allowed_set, pbar)
 
 
 def main():
@@ -91,7 +91,7 @@ def main():
         if confirm.lower() != "y":
             return
 
-    process_csv(TRAIN_CSV, allowed_set, train_dst_map, CLASS_MAP, SRC_DIR)
+    process_csv(TRAIN_CSV, SRC_DIR, CLASS_MAP, train_dst_map, allowed_set)
 
 
 if __name__ == "__main__":

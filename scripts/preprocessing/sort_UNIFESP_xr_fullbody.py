@@ -57,9 +57,9 @@ def important_info():
 
 
 # get unique image id and map it to its full path
-def map_files():
+def map_files(src_dir):
     file_map = {}
-    for root, dirs, files in os.walk(SRC_DIR):
+    for root, dirs, files in os.walk(src_dir):
         for f in files:
             if f.endswith(".dcm"):
                 image_id = f.split("-")[0]  # files end in "-c" which is not part of image id
@@ -113,7 +113,7 @@ def main():
     important_info()
 
     train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX, False)
-    file_map = map_files()
+    file_map = map_files(SRC_DIR)
 
     process_csv(TRAIN_CSV, file_map, train_dst_map, CLASS_MAP, MULTI_TARGET_DST)
 

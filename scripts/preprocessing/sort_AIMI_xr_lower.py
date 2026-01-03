@@ -18,8 +18,6 @@ SRC_DIR = DATASET_DIR
 TRAIN_CSV = os.path.join(DATASET_DIR, "labels.csv")
 ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/AIMI_xr_lower_allowlist.txt")
 
-TRAIN_DST = os.path.join(TRAIN_DIR, "xr_AIMI")
-
 CLASS_MAP = {
     "XR KNEE": "xr_knee",
     "XR HIP": "xr_hip",

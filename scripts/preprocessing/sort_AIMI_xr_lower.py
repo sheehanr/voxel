@@ -6,7 +6,6 @@ from shared import init_multi_dirs, read_text_file
 from tqdm import tqdm
 
 DATASET_NAME = "AIMI_xr_lower"
-MODALITY = "xr"
 SUFFIX = "_AIMI"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -75,7 +74,7 @@ def load_allowlist(allowlist_path):
 
 
 def main():
-    train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, MODALITY, SUFFIX)
+    train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX)
     allowed_set = load_allowlist(ALLOWLIST)
 
     if allowed_set is None:

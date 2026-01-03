@@ -30,9 +30,10 @@ CLASS_MAP = {
 }
 
 
-def process_row(row, class_map, dataset_dir, dst_map):
+def process_row(row, class_map, dataset_dir, dst_map, class_counts):
     relative_path = row[0]
     parts = relative_path.split("/")
+
     raw_class_name = parts[2]
     raw_patient_id = parts[3]
     raw_study_id = parts[4]
@@ -44,19 +45,30 @@ def process_row(row, class_map, dataset_dir, dst_map):
     patient_id = raw_patient_id[7:]  # patient00001 -> 00001
     study_id = f"{raw_study_id[0]}{raw_study_id[5]}{raw_study_id[7]}"  # study1_positive -> s1p
 
+    if class_name not in class_counts:
+        class_counts[class_name] = 0
+
+    if class_counts[class_name] >= 5000:
+        return
+
     filepath = os.path.join(dataset_dir, relative_path)
     dst_dir = dst_map[class_name]
 
     prefix = f"{patient_id}_{study_id}_"
     process_image(filepath, dst_dir, prefix)
 
+    class_counts[class_name] += 1
+
 
 def process_csv(csv_path, dataset_dir, class_map, dst_map, tqdm_desc="Processing files"):
     df = pd.read_csv(csv_path, header=None)
 
-    with tqdm(df.iterrows(), total=len(df), desc=tqdm_desc):
-        for _, row in df.iterrows():
-            process_row(row, class_map, dataset_dir, dst_map)
+    # for undersampling classes with over 5000 files
+    df = df.sample(frac=1, random_state=42).reset_index(drop=True)
+    class_counts = {}
+
+    for _, row in tqdm(df.iterrows(), total=len(df), desc=tqdm_desc):
+        process_row(row, class_map, dataset_dir, dst_map, class_counts)
 
 
 def main():

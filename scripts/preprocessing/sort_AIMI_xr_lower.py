@@ -41,13 +41,13 @@ def process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar):
     if filename.startswith("."):
         return
 
+    if class_name not in dst_map:
+        return
+
     if allowed_set is not None:
         candidate_name = f"{current_dir}_{os.path.splitext(filename)[0]}.png"
         if candidate_name not in allowed_set:
             return
-
-    if class_name not in dst_map:
-        return
 
     dst_dir = dst_map[class_name]
     prefix = current_dir + "_"
@@ -59,7 +59,11 @@ def process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar):
 # each row of csv contains the directory name
 def process_dir(row, src_dir, class_map, dst_map, allowed_set, pbar):
     current_dir = str(row[0])
-    class_name = class_map[str(row[1])]
+    raw_class_name = str(row[1])
+    if raw_class_name not in class_map:
+        return
+
+    class_name = class_map[raw_class_name]
 
     current_path = os.path.join(src_dir, current_dir)
     if not os.path.exists(current_path):

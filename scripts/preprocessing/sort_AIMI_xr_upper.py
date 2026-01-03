@@ -60,7 +60,10 @@ def process_csv(csv_path, dataset_dir, class_map, dst_map, tqdm_desc="Processing
 
 
 def main():
-    train_dst_map, val_dst_map = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX)
+    train_dst_map, val_dst_map = init_multi_dirs(CLASS_MAP, TRAIN_DIR, VAL_DIR, "xr", SUFFIX)
+
+    process_csv(TRAIN_CSV, DATASET_DIR, CLASS_MAP, train_dst_map, "Processing train files")
+    process_csv(VAL_CSV, DATASET_DIR, CLASS_MAP, val_dst_map, "Processing val files")
 
 
 if __name__ == "__main__":

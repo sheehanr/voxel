@@ -28,42 +28,6 @@ CLASS_MAP = {
 }
 
 
-# read csv and move files according to label
-def process_csv(csv_path, allowed_set, dst_map):
-    df = pd.read_csv(csv_path, header=None)
-
-    pbar_total = len(allowed_set) if allowed_set else 1297
-    with tqdm(total=pbar_total, desc="Processing files") as pbar:
-        for _, row in df.iterrows():
-            current_dir = str(row[0])
-            class_name = CLASS_MAP[str(row[1])]
-
-            current_path = os.path.join(SRC_DIR, current_dir)
-            if not os.path.exists(current_path):
-                continue
-
-            for root, dirs, files in os.walk(current_path):
-                for f in files:
-                    if f.startswith("."):
-                        continue
-
-                    if allowed_set is not None:
-                        candidate_name = f"{current_dir}_{os.path.splitext(f)[0]}.png"
-                        if candidate_name not in allowed_set:
-                            continue
-
-                    if class_name not in dst_map:
-                        continue
-
-                    filepath = os.path.join(root, f)
-                    dst_dir = dst_map[class_name]
-
-                    prefix = current_dir + "_"
-                    process_image(filepath, dst_dir, prefix)
-
-                    pbar.update(1)
-
-
 def load_allowlist(allowlist_path):
     if not os.path.exists(allowlist_path):
         print(f"ERROR [load_allowlist]: {allowlist_path} not found")
@@ -71,6 +35,51 @@ def load_allowlist(allowlist_path):
 
     raw_list = read_text_file(allowlist_path)
     return set(os.path.basename(f) for f in raw_list)
+
+
+# loop through the directory that corresponds with the current row of csv
+def process_file(filename, root, current_dir, class_name, allowed_set, dst_map, pbar):
+    if filename.startswith("."):
+        return
+
+    if allowed_set is not None:
+        candidate_name = f"{current_dir}_{os.path.splitext(filename)[0]}.png"
+        if candidate_name not in allowed_set:
+            return
+
+    if class_name not in dst_map:
+        return
+
+    filepath = os.path.join(root, filename)
+    dst_dir = dst_map[class_name]
+
+    prefix = current_dir + "_"
+    process_image(filepath, dst_dir, prefix)
+
+    pbar.update(1)
+
+
+# each row of csv contains the directory name
+def process_dir(row, allowed_set, dst_map, pbar, class_map, src_dir):
+    current_dir = str(row[0])
+    class_name = class_map[str(row[1])]
+
+    current_path = os.path.join(src_dir, current_dir)
+    if not os.path.exists(current_path):
+        return
+
+    for root, dirs, files in os.walk(current_path):
+        for f in files:
+            process_file(f, root, current_dir, class_name, allowed_set, dst_map, pbar)
+
+
+def process_csv(csv_path, allowed_set, dst_map, class_map, src_dir):
+    df = pd.read_csv(csv_path, header=None)
+
+    pbar_total = len(allowed_set) if allowed_set else 1297
+    with tqdm(total=pbar_total, desc="Processing files") as pbar:
+        for _, row in df.iterrows():
+            process_dir(row, allowed_set, dst_map, pbar, class_map, src_dir)
 
 
 def main():
@@ -84,7 +93,7 @@ def main():
         if confirm.lower() != "y":
             return
 
-    process_csv(TRAIN_CSV, allowed_set, train_dst_map)
+    process_csv(TRAIN_CSV, allowed_set, train_dst_map, CLASS_MAP, SRC_DIR)
 
 
 if __name__ == "__main__":

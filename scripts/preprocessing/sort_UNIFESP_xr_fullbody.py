@@ -68,46 +68,54 @@ def map_files():
     return file_map
 
 
-# move images to named folders
-def process_images(file_map):
-    df = pd.read_csv(TRAIN_CSV)
+def save_multi_target(img, targets, short_id, multi_target_dst):
+    dst_path = os.path.join(multi_target_dst, f"{'_'.join(targets)}_{short_id}.png")
+    img.save(dst_path)
+
+
+def save_single_target(img, target, short_id, dst_map, class_map):
+    class_name = class_map[target]
+    if class_name in dst_map:
+        dst_path = os.path.join(dst_map[class_name], f"{short_id}.png")
+        img.save(dst_path)
+
+
+# read one row of csv and process image
+def process_row(row, file_map, dst_map, class_map, multi_target_dst):
+    image_id = row["SOPInstanceUID"]
+    short_id = image_id[26:]  # all files have same prefix
+    if image_id not in file_map:
+        return
+
+    img = load_dcm(file_map[image_id])
+    if img is None:
+        return
+    img = standardize_pil(img)
+
+    target_str = str(row["Target"]).strip()
+    targets = target_str.split(" ")
+
+    # save image based on amount of targets
+    if len(targets) > 1:
+        save_multi_target(img, targets, short_id, multi_target_dst)
+    else:
+        save_single_target(img, int(targets[0]), short_id, dst_map, class_map)
+
+
+def process_csv(train_csv, file_map, dst_map, class_map, multi_target_dst):
+    df = pd.read_csv(train_csv)
+    os.makedirs(multi_target_dst, exist_ok=True)
     for _, row in tqdm(df.iterrows(), total=len(df), desc="Processing files"):
-        # verify file existence and get path
-        image_id = row["SOPInstanceUID"]
-        short_id = image_id[26:]  # all files have same prefix
-        if image_id not in file_map:
-            continue
-
-        filepath = file_map[image_id]
-
-        # convert and verify proper image
-        img = load_dcm(filepath)
-        img = standardize_pil(img)
-        if img is None:
-            continue
-
-        # save image as png based on number of targets
-        target_str = str(row["Target"]).strip()
-        targets = target_str.split(" ")
-
-        if len(targets) > 1:  # multiple anatomical regions
-            dst_path = os.path.join(MULTI_TARGET_DST, f"{'_'.join(targets)}_{short_id}.png")
-            img.save(dst_path)
-
-        else:
-            target = int(targets[0])
-            dst_subdir = CLASS_MAP[target] + SUFFIX
-            dst_path = os.path.join(TRAIN_DST, dst_subdir, f"{short_id}.png")
-            img.save(dst_path)
+        process_row(row, file_map, dst_map, class_map, multi_target_dst)
 
 
 def main():
     important_info()
-    init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX, False)
-    os.makedirs(MULTI_TARGET_DST, exist_ok=True)
+
+    train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX, False)
     file_map = map_files()
 
-    process_images(file_map)
+    process_csv(TRAIN_CSV, file_map, train_dst_map, CLASS_MAP, MULTI_TARGET_DST)
 
 
 if __name__ == "__main__":

@@ -15,16 +15,18 @@ def single_dst_prompt(class_name, suffix):
 
 # directory setup for datasets with one class; return paths of target directories
 def init_single_dir(class_name, train_dir, val_dir, suffix=""):
-    if single_dst_prompt(class_name, suffix) != "1":
-        class_subdir = f"{class_name}{suffix}"
-        train_dst = os.path.join(train_dir, class_subdir)
-        val_dst = os.path.join(val_dir, class_subdir)
+    choice = single_dst_prompt(class_name, suffix)
 
-    train_dst = os.path.join(train_dir, class_name)
-    val_dst = os.path.join(val_dir, class_name)
+    if choice == "1":
+        sub_path = class_name
+    else:
+        sub_path = os.path.join(class_name, f"{class_name}{suffix}")
 
-    os.makedirs(train_dir, exist_ok=True)
-    os.makedirs(val_dir, exist_ok=True)
+    train_dst = os.path.join(train_dir, sub_path)
+    os.makedirs(train_dst, exist_ok=True)
+
+    val_dst = os.path.join(val_dir, sub_path)
+    os.makedirs(val_dst, exist_ok=True)
 
     return train_dst, val_dst
 

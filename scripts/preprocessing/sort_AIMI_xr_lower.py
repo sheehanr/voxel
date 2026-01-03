@@ -50,7 +50,7 @@ def process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar):
             return
 
     dst_dir = dst_map[class_name]
-    prefix = current_dir + "_"
+    prefix = f"{current_dir}_"
     process_image(filepath, dst_dir, prefix)
 
     pbar.update(1)

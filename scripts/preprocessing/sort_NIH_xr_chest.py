@@ -24,24 +24,23 @@ N_TRAIN = 5000
 N_VAL = 500
 
 
+def process_files(filenames, dst_dir, file_map, tqdm_desc="Processing files"):
+    for f in tqdm(filenames, desc=tqdm_desc):
+        if f in file_map:
+            filepath = file_map[f]
+            process_image(filepath, dst_dir)
+
+
 def main():
     random.seed(42)
 
     train_dst, val_dst = init_single_dir(CLASS_NAME, TRAIN_DIR, VAL_DIR, SUFFIX)
     train_files = sample_files(read_text_file(TRAIN_FILE), N_TRAIN)
     val_files = sample_files(read_text_file(VAL_FILE), N_VAL)
-
     file_map = map_files(SRC_DIR)
 
-    for filename in tqdm(train_files, desc="Processing train files"):
-        if filename in file_map:
-            filepath = file_map[filename]
-            process_image(filepath, train_dst)
-
-    for filename in tqdm(val_files, desc="Processing val files"):
-        if filename in file_map:
-            filepath = file_map[filename]
-            process_image(filepath, val_dst)
+    process_files(train_files, train_dst, file_map, "Processing train files")
+    process_files(val_files, val_dst, file_map, "Processing val files")
 
 
 if __name__ == "__main__":

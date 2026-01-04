@@ -37,7 +37,7 @@ def download_datasets():
         "UNIFESP_xr_fullbody": "felipekitamura/unifesp-xray-bodypart-classification",
         "MD_xr_knee": "orvile/digital-knee-x-ray-images",
         "MG_xr_knee": "mohamedgobara/multi-class-knee-osteoporosis-x-ray-dataset",
-        "OT_xr_heel": "osamahtaher/heel-dataset",
+        "OT_xr_foot": "osamahtaher/heel-dataset",
     }
 
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}

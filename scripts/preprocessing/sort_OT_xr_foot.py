@@ -5,8 +5,8 @@ from image_utils import process_image
 from shared import get_filepaths, get_subdirs, init_single_dir, split_data
 from tqdm import tqdm
 
-DATASET_NAME = "OT_xr_heel"
-CLASS_NAME = "xr_heel"
+DATASET_NAME = "OT_xr_foot"
+CLASS_NAME = "xr_foot"
 SUFFIX = "_OT"
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -87,6 +87,16 @@ def read_text_file(filepath):
     return filenames
 
 
+# return unique filenames in allowlist
+def load_allowlist(allowlist_path):
+    if not os.path.exists(allowlist_path):
+        print(f"ERROR [load_allowlist]: {allowlist_path} not found")
+        return None
+
+    raw_list = read_text_file(allowlist_path)
+    return set(os.path.basename(f) for f in raw_list)
+
+
 # map each unique filename to its full path
 def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
     if not os.path.exists(src_dir):

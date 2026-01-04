@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 from image_utils import process_image
-from shared import init_multi_dirs, read_text_file
+from shared import init_multi_dirs, load_allowlist
 from tqdm import tqdm
 
 DATASET_NAME = "AIMI_xr_lower"
@@ -24,15 +24,6 @@ CLASS_MAP = {
     "XR ANKLE": "xr_ankle",
     "XR FOOT": "xr_foot",
 }
-
-
-def load_allowlist(allowlist_path):
-    if not os.path.exists(allowlist_path):
-        print(f"ERROR [load_allowlist]: {allowlist_path} not found")
-        return None
-
-    raw_list = read_text_file(allowlist_path)
-    return set(os.path.basename(f) for f in raw_list)
 
 
 # loop through the directory that corresponds with the current row of csv

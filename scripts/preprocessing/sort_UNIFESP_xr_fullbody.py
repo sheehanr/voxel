@@ -68,26 +68,28 @@ def map_files(src_dir):
     return file_map
 
 
-def save_multi_target(img, targets, short_id, multi_target_dst):
-    dst_path = os.path.join(multi_target_dst, f"{'_'.join(targets)}_{short_id}.png")
+def save_multi_target(img, targets, multi_target_dst, dcm_filename):
+    dst_path = os.path.join(multi_target_dst, f"{'_'.join(targets)}_{dcm_filename}.png")
     img.save(dst_path)
 
 
-def save_single_target(img, target, short_id, dst_map, class_map):
+def save_single_target(img, target, dst_map, class_map, dcm_filename):
     class_name = class_map[target]
     if class_name in dst_map:
-        dst_path = os.path.join(dst_map[class_name], f"{short_id}.png")
+        dst_path = os.path.join(dst_map[class_name], f"{dcm_filename}.png")
         img.save(dst_path)
 
 
 # read one row of csv and process image
 def process_row(row, file_map, dst_map, class_map, multi_target_dst):
     image_id = row["SOPInstanceUID"]
-    short_id = image_id[26:]  # all files have same prefix
     if image_id not in file_map:
         return
 
-    img = load_dcm(file_map[image_id])
+    dcm_path = file_map[image_id]
+    dcm_filename = os.path.splitext(os.path.basename(dcm_path))[0]
+
+    img = load_dcm(dcm_path)
     if img is None:
         return
     img = standardize_pil(img)
@@ -97,9 +99,9 @@ def process_row(row, file_map, dst_map, class_map, multi_target_dst):
 
     # save image based on amount of targets
     if len(targets) > 1:
-        save_multi_target(img, targets, short_id, multi_target_dst)
+        save_multi_target(img, targets, multi_target_dst, dcm_filename)
     else:
-        save_single_target(img, int(targets[0]), short_id, dst_map, class_map)
+        save_single_target(img, int(targets[0]), dst_map, class_map, dcm_filename)
 
 
 def process_csv(train_csv, file_map, dst_map, class_map, multi_target_dst):

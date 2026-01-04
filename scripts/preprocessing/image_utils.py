@@ -27,10 +27,14 @@ def inversion_helper(img):
 
 
 # convert image to standardized format
-def standardize_pil(img, img_size=IMG_SIZE):
+def standardize_pil(img, img_size=IMG_SIZE, check_inversion=True):
     img = img.convert("L")  # convert to grayscale
-    img = inversion_helper(img)  # check for inversion
-    img = ImageOps.pad(img, img_size, color=0)  # resize and preserve aspect ratio (pad black squares)
+
+    if check_inversion:
+        img.thumbnail(img_size, Image.Resampling.LANCZOS)  # shrink without distorting
+        img = inversion_helper(img)  # check for inversion
+
+    img = ImageOps.pad(img, img_size, method=Image.Resampling.LANCZOS, color=0)  # pad to preserve aspect ratio
 
     return img
 
@@ -67,7 +71,7 @@ def load_dcm(dcm_path):
 
 
 # load, process, and save image
-def process_image(filepath, dst_dir, prefix=None, img_size=IMG_SIZE):
+def process_image(filepath, dst_dir, prefix=None, check_inversion=True, img_size=IMG_SIZE):
     if not os.path.exists(filepath):
         print(f"ERROR [process_image]: {filepath} not found")
         return
@@ -79,6 +83,7 @@ def process_image(filepath, dst_dir, prefix=None, img_size=IMG_SIZE):
     # handle according to file extension
     if ext == ".dcm":
         img = load_dcm(filepath)
+        check_inversion = False
 
     elif ext in [".jpg", ".jpeg", ".png"]:
         img = Image.open(filepath)  # converts to PIL image
@@ -93,5 +98,5 @@ def process_image(filepath, dst_dir, prefix=None, img_size=IMG_SIZE):
     dst_path = os.path.join(dst_dir, dst_name)
 
     # standardize and save as png
-    img = standardize_pil(img, img_size)
+    img = standardize_pil(img, img_size, check_inversion)
     img.save(dst_path)

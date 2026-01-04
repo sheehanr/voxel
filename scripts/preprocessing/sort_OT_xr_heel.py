@@ -27,10 +27,10 @@ def main():
     train_files, val_files = split_data(file_list)
 
     for filepath in tqdm(train_files, desc="Processing train files"):
-        process_image(filepath, train_dst)
+        process_image(filepath, train_dst, check_inversion=False)
 
     for filepath in tqdm(val_files, desc="Processing val files"):
-        process_image(filepath, val_dst)
+        process_image(filepath, val_dst, check_inversion=False)
 
 
 if __name__ == "__main__":

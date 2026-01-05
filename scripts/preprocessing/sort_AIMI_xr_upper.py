@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 
 import pandas as pd
 from image_utils import process_image
@@ -45,9 +46,6 @@ def process_row(row, class_map, dataset_dir, dst_map, class_counts):
     patient_id = raw_patient_id[7:]  # patient00001 -> 00001
     study_id = f"{raw_study_id[0]}{raw_study_id[5]}{raw_study_id[7]}"  # study1_positive -> s1p
 
-    if class_name not in class_counts:
-        class_counts[class_name] = 0
-
     if class_counts[class_name] >= 5000:
         return
 
@@ -65,7 +63,7 @@ def process_csv(csv_path, dataset_dir, class_map, dst_map, tqdm_desc="Processing
 
     # for undersampling classes with over 5000 files
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-    class_counts = {}
+    class_counts = defaultdict(int)
 
     for _, row in tqdm(df.iterrows(), total=len(df), desc=tqdm_desc):
         process_row(row, class_map, dataset_dir, dst_map, class_counts)

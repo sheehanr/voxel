@@ -70,6 +70,27 @@ def load_dcm(dcm_path):
     return Image.fromarray(normalized_pixels)
 
 
+# handle file according to extension; return img and check_inversion
+def handle_file(filepath, ext, check_inversion):
+    if ext == ".dcm":
+        return load_dcm(filepath), False
+
+    elif ext in [".jpg", ".jpeg", ".png"]:
+        return Image.open(filepath), check_inversion
+
+    return None, True
+
+
+# get destination path
+def get_dst_path(filename, dst_dir, prefix):
+    if prefix:
+        filename = f"{prefix}{filename}"
+
+    dst_name = f"{filename}.png"
+
+    return os.path.join(dst_dir, dst_name)
+
+
 # load, process, and save image
 def process_image(filepath, dst_dir, prefix=None, check_inversion=True, img_size=IMG_SIZE):
     if not os.path.exists(filepath):
@@ -78,25 +99,12 @@ def process_image(filepath, dst_dir, prefix=None, check_inversion=True, img_size
 
     os.makedirs(dst_dir, exist_ok=True)
     filename, ext = os.path.splitext(os.path.basename(filepath))
-    img = None
 
-    # handle according to file extension
-    if ext == ".dcm":
-        img = load_dcm(filepath)
-        check_inversion = False
-
-    elif ext in [".jpg", ".jpeg", ".png"]:
-        img = Image.open(filepath)  # converts to PIL image
-
-    if img is None:  # incorrect extension or bad file
+    img, check_inversion = handle_file(filepath, ext, check_inversion)
+    if img is None:
         return
-
-    # get destination path
-    if prefix:
-        filename = f"{prefix}{filename}"
-    dst_name = f"{filename}.png"
-    dst_path = os.path.join(dst_dir, dst_name)
 
     # standardize and save as png
     img = standardize_pil(img, img_size, check_inversion)
+    dst_path = get_dst_path(filename, dst_dir, prefix)
     img.save(dst_path)

@@ -18,7 +18,7 @@ ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/UNIFESP_allowlist.txt")
 CLASS_MAP = {
     "xr_abdomen_UNIFESP": "xr_other",
     "xr_ankle_UNIFESP": "xr_ankle",
-    "xr_cervical_spine_UNIFESP": "xr_cervical_spine",
+    "xr_cervical_spine_UNIFESP": "xr_other",
     "xr_chest_frontal_UNIFESP": "xr_chest",
     "xr_chest_lateral_UNIFESP": "xr_chest",
     "xr_elbow_UNIFESP": "xr_elbow",

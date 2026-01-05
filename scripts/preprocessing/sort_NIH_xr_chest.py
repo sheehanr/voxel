@@ -27,8 +27,7 @@ N_VAL = 500
 def process_files(filenames, dst_dir, file_map, tqdm_desc="Processing files"):
     for f in tqdm(filenames, desc=tqdm_desc):
         if f in file_map:
-            filepath = file_map[f]
-            process_image(filepath, dst_dir)
+            process_image(file_map[f], dst_dir)
 
 
 def main():

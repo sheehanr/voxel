@@ -82,9 +82,9 @@ def read_text_file(filepath):
         return []
 
     with open(filepath, "r") as f:
-        filenames = [line.strip() for line in f.readlines()]
+        file_list = [line.strip() for line in f.readlines()]
 
-    return filenames
+    return file_list
 
 
 # return unique filenames in allowlist
@@ -128,7 +128,7 @@ def get_filepaths(src_dir, subdirs):
         print(f"ERROR [get_filepaths]: {src_dir} not found")
         return []
 
-    file_list = []
+    filepaths = []
 
     for subdir in subdirs:
         subdir_path = os.path.join(src_dir, subdir)
@@ -136,9 +136,9 @@ def get_filepaths(src_dir, subdirs):
             if filename.startswith("."):
                 continue
 
-            file_list.append(os.path.join(subdir_path, filename))
+            filepaths.append(os.path.join(subdir_path, filename))
 
-    return file_list
+    return filepaths
 
 
 # randomly separate files into train and val
@@ -152,6 +152,6 @@ def split_data(file_list, split_ratio=0.9):
     return train_files, val_files
 
 
-# select randomly from list of filenames (not full path)
-def sample_files(filenames, n=5500):
-    return random.sample(filenames, n)
+# randomly select files from list
+def sample_files(file_list, n=5500):
+    return random.sample(file_list, n)

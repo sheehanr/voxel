@@ -23,8 +23,8 @@ def main():
 
     train_dst, val_dst = init_single_dir(CLASS_NAME, TRAIN_DIR, VAL_DIR, SUFFIX)
     subdirs = get_subdirs(SRC_DIR)
-    file_list = get_filepaths(SRC_DIR, subdirs)
-    train_files, val_files = split_data(file_list)
+    filepaths = get_filepaths(SRC_DIR, subdirs)
+    train_files, val_files = split_data(filepaths)
 
     for filepath in tqdm(train_files, desc="Processing train files"):
         process_image(filepath, train_dst, check_inversion=False)

@@ -1,8 +1,9 @@
 import os
+import random
+from collections import defaultdict
 
-import pandas as pd
 from image_utils import process_image
-from shared import init_multi_dirs, load_allowlist
+from shared import init_multi_dirs, read_text_file, split_data
 from tqdm import tqdm
 
 DATASET_NAME = "AIMI_xr_lower"
@@ -11,82 +12,98 @@ SUFFIX = "_AIMI"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 TRAIN_DIR = os.path.join(DATA_DIR, "train")
+VAL_DIR = os.path.join(DATA_DIR, "val")
 
 DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
 SRC_DIR = DATASET_DIR
 
-TRAIN_CSV = os.path.join(DATASET_DIR, "labels.csv")
 ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/AIMI_xr_lower_allowlist.txt")
 
 CLASS_MAP = {
-    "XR KNEE": "xr_knee",
-    "XR HIP": "xr_hip",
-    "XR ANKLE": "xr_ankle",
-    "XR FOOT": "xr_foot",
+    "xr_knee_AIMI": "xr_knee",
+    "xr_hip_AIMI": "xr_hip",
+    "xr_ankle_AIMI": "xr_ankle",
+    "xr_foot_AIMI": "xr_foot",
 }
 
 
-# loop through the directory that corresponds with the current row of csv
-def process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar):
-    filename = os.path.basename(filepath)
-    if filename.startswith("."):
+def process_class(class_name, file_list, file_map, dst_map, pbar):
+    for f in file_list:
+        if f in file_map:
+            prefix = f[:5]
+            process_image(file_map[f], dst_map[class_name], prefix)
+            pbar.update(1)
+
+
+def process_files(class_lists_map, file_map, train_dst_map, val_dst_map):
+    total_files = sum(len(files) for files in class_lists_map.values())
+    with tqdm(total=total_files, desc="Processing files") as pbar:
+        for class_name, file_list in class_lists_map.items():
+            train_files, val_files = split_data(file_list)
+
+            process_class(class_name, train_files, file_map, train_dst_map, pbar)
+            process_class(class_name, val_files, file_map, val_dst_map, pbar)
+
+
+def parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map):
+    for row in allowlist:
+        # map class name to list of allowed files in the class
+        path_parts = row.split("/")
+        raw_class_name = path_parts[1]
+        raw_filename = path_parts[2]
+
+        if raw_class_name not in class_map:
+            continue
+
+        class_name = class_map[raw_class_name]
+        class_lists_map[class_name].append(raw_filename)
+
+        # map original directory name to list of allowed files in the directory
+        basename_parts = raw_filename.split("_")
+        original_dir_name = basename_parts[0]
+        original_basename = basename_parts[1]
+
+        dir_lists_map[original_dir_name].append(original_basename)
+
+
+def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, ext=".png"):
+    if not os.path.exists(src_dir):
+        print(f"ERROR [map_custom_filenames]: {src_dir} not found")
         return
 
-    if class_name not in dst_map:
+    allowlist = read_text_file(allowlist)
+    if allowlist is None:
         return
 
-    if allowed_set is not None:
-        candidate_name = f"{current_dir}_{os.path.splitext(filename)[0]}.png"
-        if candidate_name not in allowed_set:
-            return
+    random.shuffle(allowlist)
+    class_lists_map = defaultdict(list)  # xr_ankle -> [1023_0.png, 1125_0.png, ...]
+    dir_lists_map = defaultdict(list)  # 1001 -> [0.png, 1.png, ...]
 
-    dst_dir = dst_map[class_name]
-    prefix = f"{current_dir}_"
-    process_image(filepath, dst_dir, prefix)
-
-    pbar.update(1)
+    parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map)
+    file_map = map_custom_filenames(src_dir, dir_lists_map, ext)
+    process_files(class_lists_map, file_map, train_dst_map, val_dst_map)
 
 
-# each row of csv contains the directory name
-def process_dir(row, src_dir, class_map, dst_map, allowed_set, pbar):
-    current_dir = str(row[0])
-    raw_class_name = str(row[1])
-    if raw_class_name not in class_map:
-        return
+# map custom basename to the original file's path
+def map_custom_filenames(src_dir, dir_lists_map, ext):
+    file_map = {}  # 1023_0.png -> ../1023/ST-1/0.png
 
-    class_name = class_map[raw_class_name]
+    for root, dirs, files in os.walk(src_dir):
+        relative_path = os.path.relpath(root, src_dir)
+        top_dir = relative_path.split("/")[0]
 
-    current_path = os.path.join(src_dir, current_dir)
-    if not os.path.exists(current_path):
-        return
+        if top_dir in dir_lists_map:
+            for f in dir_lists_map[top_dir]:
+                if f in files:
+                    if f.lower().endswith(ext):
+                        file_map[f"{top_dir}_{f}"] = os.path.join(root, f)
 
-    for root, dirs, files in os.walk(current_path):
-        for f in files:
-            filepath = os.path.join(root, f)
-            process_file(filepath, current_dir, class_name, dst_map, allowed_set, pbar)
-
-
-def process_csv(csv_path, src_dir, class_map, dst_map, allowed_set):
-    df = pd.read_csv(csv_path, header=None)
-
-    pbar_total = len(allowed_set) if allowed_set else 1297
-    with tqdm(total=pbar_total, desc="Processing files") as pbar:
-        for _, row in df.iterrows():
-            process_dir(row, src_dir, class_map, dst_map, allowed_set, pbar)
+    return file_map
 
 
 def main():
-    train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX)
-    allowed_set = load_allowlist(ALLOWLIST)
-
-    if allowed_set is None:
-        print("WARNING: allowlist not found. All files, including duplicates, will be saved.")
-        confirm = input("Continue? (y/n): ")
-        print("")
-        if confirm.lower() != "y":
-            return
-
-    process_csv(TRAIN_CSV, SRC_DIR, CLASS_MAP, train_dst_map, allowed_set)
+    train_dst_map, val_dst_map = init_multi_dirs(CLASS_MAP, TRAIN_DIR, VAL_DIR, "xr", SUFFIX)
+    process_dataset(SRC_DIR, ALLOWLIST, CLASS_MAP, train_dst_map, val_dst_map)
 
 
 if __name__ == "__main__":

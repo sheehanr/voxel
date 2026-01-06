@@ -3,7 +3,7 @@ import random
 from collections import defaultdict
 
 from image_utils import process_image
-from shared import init_multi_dirs, load_allowlist, map_files, split_data
+from shared import init_multi_dirs, read_text_file, map_files, split_data
 from tqdm import tqdm
 
 DATASET_NAME = "UNIFESP_xr_fullbody"
@@ -97,7 +97,7 @@ def parse_allowlist(allowlist, class_map, class_lists_map):
 
 def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
     file_map = map_files(src_dir)
-    allowlist = load_allowlist(allowlist)
+    allowlist = read_text_file(allowlist)
     if allowlist is None:
         return
 

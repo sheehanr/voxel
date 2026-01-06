@@ -44,7 +44,11 @@ CLASS_MAP = {
 def process_class(class_name, file_list, file_map, dst_map, pbar):
     for f in file_list:
         if f in file_map:
-            process_image(file_map[f], dst_map[class_name])
+            filepath = file_map[f]
+            filename = os.path.splitext(os.path.basename(filepath))[0]
+            custom_name = filename[26:-2]
+
+            process_image(filepath, dst_map[class_name], custom_name=custom_name)
             pbar.update(1)
 
 

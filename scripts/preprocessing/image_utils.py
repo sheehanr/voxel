@@ -82,7 +82,10 @@ def handle_file(filepath, ext, check_inversion):
 
 
 # get destination path
-def get_dst_path(filename, dst_dir, prefix):
+def get_dst_path(filename, dst_dir, prefix, custom_name):
+    if custom_name:
+        filename = custom_name
+
     if prefix:
         filename = f"{prefix}{filename}"
 
@@ -92,7 +95,7 @@ def get_dst_path(filename, dst_dir, prefix):
 
 
 # load, process, and save image
-def process_image(filepath, dst_dir, prefix=None, check_inversion=True, img_size=IMG_SIZE):
+def process_image(filepath, dst_dir, prefix=None, custom_name=None, check_inversion=True, img_size=IMG_SIZE):
     if not os.path.exists(filepath):
         print(f"ERROR [process_image]: {filepath} not found")
         return
@@ -106,5 +109,5 @@ def process_image(filepath, dst_dir, prefix=None, check_inversion=True, img_size
 
     # standardize and save as png
     img = standardize_pil(img, img_size, check_inversion)
-    dst_path = get_dst_path(filename, dst_dir, prefix)
+    dst_path = get_dst_path(filename, dst_dir, prefix, custom_name)
     img.save(dst_path)

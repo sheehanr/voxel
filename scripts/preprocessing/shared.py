@@ -87,14 +87,13 @@ def read_text_file(filepath):
     return file_list
 
 
-# return unique filenames in allowlist
+# return unique filepaths in allowlist
 def load_allowlist(allowlist_path):
     if not os.path.exists(allowlist_path):
         print(f"ERROR [load_allowlist]: {allowlist_path} not found")
         return None
 
-    raw_list = read_text_file(allowlist_path)
-    return set(os.path.basename(f) for f in raw_list)
+    return read_text_file(allowlist_path)
 
 
 # map each unique filename to its full path

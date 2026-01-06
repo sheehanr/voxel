@@ -45,6 +45,8 @@ def process_class(class_name, file_list, file_map, dst_map, pbar):
     for f in file_list:
         if f in file_map:
             filepath = file_map[f]
+
+            # shorten name for readability; every file has identical 26 character prefix
             filename = os.path.splitext(os.path.basename(filepath))[0]
             custom_name = filename[26:-2]
 
@@ -70,6 +72,7 @@ def change_extension(basename, new_ext):
     return f"{filename}{new_ext}"
 
 
+# get list of files per class
 def parse_allowlist(allowlist, class_map, class_lists):
     chest_frontal_count = 0
 
@@ -82,12 +85,12 @@ def parse_allowlist(allowlist, class_map, class_lists):
             continue
 
         if raw_class_name == "xr_chest_frontal_UNIFESP":
-            if chest_frontal_count >= 218:
+            if chest_frontal_count >= 218:  # 218 frontal + 182 lateral chest x-rays
                 continue
             chest_frontal_count += 1
 
         class_name = class_map[raw_class_name]
-        filename = change_extension(raw_filename, ".dcm")
+        filename = change_extension(raw_filename, ".dcm")  # to mimic original file
 
         class_lists[class_name].append(filename)
 

@@ -3,7 +3,7 @@ import random
 from collections import defaultdict
 
 from image_utils import process_image
-from shared import init_multi_dirs, read_text_file, map_files, split_data
+from shared import init_multi_dirs, map_files, read_text_file, split_data
 from tqdm import tqdm
 
 DATASET_NAME = "UNIFESP_xr_fullbody"
@@ -72,7 +72,7 @@ def change_extension(basename, new_ext):
     return f"{filename}{new_ext}"
 
 
-# get list of files per class
+# map class name to list of allowed files in the class
 def parse_allowlist(allowlist, class_map, class_lists_map):
     chest_frontal_count = 0
 
@@ -96,7 +96,6 @@ def parse_allowlist(allowlist, class_map, class_lists_map):
 
 
 def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
-    file_map = map_files(src_dir)
     allowlist = read_text_file(allowlist)
     if allowlist is None:
         return
@@ -105,6 +104,7 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
     class_lists_map = defaultdict(list)
 
     parse_allowlist(allowlist, class_map, class_lists_map)
+    file_map = map_files(src_dir)
     process_files(class_lists_map, file_map, train_dst_map, val_dst_map)
 
 

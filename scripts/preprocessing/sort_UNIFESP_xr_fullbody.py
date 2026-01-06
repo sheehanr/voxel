@@ -54,10 +54,10 @@ def process_class(class_name, file_list, file_map, dst_map, pbar):
             pbar.update(1)
 
 
-def process_files(class_lists, file_map, train_dst_map, val_dst_map):
-    total_files = sum(len(files) for files in class_lists.values())
+def process_files(class_lists_map, file_map, train_dst_map, val_dst_map):
+    total_files = sum(len(files) for files in class_lists_map.values())
     with tqdm(total=total_files, desc="Processing files") as pbar:
-        for class_name, file_list in class_lists.items():
+        for class_name, file_list in class_lists_map.items():
             train_files, val_files = split_data(file_list)
 
             process_class(class_name, train_files, file_map, train_dst_map, pbar)
@@ -73,7 +73,7 @@ def change_extension(basename, new_ext):
 
 
 # get list of files per class
-def parse_allowlist(allowlist, class_map, class_lists):
+def parse_allowlist(allowlist, class_map, class_lists_map):
     chest_frontal_count = 0
 
     for row in allowlist:
@@ -92,7 +92,7 @@ def parse_allowlist(allowlist, class_map, class_lists):
         class_name = class_map[raw_class_name]
         filename = change_extension(raw_filename, ".dcm")  # to mimic original file
 
-        class_lists[class_name].append(filename)
+        class_lists_map[class_name].append(filename)
 
 
 def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
@@ -102,10 +102,10 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
         return
 
     random.shuffle(allowlist)
-    class_lists = defaultdict(list)
+    class_lists_map = defaultdict(list)
 
-    parse_allowlist(allowlist, class_map, class_lists)
-    process_files(class_lists, file_map, train_dst_map, val_dst_map)
+    parse_allowlist(allowlist, class_map, class_lists_map)
+    process_files(class_lists_map, file_map, train_dst_map, val_dst_map)
 
 
 def main():

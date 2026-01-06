@@ -1,123 +1,115 @@
 import os
+import random
+from collections import defaultdict
 
-import pandas as pd
-from image_utils import load_dcm, standardize_pil
-from shared import init_multi_dirs
+from image_utils import process_image
+from shared import init_multi_dirs, load_allowlist, map_files, split_data
 from tqdm import tqdm
 
 DATASET_NAME = "UNIFESP_xr_fullbody"
 SUFFIX = "_UNIFESP"
 
-# note: test folder is not included because it is unlabeled in dataset
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
 TRAIN_DIR = os.path.join(DATA_DIR, "train")
+VAL_DIR = os.path.join(DATA_DIR, "val")
 
 DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
 SRC_DIR = os.path.join(DATASET_DIR, "train")
 
-TRAIN_CSV = os.path.join(DATASET_DIR, "train.csv")
-
-TRAIN_DST = os.path.join(TRAIN_DIR, "xr_UNIFESP")
-MULTI_TARGET_DST = os.path.join(TRAIN_DST, "xr_multi_target")
+ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/UNIFESP_allowlist.txt")
 
 CLASS_MAP = {
-    0: "xr_abdomen",
-    1: "xr_ankle",
-    2: "xr_cervical_spine",
-    3: "xr_chest",
-    4: "xr_clavicles",
-    5: "xr_elbow",
-    6: "xr_foot",
-    7: "xr_finger",
-    8: "xr_forearm",
-    9: "xr_hand",
-    10: "xr_hip",
-    11: "xr_knee",
-    12: "xr_tibia",
-    13: "xr_lumbar_spine",
-    14: "xr_others",
-    15: "xr_pelvis",
-    16: "xr_shoulder",
-    17: "xr_sinus",
-    18: "xr_skull",
-    19: "xr_femur",
-    20: "xr_thoracic_spine",
-    21: "xr_wrist",
+    "xr_abdomen_UNIFESP": "xr_other",
+    "xr_ankle_UNIFESP": "xr_ankle",
+    "xr_cervical_spine_UNIFESP": "xr_other",
+    "xr_chest_frontal_UNIFESP": "xr_chest",
+    "xr_chest_lateral_UNIFESP": "xr_chest",
+    "xr_elbow_UNIFESP": "xr_elbow",
+    "xr_femur_UNIFESP": "xr_other",
+    "xr_foot_UNIFESP": "xr_foot",
+    "xr_forearm_UNIFESP": "xr_forearm",
+    "xr_hand_UNIFESP": "xr_hand",
+    "xr_hip_UNIFESP": "xr_hip",
+    "xr_knee_UNIFESP": "xr_knee",
+    "xr_lumbar_spine_UNIFESP": "xr_other",
+    "xr_pelvis_UNIFESP": "xr_other",
+    "xr_shoulder_UNIFESP": "xr_shoulder",
+    "xr_skull_UNIFESP": "xr_other",
+    "xr_tibia_UNIFESP": "xr_other",
+    "xr_wrist_UNIFESP": "xr_wrist",
 }
 
 
-# print information about data placement
-def important_info():
-    print("IMPORTANT INFO:")
-    print("- Single target images saved in data/train/xr_UNIFESP/xr_[bodypart]_UNIFESP")
-    print("- Multi target images saved in data/train/xr_UNIFESP/xr_multi_target")
-    print("- Test data ignored (no labels provided)")
-    print("- Manual review is required before training\n")
+def process_class(class_name, file_list, file_map, dst_map, pbar):
+    for f in file_list:
+        if f in file_map:
+            filepath = file_map[f]
+            filename = os.path.splitext(os.path.basename(filepath))[0]
+            custom_name = filename[26:-2]
+
+            process_image(filepath, dst_map[class_name], custom_name=custom_name)
+            pbar.update(1)
 
 
-# get unique image id and map it to its full path
-def map_files(src_dir):
-    file_map = {}
-    for root, dirs, files in os.walk(src_dir):
-        for f in files:
-            if f.endswith(".dcm"):
-                image_id = f.split("-")[0]  # files end in "-c" which is not part of image id
-                file_map[image_id] = os.path.join(root, f)
+def process_files(class_lists, file_map, train_dst_map, val_dst_map):
+    total_files = sum(len(files) for files in class_lists.values())
+    with tqdm(total=total_files, desc="Processing files") as pbar:
+        for class_name, file_list in class_lists.items():
+            train_files, val_files = split_data(file_list)
 
-    return file_map
+            process_class(class_name, train_files, file_map, train_dst_map, pbar)
+            process_class(class_name, val_files, file_map, val_dst_map, pbar)
 
 
-def save_multi_target(img, targets, multi_target_dst, dcm_filename):
-    dst_path = os.path.join(multi_target_dst, f"{'_'.join(targets)}_{dcm_filename}.png")
-    img.save(dst_path)
+def change_extension(basename, new_ext):
+    filename = os.path.splitext(basename)[0]
+    if new_ext[0] != ".":
+        new_ext = f".{new_ext}"
+
+    return f"{filename}{new_ext}"
 
 
-def save_single_target(img, target, dst_map, class_map, dcm_filename):
-    class_name = class_map[target]
-    if class_name in dst_map:
-        dst_path = os.path.join(dst_map[class_name], f"{dcm_filename}.png")
-        img.save(dst_path)
+def parse_allowlist(allowlist, class_map, class_lists):
+    chest_frontal_count = 0
+
+    for row in allowlist:
+        parts = row.split("/")
+        raw_class_name = parts[1]
+        raw_filename = parts[2]
+
+        if raw_class_name not in class_map:
+            continue
+
+        if raw_class_name == "xr_chest_frontal_UNIFESP":
+            if chest_frontal_count >= 218:
+                continue
+            chest_frontal_count += 1
+
+        class_name = class_map[raw_class_name]
+        filename = change_extension(raw_filename, ".dcm")
+
+        class_lists[class_name].append(filename)
 
 
-# read one row of csv and process image
-def process_row(row, file_map, dst_map, class_map, multi_target_dst):
-    image_id = row["SOPInstanceUID"]
-    if image_id not in file_map:
+def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
+    file_map = map_files(src_dir)
+    allowlist = load_allowlist(allowlist)
+    if allowlist is None:
         return
 
-    dcm_path = file_map[image_id]
-    dcm_filename = os.path.splitext(os.path.basename(dcm_path))[0]
+    random.shuffle(allowlist)
+    class_lists = defaultdict(list)
 
-    img = load_dcm(dcm_path)
-    if img is None:
-        return
-    img = standardize_pil(img)
-
-    target_str = str(row["Target"]).strip()
-    targets = target_str.split(" ")
-
-    # save image based on amount of targets
-    if len(targets) > 1:
-        save_multi_target(img, targets, multi_target_dst, dcm_filename)
-    else:
-        save_single_target(img, int(targets[0]), dst_map, class_map, dcm_filename)
-
-
-def process_csv(train_csv, file_map, dst_map, class_map, multi_target_dst):
-    df = pd.read_csv(train_csv)
-    os.makedirs(multi_target_dst, exist_ok=True)
-    for _, row in tqdm(df.iterrows(), total=len(df), desc="Processing files"):
-        process_row(row, file_map, dst_map, class_map, multi_target_dst)
+    parse_allowlist(allowlist, class_map, class_lists)
+    process_files(class_lists, file_map, train_dst_map, val_dst_map)
 
 
 def main():
-    important_info()
+    random.seed(42)
 
-    train_dst_map, _ = init_multi_dirs(CLASS_MAP, TRAIN_DIR, None, "xr", SUFFIX, False)
-    file_map = map_files(SRC_DIR)
-
-    process_csv(TRAIN_CSV, file_map, train_dst_map, CLASS_MAP, MULTI_TARGET_DST)
+    train_dst_map, val_dst_map = init_multi_dirs(CLASS_MAP, TRAIN_DIR, VAL_DIR, "xr", SUFFIX)
+    process_dataset(SRC_DIR, ALLOWLIST, CLASS_MAP, train_dst_map, val_dst_map)
 
 
 if __name__ == "__main__":

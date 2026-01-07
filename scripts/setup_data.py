@@ -1,22 +1,21 @@
-import os
 import zipfile
+from pathlib import Path
 
 from kaggle.api.kaggle_api_extended import KaggleApi
 from tqdm import tqdm
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../data"))
-DOWNLOADS_DIR = os.path.join(DATA_DIR, "downloads")
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../data").resolve()
+
+DOWNLOADS_DIR = DATA_DIR / "downloads"
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
 
 # create directories if needed
 def init_dirs():
-    os.makedirs(DATA_DIR, exist_ok=True)
-    os.makedirs(DOWNLOADS_DIR, exist_ok=True)
-    os.makedirs(TRAIN_DIR, exist_ok=True)
-    os.makedirs(VAL_DIR, exist_ok=True)
+    for dir in [DATA_DIR, DOWNLOADS_DIR, TRAIN_DIR, VAL_DIR]:
+        dir.mkdir(parents=True, exist_ok=True)
 
 
 # create directories and download datasets in them
@@ -43,9 +42,9 @@ def download_datasets():
     competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
 
     for directory, slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
-        dst = os.path.join(DOWNLOADS_DIR, directory)
+        dst = DOWNLOADS_DIR / directory
 
-        if os.path.exists(dst):
+        if dst.is_dir():
             print(f"\n{directory} already exists, skipping...")
             continue
 
@@ -60,23 +59,23 @@ def download_datasets():
             print(f"https://www.kaggle.com/datasets/{slug}")
 
     for directory, slug in tqdm(competitions.items(), desc="\nDownloading Competition Datasets"):
-        dst = os.path.join(DOWNLOADS_DIR, directory)
+        dst = DOWNLOADS_DIR / directory
 
-        if os.path.exists(dst):
+        if dst.is_dir():
             print(f"\n{directory} already exists, skipping...")
             continue
 
         try:
-            api.competition_download_files(slug, path=dst)
+            api.competition_download_files(slug, path=str(dst))
 
             # competitions do not support unzip=True
-            zip_name = slug + ".zip"
-            zip_path = os.path.join(dst, zip_name)
+            zip_path = dst / f"{slug}.zip"
 
-            if os.path.exists(zip_path):
+            if zip_path.exists():
                 with zipfile.ZipFile(zip_path, "r") as zip_ref:
                     zip_ref.extractall(dst)
-                os.remove(zip_path)
+
+                zip_path.unlink()
 
         except Exception:
             print(f"\nERROR [download_datasets]: Unable to download {directory}")

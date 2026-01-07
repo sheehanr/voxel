@@ -1,16 +1,35 @@
-import os
 import sys
+from pathlib import Path
 
 
-def get_size(path):
-    size = 0
-    for root, dirs, files in os.walk(path):
-        for f in files:
-            fp = os.path.join(root, f)
-            if not os.path.islink(fp):
-                size += os.path.getsize(fp)
+def get_dir_stats(path):
+    if not path.exists():
+        print(f"ERROR [print_dir_stats]: Directory '{path}' not found.")
+        return -1, -1, {}
 
-    return size
+    file_count = 0
+    total_bytes = 0
+    stats = {}
+
+    for item in sorted(path.iterdir()):
+        if item.is_dir():
+            count = 0
+            size = 0
+
+            for f in item.rglob("*"):
+                if f.is_file() and not f.is_symlink():
+                    count += 1
+                    size += f.stat().st_size
+
+            stats[item.name] = (count, size)
+            file_count += count
+            total_bytes += size
+
+        elif item.is_file() and not item.is_symlink():
+            file_count += 1
+            total_bytes += item.stat().st_size
+
+    return file_count, total_bytes, stats
 
 
 def format_size(size_bytes):
@@ -23,38 +42,16 @@ def format_size(size_bytes):
     return f"{size_bytes:.2f} TB"
 
 
-def get_dir_stats(path):
-    if not os.path.exists(path):
-        print(f"ERROR [print_dir_stats]: Directory '{path}' not found.")
-        return -1, -1, {}
+def print_dir_stats(path):
+    path = Path(path)
 
-    file_count = 0
-    total_bytes = 0
-    stats = {}
+    file_count, total_bytes, stats = get_dir_stats(path)
+    if file_count < 0:
+        return
 
-    for item in sorted(os.listdir(path)):
-        item_path = os.path.join(path, item)
+    name = path.name if path.name else path.resolve().name
 
-        if os.path.isdir(item_path):
-            count = 0
-            for root, dirs, files in os.walk(item_path):
-                count += len(files)
-
-            size = get_size(item_path)
-
-            stats[item] = (count, size)
-            file_count += count
-            total_bytes += size
-
-        elif os.path.isfile(item_path):
-            file_count += 1
-            total_bytes += os.path.getsize(item_path)
-
-    return file_count, total_bytes, stats
-
-
-def print_dir_stats(path, file_count, total_bytes, stats):
-    print(f"\n--- Statistics for: {os.path.basename(path)} ---")
+    print(f"\n--- Statistics for: {name} ---")
     print(f"\nTotal Files: {file_count}")
     print(f"Total Size:  {format_size(total_bytes)}")
 
@@ -73,9 +70,7 @@ def main():
         return
 
     path = sys.argv[1]
-    file_count, total_bytes, stats = get_dir_stats(path)
-    if file_count > -1:
-        print_dir_stats(path, file_count, total_bytes, stats)
+    print_dir_stats(path)
 
 
 if __name__ == "__main__":

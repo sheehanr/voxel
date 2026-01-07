@@ -11,78 +11,85 @@ DOWNLOADS_DIR = DATA_DIR / "downloads"
 TRAIN_DIR = DATA_DIR / "train"
 VAL_DIR = DATA_DIR / "val"
 
+DATASETS = {  # dictionary key corresponds to name of directory
+    "TUSEB_ct_brain": "ozguraslank/brain-stroke-ct-dataset",
+    "TCIA_ct_chest": "kmader/siim-medical-images",
+    "MH_ct_chest": "mohamedhanyyy/chest-ctscan-images",
+    "IQOTHNCCD_ct_chest": "adityamahimkar/iqothnccd-lung-cancer-dataset",
+    "MN_mr_brain": "masoudnickparvar/brain-tumor-mri-dataset",
+    "AIMI_mr_knee": "cjinny/mrnet-v1",
+    "NIH_xr_chest": "nih-chest-xrays/data",
+    "AIMI_xr_upper": "cjinny/mura-v11",
+    "UNIFESP_xr_fullbody": "felipekitamura/unifesp-xray-bodypart-classification",
+    "MD_xr_knee": "orvile/digital-knee-x-ray-images",
+    "MG_xr_knee": "mohamedgobara/multi-class-knee-osteoporosis-x-ray-dataset",
+    "OT_xr_foot": "osamahtaher/heel-dataset",
+}
+
+COMPETITIONS = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
+
 
 # create directories if needed
-def init_dirs():
-    for dir in [DATA_DIR, DOWNLOADS_DIR, TRAIN_DIR, VAL_DIR]:
+def init_dirs(dir_list):
+    for dir in dir_list:
         dir.mkdir(parents=True, exist_ok=True)
 
 
+def download_dataset(api, downloads_dir, directory, slug):
+    dst = downloads_dir / directory
+
+    if dst.is_dir():
+        print(f"\n{directory} already exists, skipping...")
+        return
+
+    try:
+        api.dataset_download_files(slug, path=dst, unzip=True)
+
+    except Exception:
+        print(f"\nERROR [download_datasets]: Unable to download {directory}")
+        print("\nTry downloading the dataset using the following command in your terminal:")
+        print(f"kaggle datasets download {slug}")
+        print("\nOr, download the dataset from the dataset webpage:")
+        print(f"https://www.kaggle.com/datasets/{slug}")
+
+
+def download_competition(api, downloads_dir, directory, slug):
+    dst = downloads_dir / directory
+
+    if dst.is_dir():
+        print(f"\n{directory} already exists, skipping...")
+        return
+
+    try:
+        api.competition_download_files(slug, path=str(dst))
+
+        # competitions do not support unzip=True
+        zip_path = dst / f"{slug}.zip"
+
+        if zip_path.exists():
+            with zipfile.ZipFile(zip_path, "r") as zip_ref:
+                zip_ref.extractall(dst)
+
+            zip_path.unlink()
+
+    except Exception:
+        print(f"\nERROR [download_datasets]: Unable to download {directory}")
+        print("\nTry downloading the dataset using the following command in your terminal:")
+        print(f"kaggle competitions download -c {slug}")
+        print("\nOr, download the dataset from the competition webpage:")
+        print(f"https://www.kaggle.com/competitions/{slug}/data")
+
+
 # create directories and download datasets in them
-def download_datasets():
+def kaggle_setup(downloads_dir, datasets, competitions):
     api = KaggleApi()
     api.authenticate()
 
-    # dictionary key corresponds to name of directory
-    datasets = {
-        "TUSEB_ct_brain": "ozguraslank/brain-stroke-ct-dataset",
-        "TCIA_ct_chest": "kmader/siim-medical-images",
-        "MH_ct_chest": "mohamedhanyyy/chest-ctscan-images",
-        "IQOTHNCCD_ct_chest": "adityamahimkar/iqothnccd-lung-cancer-dataset",
-        "MN_mr_brain": "masoudnickparvar/brain-tumor-mri-dataset",
-        "AIMI_mr_knee": "cjinny/mrnet-v1",
-        "NIH_xr_chest": "nih-chest-xrays/data",
-        "AIMI_xr_upper": "cjinny/mura-v11",
-        "UNIFESP_xr_fullbody": "felipekitamura/unifesp-xray-bodypart-classification",
-        "MD_xr_knee": "orvile/digital-knee-x-ray-images",
-        "MG_xr_knee": "mohamedgobara/multi-class-knee-osteoporosis-x-ray-dataset",
-        "OT_xr_foot": "osamahtaher/heel-dataset",
-    }
+    for directory, slug in tqdm(datasets.items(), desc="\nDownloading datasets"):
+        download_dataset(api, downloads_dir, directory, slug)
 
-    competitions = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
-
-    for directory, slug in tqdm(datasets.items(), desc="\nDownloading Datasets"):
-        dst = DOWNLOADS_DIR / directory
-
-        if dst.is_dir():
-            print(f"\n{directory} already exists, skipping...")
-            continue
-
-        try:
-            api.dataset_download_files(slug, path=dst, unzip=True)
-
-        except Exception:
-            print(f"\nERROR [download_datasets]: Unable to download {directory}")
-            print("\nTry downloading the dataset using the following command in your terminal:")
-            print(f"kaggle datasets download {slug}")
-            print("\nOr, download the dataset from the dataset webpage:")
-            print(f"https://www.kaggle.com/datasets/{slug}")
-
-    for directory, slug in tqdm(competitions.items(), desc="\nDownloading Competition Datasets"):
-        dst = DOWNLOADS_DIR / directory
-
-        if dst.is_dir():
-            print(f"\n{directory} already exists, skipping...")
-            continue
-
-        try:
-            api.competition_download_files(slug, path=str(dst))
-
-            # competitions do not support unzip=True
-            zip_path = dst / f"{slug}.zip"
-
-            if zip_path.exists():
-                with zipfile.ZipFile(zip_path, "r") as zip_ref:
-                    zip_ref.extractall(dst)
-
-                zip_path.unlink()
-
-        except Exception:
-            print(f"\nERROR [download_datasets]: Unable to download {directory}")
-            print("\nTry downloading the dataset using the following command in your terminal:")
-            print(f"kaggle competitions download -c {slug}")
-            print("\nOr, download the dataset from the competition webpage:")
-            print(f"https://www.kaggle.com/competitions/{slug}/data")
+    for directory, slug in tqdm(competitions.items(), desc="\nDownloading competition datasets"):
+        download_competition(api, downloads_dir, directory, slug)
 
 
 def main():
@@ -91,8 +98,8 @@ def main():
     if confirm.lower() != "y":
         return
 
-    init_dirs()
-    download_datasets()
+    init_dirs([DATA_DIR, DOWNLOADS_DIR, TRAIN_DIR, VAL_DIR])
+    kaggle_setup(DOWNLOADS_DIR, DATASETS, COMPETITIONS)
 
 
 if __name__ == "__main__":

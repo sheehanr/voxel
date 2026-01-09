@@ -2,7 +2,7 @@ import random
 from pathlib import Path
 
 from tqdm import tqdm
-from utils import get_filepaths, get_subdirs, init_single_dir, process_image, split_data
+from scripts.preprocessing.utils import get_filepaths, get_subdirs, init_single_dir, process_image, split_data
 
 DATASET_NAME = "xr_foot_OT"
 CLASS_NAME = "xr_foot"

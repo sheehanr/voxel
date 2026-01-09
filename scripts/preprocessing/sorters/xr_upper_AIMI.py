@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 from tqdm import tqdm
-from utils import init_multi_dirs, process_image
+from scripts.preprocessing.utils import init_multi_dirs, process_image
 
 DATASET_NAME = "xr_upper_AIMI"
 SUFFIX = "_AIMI"

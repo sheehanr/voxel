@@ -2,9 +2,8 @@ from collections import defaultdict
 from pathlib import Path
 
 import pandas as pd
-from image_utils import process_image
-from shared import init_multi_dirs
 from tqdm import tqdm
+from utils import init_multi_dirs, process_image
 
 DATASET_NAME = "AIMI_xr_upper"
 SUFFIX = "_AIMI"

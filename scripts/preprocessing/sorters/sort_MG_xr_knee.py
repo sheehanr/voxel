@@ -1,9 +1,8 @@
 import random
 from pathlib import Path
 
-from image_utils import process_image
-from shared import get_filepaths, init_single_dir, split_data
 from tqdm import tqdm
+from utils import get_filepaths, init_single_dir, process_image, split_data
 
 DATASET_NAME = "MG_xr_knee"
 CLASS_NAME = "xr_knee"

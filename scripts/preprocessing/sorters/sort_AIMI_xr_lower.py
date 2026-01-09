@@ -1,7 +1,7 @@
 from collections import defaultdict
 from pathlib import Path
 
-from shared import init_multi_dirs, process_classes, read_text_file
+from utils import init_multi_dirs, process_classes, read_text_file
 
 DATASET_NAME = "AIMI_xr_lower"
 SUFFIX = "_AIMI"

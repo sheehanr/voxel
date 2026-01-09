@@ -88,7 +88,7 @@ def map_custom_filenames(src_dir, dir_lists_map, ext):
 def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, ext=".png"):
     src_dir = Path(src_dir)
     if not src_dir.exists():
-        print(f"ERROR [map_custom_filenames]: {src_dir} not found")
+        print(f"ERROR [process_dataset]: {src_dir} not found")
         return
 
     allowlist = read_text_file(allowlist)

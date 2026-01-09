@@ -2,9 +2,7 @@ import random
 from collections import defaultdict
 from pathlib import Path
 
-from image_utils import process_image
-from shared import init_multi_dirs, read_text_file, split_data
-from tqdm import tqdm
+from shared import init_multi_dirs, process_classes, read_text_file
 
 DATASET_NAME = "AIMI_xr_lower"
 SUFFIX = "_AIMI"
@@ -27,22 +25,8 @@ CLASS_MAP = {
 }
 
 
-def process_class(class_name, file_list, file_map, dst_map, pbar):
-    for f in file_list:
-        if f in file_map:
-            prefix = f[:5]
-            process_image(file_map[f], dst_map[class_name], prefix)
-            pbar.update(1)
-
-
-def process_files(class_lists_map, file_map, train_dst_map, val_dst_map):
-    total_files = sum(len(files) for files in class_lists_map.values())
-    with tqdm(total=total_files, desc="Processing files") as pbar:
-        for class_name, file_list in class_lists_map.items():
-            train_files, val_files = split_data(file_list)
-
-            process_class(class_name, train_files, file_map, train_dst_map, pbar)
-            process_class(class_name, val_files, file_map, val_dst_map, pbar)
+def prefix_func(f):
+    return f[:5]
 
 
 def parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map):
@@ -101,7 +85,7 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, e
 
     parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map)
     file_map = map_custom_filenames(src_dir, dir_lists_map, ext)
-    process_files(class_lists_map, file_map, train_dst_map, val_dst_map)
+    process_classes(class_lists_map, file_map, train_dst_map, val_dst_map, prefix_func)
 
 
 def main():

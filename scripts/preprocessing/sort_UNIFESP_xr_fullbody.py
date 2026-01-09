@@ -2,9 +2,7 @@ import random
 from collections import defaultdict
 from pathlib import Path
 
-from image_utils import process_image
-from shared import init_multi_dirs, map_files, read_text_file, split_data
-from tqdm import tqdm
+from shared import init_multi_dirs, map_files, process_classes, read_text_file
 
 DATASET_NAME = "UNIFESP_xr_fullbody"
 SUFFIX = "_UNIFESP"
@@ -41,26 +39,9 @@ CLASS_MAP = {
 }
 
 
-def process_class(class_name, file_list, file_map, dst_map, pbar):
-    for f in file_list:
-        if f in file_map:
-            filepath = file_map[f]
-
-            # shorten name for readability; every file has identical 26 character prefix
-            custom_name = filepath.stem[26:-2]
-
-            process_image(filepath, dst_map[class_name], custom_name=custom_name)
-            pbar.update(1)
-
-
-def process_files(class_lists_map, file_map, train_dst_map, val_dst_map):
-    total_files = sum(len(files) for files in class_lists_map.values())
-    with tqdm(total=total_files, desc="Processing files") as pbar:
-        for class_name, file_list in class_lists_map.items():
-            train_files, val_files = split_data(file_list)
-
-            process_class(class_name, train_files, file_map, train_dst_map, pbar)
-            process_class(class_name, val_files, file_map, val_dst_map, pbar)
+def custom_name_func(filepath):
+    filepath = Path(filepath)
+    return filepath.stem[26:-2]
 
 
 def change_extension(basename, new_ext):
@@ -100,7 +81,7 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map):
 
     parse_allowlist(allowlist, class_map, class_lists_map)
     file_map = map_files(src_dir)
-    process_files(class_lists_map, file_map, train_dst_map, val_dst_map)
+    process_classes(class_lists_map, file_map, train_dst_map, val_dst_map, None, custom_name_func)
 
 
 def main():

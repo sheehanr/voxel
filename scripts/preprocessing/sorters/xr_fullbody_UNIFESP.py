@@ -4,7 +4,7 @@ from pathlib import Path
 
 from utils import init_multi_dirs, map_files, process_classes, read_text_file
 
-DATASET_NAME = "UNIFESP_xr_fullbody"
+DATASET_NAME = "xr_fullbody_UNIFESP"
 SUFFIX = "_UNIFESP"
 
 SCRIPT_DIR = Path(__file__).resolve().parent

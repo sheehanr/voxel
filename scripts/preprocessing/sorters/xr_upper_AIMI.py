@@ -5,7 +5,7 @@ import pandas as pd
 from tqdm import tqdm
 from utils import init_multi_dirs, process_image
 
-DATASET_NAME = "AIMI_xr_upper"
+DATASET_NAME = "xr_upper_AIMI"
 SUFFIX = "_AIMI"
 
 SCRIPT_DIR = Path(__file__).resolve().parent

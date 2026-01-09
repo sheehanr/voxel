@@ -4,7 +4,7 @@ from pathlib import Path
 from tqdm import tqdm
 from utils import init_single_dir, map_files, process_image, read_text_file, sample_files
 
-DATASET_NAME = "NIH_xr_chest"
+DATASET_NAME = "xr_chest_NIH"
 CLASS_NAME = "xr_chest"
 SUFFIX = "_NIH"
 

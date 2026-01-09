@@ -12,21 +12,21 @@ TRAIN_DIR = DATA_DIR / "train"
 VAL_DIR = DATA_DIR / "val"
 
 DATASETS = {  # dictionary key corresponds to name of directory
-    "TUSEB_ct_brain": "ozguraslank/brain-stroke-ct-dataset",
-    "TCIA_ct_chest": "kmader/siim-medical-images",
-    "MH_ct_chest": "mohamedhanyyy/chest-ctscan-images",
-    "IQOTHNCCD_ct_chest": "adityamahimkar/iqothnccd-lung-cancer-dataset",
-    "MN_mr_brain": "masoudnickparvar/brain-tumor-mri-dataset",
-    "AIMI_mr_knee": "cjinny/mrnet-v1",
-    "NIH_xr_chest": "nih-chest-xrays/data",
-    "AIMI_xr_upper": "cjinny/mura-v11",
-    "UNIFESP_xr_fullbody": "felipekitamura/unifesp-xray-bodypart-classification",
-    "MD_xr_knee": "orvile/digital-knee-x-ray-images",
-    "MG_xr_knee": "mohamedgobara/multi-class-knee-osteoporosis-x-ray-dataset",
-    "OT_xr_foot": "osamahtaher/heel-dataset",
+    "ct_brain_TUSEB": "ozguraslank/brain-stroke-ct-dataset",
+    "ct_chest_TCIA": "kmader/siim-medical-images",
+    "ct_chest_MH": "mohamedhanyyy/chest-ctscan-images",
+    "ct_chest_IQOTHNCCD": "adityamahimkar/iqothnccd-lung-cancer-dataset",
+    "mr_brain_MN": "masoudnickparvar/brain-tumor-mri-dataset",
+    "mr_knee_AIMI": "cjinny/mrnet-v1",
+    "xr_chest_NIH": "nih-chest-xrays/data",
+    "xr_upper_AIMI": "cjinny/mura-v11",
+    "xr_fullbody_UNIFESP": "felipekitamura/unifesp-xray-bodypart-classification",
+    "xr_knee_MD": "orvile/digital-knee-x-ray-images",
+    "xr_knee_MG": "mohamedgobara/multi-class-knee-osteoporosis-x-ray-dataset",
+    "xr_foot_OT": "osamahtaher/heel-dataset",
 }
 
-COMPETITIONS = {"RSNA_mr_spine": "rsna-2024-lumbar-spine-degenerative-classification"}
+COMPETITIONS = {"mr_spine_RSNA": "rsna-2024-lumbar-spine-degenerative-classification"}
 
 
 # create directories if needed

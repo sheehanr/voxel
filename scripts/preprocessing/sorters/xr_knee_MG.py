@@ -4,7 +4,7 @@ from pathlib import Path
 from tqdm import tqdm
 from utils import get_filepaths, init_single_dir, process_image, split_data
 
-DATASET_NAME = "MG_xr_knee"
+DATASET_NAME = "xr_knee_MG"
 CLASS_NAME = "xr_knee"
 SUFFIX = "_MG"
 

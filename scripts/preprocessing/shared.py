@@ -1,6 +1,9 @@
 import random
 from pathlib import Path
 
+from image_utils import process_image
+from tqdm import tqdm
+
 
 # directory setup prompt for datasets with one class
 def single_dst_prompt(class_name, suffix):
@@ -159,3 +162,28 @@ def split_data(file_list, split_ratio=0.9):
 # randomly select files from list
 def sample_files(file_list, n=5500):
     return random.sample(file_list, n)
+
+
+def process_class_files(class_name, file_list, file_map, dst_map, prefix_func, custom_name_func, pbar):
+    for f in file_list:
+        if f in file_map:
+            filepath = file_map[f]
+            prefix, custom_name = None, None
+
+            if prefix_func:
+                prefix = prefix_func(f)
+            if custom_name_func:
+                custom_name = custom_name_func(filepath)
+
+            process_image(filepath, dst_map[class_name], prefix, custom_name)
+            pbar.update(1)
+
+
+def process_classes(class_lists_map, file_map, train_dst_map, val_dst_map, prefix_func=None, custom_name_func=None):
+    total_files = sum(len(files) for files in class_lists_map.values())
+    with tqdm(total=total_files, desc="Processing files") as pbar:
+        for class_name, file_list in class_lists_map.items():
+            train_files, val_files = split_data(file_list)
+
+            process_class_files(class_name, train_files, file_map, train_dst_map, prefix_func, custom_name_func, pbar)
+            process_class_files(class_name, val_files, file_map, val_dst_map, prefix_func, custom_name_func, pbar)

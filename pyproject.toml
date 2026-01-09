@@ -1,0 +1,18 @@
+[build-system]
+    requires = ["setuptools>=61.0", "wheel"]
+    build-backend = "setuptools.build_meta"
+
+[project]
+name = "voxel"
+version = "0.1.0"
+dependencies = [
+    "kaggle",
+    "numpy",
+    "pandas",
+    "pillow",
+    "pydicom",
+    "tqdm",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]

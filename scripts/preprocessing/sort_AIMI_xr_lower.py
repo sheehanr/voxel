@@ -1,4 +1,3 @@
-import random
 from collections import defaultdict
 from pathlib import Path
 
@@ -79,7 +78,6 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, e
     if allowlist is None:
         return
 
-    random.shuffle(allowlist)
     class_lists_map = defaultdict(list)  # "xr_ankle" --> ["1023_0.png", "1125_0.png", ...]
     dir_lists_map = defaultdict(list)  # "1001" --> ["0.png", "1.png", ...]
 

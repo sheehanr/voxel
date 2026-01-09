@@ -13,5 +13,5 @@ def split_data(file_list, split_ratio=0.9):
 
 
 # randomly select files from list
-def sample_files(file_list, n=5500):
+def sample_files(file_list, n=5000):
     return random.sample(file_list, n)

@@ -30,7 +30,7 @@ CLASS_MAP = {
 }
 
 
-def process_row(row, class_map, dataset_dir, dst_map, class_counts):
+def process_row(row, class_map, dataset_dir, dst_map, class_counts, max_count):
     relative_path = row[0]
     parts = relative_path.split("/")
 
@@ -45,7 +45,7 @@ def process_row(row, class_map, dataset_dir, dst_map, class_counts):
     patient_id = raw_patient_id[7:]  # patient00001 -> 00001
     study_id = f"{raw_study_id[0]}{raw_study_id[5]}{raw_study_id[7]}"  # study1_positive -> s1p
 
-    if class_counts[class_name] >= 5000:
+    if class_counts[class_name] >= max_count:
         return
 
     filepath = dataset_dir / relative_path
@@ -57,7 +57,7 @@ def process_row(row, class_map, dataset_dir, dst_map, class_counts):
     class_counts[class_name] += 1
 
 
-def process_csv(csv_path, dataset_dir, class_map, dst_map, tqdm_desc="Processing files"):
+def process_csv(csv_path, dataset_dir, class_map, dst_map, max_count, tqdm_desc="Processing files"):
     df = pd.read_csv(csv_path, header=None)
 
     # for undersampling classes with over 5000 files
@@ -65,14 +65,14 @@ def process_csv(csv_path, dataset_dir, class_map, dst_map, tqdm_desc="Processing
     class_counts = defaultdict(int)
 
     for _, row in tqdm(df.iterrows(), total=len(df), desc=tqdm_desc):
-        process_row(row, class_map, dataset_dir, dst_map, class_counts)
+        process_row(row, class_map, dataset_dir, dst_map, class_counts, max_count)
 
 
 def main():
     train_dst_map, val_dst_map = init_multi_dirs(CLASS_MAP, TRAIN_DIR, VAL_DIR, "xr", SUFFIX)
 
-    process_csv(TRAIN_CSV, DATASET_DIR, CLASS_MAP, train_dst_map, "Processing train files")
-    process_csv(VAL_CSV, DATASET_DIR, CLASS_MAP, val_dst_map, "Processing val files")
+    process_csv(TRAIN_CSV, DATASET_DIR, CLASS_MAP, train_dst_map, 4500, "Processing train files")
+    process_csv(VAL_CSV, DATASET_DIR, CLASS_MAP, val_dst_map, 500, "Processing val files")
 
 
 if __name__ == "__main__":

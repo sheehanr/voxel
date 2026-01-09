@@ -19,8 +19,8 @@ SRC_DIR = DATASET_DIR
 TRAIN_FILE = DATASET_DIR / "train_val_list.txt"
 VAL_FILE = DATASET_DIR / "test_list.txt"
 
-N_TRAIN = 5000
-N_VAL = 500
+N_TRAIN = 4140
+N_VAL = 460
 
 
 def process_files(filenames, dst_dir, file_map, tqdm_desc="Processing files"):

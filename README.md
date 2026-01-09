@@ -59,10 +59,11 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 * **Training:** Transfer learning on 70,000+ imaging studies using PyTorch.
   * *Achieved a X% reduction in training time by using RTX 5080 (compared to _____).* 
 * **Data Balancing:** Undersampled large datasets at 5,000 images and applied weighted loss techniques to smaller datasets.
-* **Target Classes *(incomplete)*:** Classifies the following 15 specific clinical views:
+* **Target Classes *(incomplete)*:** Classifies the following 19 specific clinical views:
   * **CT:** Brain, Chest
   * **MRI:** Brain, Knee, Spine
-  * **X-Ray:** Chest, Elbow, Femur, Finger, Forearm, Hand, Heel, Humerus, Knee, Shoulder, Wrist
+  * **PET:** Full Body
+  * **X-Ray:** Ankle, Chest, Elbow, Finger, Foot, Forearm, Hand, Hip, Humerus, Knee, Shoulder, Wrist, Other
 
 ### 2. VoxeLLM (Radiology Assistant)
 

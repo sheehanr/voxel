@@ -164,6 +164,7 @@ def sample_files(file_list, n=5500):
     return random.sample(file_list, n)
 
 
+# loop through each file in the allowlist for a class
 def process_class_files(class_name, file_list, file_map, dst_map, prefix_func, custom_name_func, pbar):
     for f in file_list:
         if f in file_map:
@@ -179,6 +180,7 @@ def process_class_files(class_name, file_list, file_map, dst_map, prefix_func, c
             pbar.update(1)
 
 
+# loop to process files for datasets with multiple classes and a custom allowlist
 def process_classes(class_lists_map, file_map, train_dst_map, val_dst_map, prefix_func=None, custom_name_func=None):
     total_files = sum(len(files) for files in class_lists_map.values())
     with tqdm(total=total_files, desc="Processing files") as pbar:

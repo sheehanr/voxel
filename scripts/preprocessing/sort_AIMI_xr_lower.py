@@ -52,7 +52,7 @@ def parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map):
 
 # map custom basename to the original file's path
 def map_custom_filenames(src_dir, dir_lists_map, ext):
-    file_map = {}  # 1023_0.png -> ../1023/ST-1/0.png
+    file_map = {}  # "1023_0.png" --> "../1023/ST-1/0.png"
 
     for top_dir in dir_lists_map:
         patient_dir = src_dir / top_dir
@@ -80,8 +80,8 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, e
         return
 
     random.shuffle(allowlist)
-    class_lists_map = defaultdict(list)  # xr_ankle -> [1023_0.png, 1125_0.png, ...]
-    dir_lists_map = defaultdict(list)  # 1001 -> [0.png, 1.png, ...]
+    class_lists_map = defaultdict(list)  # "xr_ankle" --> ["1023_0.png", "1125_0.png", ...]
+    dir_lists_map = defaultdict(list)  # "1001" --> ["0.png", "1.png", ...]
 
     parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map)
     file_map = map_custom_filenames(src_dir, dir_lists_map, ext)

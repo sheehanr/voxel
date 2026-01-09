@@ -1,5 +1,5 @@
-import os
 import random
+from pathlib import Path
 
 from image_utils import process_image
 from shared import init_single_dir, map_files, read_text_file, sample_files
@@ -9,16 +9,16 @@ DATASET_NAME = "NIH_xr_chest"
 CLASS_NAME = "xr_chest"
 SUFFIX = "_NIH"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
+DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
 SRC_DIR = DATASET_DIR
 
-TRAIN_FILE = os.path.join(DATASET_DIR, "train_val_list.txt")
-VAL_FILE = os.path.join(DATASET_DIR, "test_list.txt")
+TRAIN_FILE = DATASET_DIR / "train_val_list.txt"
+VAL_FILE = DATASET_DIR / "test_list.txt"
 
 N_TRAIN = 5000
 N_VAL = 500

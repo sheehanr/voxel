@@ -1,5 +1,5 @@
-import os
 import random
+from pathlib import Path
 
 
 # directory setup prompt for datasets with one class
@@ -15,18 +15,21 @@ def single_dst_prompt(class_name, suffix):
 
 # directory setup for datasets with one class; return paths of target directories
 def init_single_dir(class_name, train_dir, val_dir, suffix=""):
+    train_dir = Path(train_dir)
+    val_dir = Path(val_dir)
+
     choice = single_dst_prompt(class_name, suffix)
 
     if choice == "1":
-        sub_path = class_name
+        sub_path = Path(class_name)
     else:
-        sub_path = os.path.join(class_name, f"{class_name}{suffix}")
+        sub_path = Path(class_name) / f"{class_name}{suffix}"
 
-    train_dst = os.path.join(train_dir, sub_path)
-    os.makedirs(train_dst, exist_ok=True)
+    train_dst = train_dir / sub_path
+    train_dst.mkdir(parents=True, exist_ok=True)
 
-    val_dst = os.path.join(val_dir, sub_path)
-    os.makedirs(val_dst, exist_ok=True)
+    val_dst = val_dir / sub_path
+    val_dst.mkdir(parents=True, exist_ok=True)
 
     return train_dst, val_dst
 
@@ -45,6 +48,8 @@ def multi_dst_prompt(modality, suffix):
 
 # directory setup for datasets with multiple classes; return maps of target directories
 def init_multi_dirs(class_map, train_dir, val_dir=None, modality="", suffix="", prompt=True):
+    train_dir = Path(train_dir)
+
     train_dst_map = {}
     val_dst_map = {}
 
@@ -55,21 +60,23 @@ def init_multi_dirs(class_map, train_dir, val_dir=None, modality="", suffix="", 
 
     for class_name in class_map.values():
         if choice == "1":
-            sub_path = class_name
+            sub_path = Path(class_name)
         elif choice == "2":
-            sub_path = os.path.join(class_name, f"{class_name}{suffix}")
+            sub_path = Path(class_name) / f"{class_name}{suffix}"
         else:
-            sub_path = os.path.join(f"{modality}{suffix}", f"{class_name}{suffix}")
+            sub_path = Path(f"{modality}{suffix}") / f"{class_name}{suffix}"
 
         # create train dir
-        train_dst = os.path.join(train_dir, sub_path)
-        os.makedirs(train_dst, exist_ok=True)
+        train_dst = train_dir / sub_path
+        train_dst.mkdir(parents=True, exist_ok=True)
         train_dst_map[class_name] = train_dst
 
         # create train dir if needed
         if val_dir is not None:
-            val_dst = os.path.join(val_dir, sub_path)
-            os.makedirs(val_dst, exist_ok=True)
+            val_dir = Path(val_dir)
+
+            val_dst = val_dir / sub_path
+            val_dst.mkdir(parents=True, exist_ok=True)
             val_dst_map[class_name] = val_dst
 
     return train_dst_map, val_dst_map
@@ -77,7 +84,8 @@ def init_multi_dirs(class_map, train_dir, val_dir=None, modality="", suffix="", 
 
 # return list of files in text file
 def read_text_file(filepath):
-    if not os.path.exists(filepath):
+    filepath = Path(filepath)
+    if not filepath.exists():
         print(f"ERROR [read_text_file]: {filepath} not found")
         return []
 
@@ -89,44 +97,50 @@ def read_text_file(filepath):
 
 # map each unique filename to its full path
 def map_files(src_dir, exts=[".png", ".jpg", ".jpeg", ".dcm"]):
-    if not os.path.exists(src_dir):
+    src_dir = Path(src_dir)
+    if not src_dir.exists():
         print(f"ERROR [map_files]: {src_dir} not found")
         return {}
 
     file_map = {}
 
-    for root, dirs, files in os.walk(src_dir):
-        for f in files:
-            if any(f.lower().endswith(ext) for ext in exts):
-                file_map[f] = os.path.join(root, f)
+    for f in src_dir.rglob("*"):
+        if f.is_file() and f.suffix.lower() in exts:
+            file_map[f.name] = f
 
     return file_map
 
 
 # return list of subdirectories of given directory
 def get_subdirs(src_dir):
-    if not os.path.exists(src_dir):
+    src_dir = Path(src_dir)
+    if not src_dir.exists():
         print(f"ERROR [get_subdirs]: {src_dir} not found")
         return []
 
-    return [d for d in os.listdir(src_dir) if os.path.isdir(os.path.join(src_dir, d))]
+    subdirs = []
+
+    for d in src_dir.iterdir():
+        if d.is_dir():
+            subdirs.append(d.name)
+
+    return subdirs
 
 
 # return list of all filepaths from all subdirectories in a given directory
 def get_filepaths(src_dir, subdirs):
-    if not os.path.exists(src_dir):
+    src_dir = Path(src_dir)
+    if not src_dir.exists():
         print(f"ERROR [get_filepaths]: {src_dir} not found")
         return []
 
     filepaths = []
 
     for subdir in subdirs:
-        subdir_path = os.path.join(src_dir, subdir)
-        for filename in os.listdir(subdir_path):
-            if filename.startswith("."):
-                continue
-
-            filepaths.append(os.path.join(subdir_path, filename))
+        subdir_path = src_dir / subdir
+        for f in subdir_path.iterdir():
+            if f.is_file() and not f.name.startswith("."):
+                filepaths.append(f)
 
     return filepaths
 

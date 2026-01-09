@@ -1,5 +1,5 @@
-import os
 import random
+from pathlib import Path
 
 from image_utils import process_image
 from shared import get_filepaths, get_subdirs, init_single_dir, split_data
@@ -9,13 +9,13 @@ DATASET_NAME = "OT_xr_foot"
 CLASS_NAME = "xr_foot"
 SUFFIX = "_OT"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
-SRC_DIR = os.path.join(DATASET_DIR, "all_category/all_category")
+DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
+SRC_DIR = DATASET_DIR / "all_category/all_category"
 
 
 def main():

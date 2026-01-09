@@ -1,6 +1,6 @@
-import os
 import random
 from collections import defaultdict
+from pathlib import Path
 
 from image_utils import process_image
 from shared import init_multi_dirs, map_files, read_text_file, split_data
@@ -9,15 +9,15 @@ from tqdm import tqdm
 DATASET_NAME = "UNIFESP_xr_fullbody"
 SUFFIX = "_UNIFESP"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
-SRC_DIR = os.path.join(DATASET_DIR, "train")
+DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
+SRC_DIR = DATASET_DIR / "train"
 
-ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/UNIFESP_allowlist.txt")
+ALLOWLIST = SCRIPT_DIR / "lists/UNIFESP_allowlist.txt"
 
 CLASS_MAP = {
     "xr_abdomen_UNIFESP": "xr_other",
@@ -47,8 +47,7 @@ def process_class(class_name, file_list, file_map, dst_map, pbar):
             filepath = file_map[f]
 
             # shorten name for readability; every file has identical 26 character prefix
-            filename = os.path.splitext(os.path.basename(filepath))[0]
-            custom_name = filename[26:-2]
+            custom_name = filepath.stem[26:-2]
 
             process_image(filepath, dst_map[class_name], custom_name=custom_name)
             pbar.update(1)
@@ -65,11 +64,7 @@ def process_files(class_lists_map, file_map, train_dst_map, val_dst_map):
 
 
 def change_extension(basename, new_ext):
-    filename = os.path.splitext(basename)[0]
-    if new_ext[0] != ".":
-        new_ext = f".{new_ext}"
-
-    return f"{filename}{new_ext}"
+    return str(Path(basename).with_suffix(new_ext))
 
 
 # map class name to list of allowed files in the class

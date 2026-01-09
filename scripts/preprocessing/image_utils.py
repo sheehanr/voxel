@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 import numpy as np
 import pydicom
@@ -71,7 +71,9 @@ def load_dcm(dcm_path):
 
 
 # handle file according to extension; return img and check_inversion
-def handle_file(filepath, ext, check_inversion):
+def handle_file(filepath, check_inversion):
+    ext = filepath.suffix.lower()
+
     if ext == ".dcm":
         return load_dcm(filepath), False
 
@@ -89,25 +91,27 @@ def get_dst_path(filename, dst_dir, prefix, custom_name):
     if prefix:
         filename = f"{prefix}{filename}"
 
-    dst_name = f"{filename}.png"
-
-    return os.path.join(dst_dir, dst_name)
+    return dst_dir / f"{filename}.png"
 
 
 # load, process, and save image
 def process_image(filepath, dst_dir, prefix=None, custom_name=None, check_inversion=True, img_size=IMG_SIZE):
-    if not os.path.exists(filepath):
+    filepath = Path(filepath)
+    dst_dir = Path(dst_dir)
+
+    if not filepath.exists():
         print(f"ERROR [process_image]: {filepath} not found")
         return
 
-    os.makedirs(dst_dir, exist_ok=True)
-    filename, ext = os.path.splitext(os.path.basename(filepath))
+    dst_dir.mkdir(parents=True, exist_ok=True)
 
-    img, check_inversion = handle_file(filepath, ext, check_inversion)
+    img, check_inversion = handle_file(filepath, check_inversion)
     if img is None:
         return
 
     # standardize and save as png
     img = standardize_pil(img, img_size, check_inversion)
+
+    filename = filepath.stem
     dst_path = get_dst_path(filename, dst_dir, prefix, custom_name)
     img.save(dst_path)

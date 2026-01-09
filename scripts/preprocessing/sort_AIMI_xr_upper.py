@@ -1,5 +1,5 @@
-import os
 from collections import defaultdict
+from pathlib import Path
 
 import pandas as pd
 from image_utils import process_image
@@ -9,16 +9,16 @@ from tqdm import tqdm
 DATASET_NAME = "AIMI_xr_upper"
 SUFFIX = "_AIMI"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
-SRC_DIR = os.path.join(DATASET_DIR, "MURA-v1.1")
+DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
+SRC_DIR = DATASET_DIR / "MURA-v1.1"
 
-TRAIN_CSV = os.path.join(SRC_DIR, "train_image_paths.csv")
-VAL_CSV = os.path.join(SRC_DIR, "valid_image_paths.csv")
+TRAIN_CSV = SRC_DIR / "train_image_paths.csv"
+VAL_CSV = SRC_DIR / "valid_image_paths.csv"
 
 CLASS_MAP = {
     "XR_ELBOW": "xr_elbow",
@@ -49,7 +49,7 @@ def process_row(row, class_map, dataset_dir, dst_map, class_counts):
     if class_counts[class_name] >= 5000:
         return
 
-    filepath = os.path.join(dataset_dir, relative_path)
+    filepath = dataset_dir / relative_path
     dst_dir = dst_map[class_name]
 
     prefix = f"{patient_id}_{study_id}_"

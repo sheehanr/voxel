@@ -1,6 +1,6 @@
-import os
 import random
 from collections import defaultdict
+from pathlib import Path
 
 from image_utils import process_image
 from shared import init_multi_dirs, read_text_file, split_data
@@ -9,15 +9,15 @@ from tqdm import tqdm
 DATASET_NAME = "AIMI_xr_lower"
 SUFFIX = "_AIMI"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
+DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
 SRC_DIR = DATASET_DIR
 
-ALLOWLIST = os.path.join(SCRIPT_DIR, "lists/AIMI_xr_lower_allowlist.txt")
+ALLOWLIST = SCRIPT_DIR / "lists/AIMI_xr_lower_allowlist.txt"
 
 CLASS_MAP = {
     "xr_knee_AIMI": "xr_knee",
@@ -66,8 +66,28 @@ def parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map):
         dir_lists_map[original_dir_name].append(original_basename)
 
 
+# map custom basename to the original file's path
+def map_custom_filenames(src_dir, dir_lists_map, ext):
+    file_map = {}  # 1023_0.png -> ../1023/ST-1/0.png
+
+    for top_dir in dir_lists_map:
+        patient_dir = src_dir / top_dir
+
+        if not patient_dir.exists():
+            continue
+
+        for f in patient_dir.rglob("*"):
+            if f.is_file() and f.name in dir_lists_map[top_dir]:
+                if f.suffix.lower() == ext:
+                    key = f"{top_dir}_{f.name}"
+                    file_map[key] = f
+
+    return file_map
+
+
 def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, ext=".png"):
-    if not os.path.exists(src_dir):
+    src_dir = Path(src_dir)
+    if not src_dir.exists():
         print(f"ERROR [map_custom_filenames]: {src_dir} not found")
         return
 
@@ -82,23 +102,6 @@ def process_dataset(src_dir, allowlist, class_map, train_dst_map, val_dst_map, e
     parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map)
     file_map = map_custom_filenames(src_dir, dir_lists_map, ext)
     process_files(class_lists_map, file_map, train_dst_map, val_dst_map)
-
-
-# map custom basename to the original file's path
-def map_custom_filenames(src_dir, dir_lists_map, ext):
-    file_map = {}  # 1023_0.png -> ../1023/ST-1/0.png
-
-    for root, dirs, files in os.walk(src_dir):
-        relative_path = os.path.relpath(root, src_dir)
-        top_dir = relative_path.split("/")[0]
-
-        if top_dir in dir_lists_map:
-            for f in dir_lists_map[top_dir]:
-                if f in files:
-                    if f.lower().endswith(ext):
-                        file_map[f"{top_dir}_{f}"] = os.path.join(root, f)
-
-    return file_map
 
 
 def main():

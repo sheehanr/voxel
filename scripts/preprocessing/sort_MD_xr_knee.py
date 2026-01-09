@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import random
 
 from image_utils import process_image
@@ -9,19 +9,19 @@ DATASET_NAME = "MD_xr_knee"
 CLASS_NAME = "xr_knee"
 SUFFIX = "_MD"
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.abspath(os.path.join(SCRIPT_DIR, "../../data"))
-TRAIN_DIR = os.path.join(DATA_DIR, "train")
-VAL_DIR = os.path.join(DATA_DIR, "val")
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
 
-DATASET_DIR = os.path.join(DATA_DIR, "downloads", DATASET_NAME)
-SRC_DIR = os.path.join(
-    DATASET_DIR,
-    "Digital Knee X-ray Images",
-    "Digital Knee X-ray Images",
-    "Knee X-ray Images",
-    "MedicalExpert-I",  # MedicalExpert-I and MedicalExpert-II have the same images
-    "MedicalExpert-I",
+DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
+SRC_DIR = (
+    DATASET_DIR
+    / "Digital Knee X-ray Images"
+    / "Digital Knee X-ray Images"
+    / "Knee X-ray Images"
+    / "MedicalExpert-I"  # MedicalExpert-I and MedicalExpert-II have the same images
+    / "MedicalExpert-I"
 )
 
 

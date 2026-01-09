@@ -3,8 +3,7 @@ from pathlib import Path
 from PIL import Image
 from tqdm import tqdm
 
-from scripts.preprocessing.utils.data import split_data
-from scripts.preprocessing.utils.image import load_dcm, standardize_pil
+from utils import load_dcm, split_data, standardize_pil
 
 IMG_SIZE = (256, 256)
 

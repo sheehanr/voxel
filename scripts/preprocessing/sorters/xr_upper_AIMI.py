@@ -9,7 +9,7 @@ DATASET_NAME = "xr_upper_AIMI"
 SUFFIX = "_AIMI"
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+DATA_DIR = (SCRIPT_DIR / "../../../data").resolve()
 TRAIN_DIR = DATA_DIR / "train"
 VAL_DIR = DATA_DIR / "val"
 

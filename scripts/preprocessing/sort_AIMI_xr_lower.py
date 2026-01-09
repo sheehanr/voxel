@@ -25,7 +25,7 @@ CLASS_MAP = {
 
 
 def prefix_func(f):
-    return f[:5]
+    return f[:5]  # custom filename without extension
 
 
 def parse_allowlist(allowlist, class_map, class_lists_map, dir_lists_map):

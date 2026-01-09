@@ -41,7 +41,7 @@ CLASS_MAP = {
 
 def custom_name_func(filepath):
     filepath = Path(filepath)
-    return filepath.stem[26:-2]
+    return filepath.stem[26:-2]  # all files have identical prefix and suffix
 
 
 def change_extension(basename, new_ext):

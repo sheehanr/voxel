@@ -15,7 +15,7 @@ VAL_DIR = DATA_DIR / "val"
 DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
 SRC_DIR = DATASET_DIR / "train"
 
-ALLOWLIST = SCRIPT_DIR / "lists/UNIFESP_allowlist.txt"
+ALLOWLIST = SCRIPT_DIR / "../lists/UNIFESP_allowlist.txt"
 
 CLASS_MAP = {
     "xr_abdomen_UNIFESP": "xr_other",

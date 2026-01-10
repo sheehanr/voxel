@@ -14,7 +14,7 @@ VAL_DIR = DATA_DIR / "val"
 DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
 SRC_DIR = DATASET_DIR
 
-ALLOWLIST = SCRIPT_DIR / "lists/AIMI_xr_lower_allowlist.txt"
+ALLOWLIST = SCRIPT_DIR / "../lists/AIMI_xr_lower_allowlist.txt"
 
 CLASS_MAP = {
     "xr_knee_AIMI": "xr_knee",

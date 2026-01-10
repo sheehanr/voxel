@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 from tqdm import tqdm
+
 from scripts.preprocessing.utils import init_multi_dirs, process_image
 
 DATASET_NAME = "xr_upper_AIMI"
@@ -29,8 +30,28 @@ CLASS_MAP = {
     "XR_WRIST": "xr_wrist",
 }
 
+MAX_TRAIN_COUNT = {
+    "xr_elbow": 4486,
+    "xr_finger": 4500,
+    "xr_forearm": 4500,
+    "xr_hand": 4464,
+    "xr_humerus": 4500,
+    "xr_shoulder": 4468,
+    "xr_wrist": 4478,
+}
 
-def process_row(row, class_map, dataset_dir, dst_map, class_counts, max_count):
+MAX_VAL_COUNT = {
+    "xr_elbow": 500,
+    "xr_finger": 500,
+    "xr_forearm": 500,
+    "xr_hand": 500,
+    "xr_humerus": 500,
+    "xr_shoulder": 496,
+    "xr_wrist": 497,
+}
+
+
+def process_row(row, class_map, dataset_dir, dst_map, class_count_map, max_count_map):
     relative_path = row[0]
     parts = relative_path.split("/")
 
@@ -45,7 +66,7 @@ def process_row(row, class_map, dataset_dir, dst_map, class_counts, max_count):
     patient_id = raw_patient_id[7:]  # patient00001 -> 00001
     study_id = f"{raw_study_id[0]}{raw_study_id[5]}{raw_study_id[7]}"  # study1_positive -> s1p
 
-    if class_counts[class_name] >= max_count:
+    if class_count_map[class_name] >= max_count_map[class_name]:
         return
 
     filepath = dataset_dir / relative_path
@@ -54,25 +75,25 @@ def process_row(row, class_map, dataset_dir, dst_map, class_counts, max_count):
     prefix = f"{patient_id}_{study_id}_"
     process_image(filepath, dst_dir, prefix)
 
-    class_counts[class_name] += 1
+    class_count_map[class_name] += 1
 
 
-def process_csv(csv_path, dataset_dir, class_map, dst_map, max_count, tqdm_desc="Processing files"):
+def process_csv(csv_path, dataset_dir, class_map, dst_map, max_count_map, tqdm_desc="Processing files"):
     df = pd.read_csv(csv_path, header=None)
 
     # for undersampling classes with over 5000 files
     df = df.sample(frac=1, random_state=42).reset_index(drop=True)
-    class_counts = defaultdict(int)
+    class_count_map = defaultdict(int)
 
     for _, row in tqdm(df.iterrows(), total=len(df), desc=tqdm_desc):
-        process_row(row, class_map, dataset_dir, dst_map, class_counts, max_count)
+        process_row(row, class_map, dataset_dir, dst_map, class_count_map, max_count_map)
 
 
 def main():
     train_dst_map, val_dst_map = init_multi_dirs(CLASS_MAP, TRAIN_DIR, VAL_DIR, "xr", SUFFIX)
 
-    process_csv(TRAIN_CSV, DATASET_DIR, CLASS_MAP, train_dst_map, 4500, "Processing train files")
-    process_csv(VAL_CSV, DATASET_DIR, CLASS_MAP, val_dst_map, 500, "Processing val files")
+    process_csv(TRAIN_CSV, DATASET_DIR, CLASS_MAP, train_dst_map, MAX_TRAIN_COUNT, "Processing train files")
+    process_csv(VAL_CSV, DATASET_DIR, CLASS_MAP, val_dst_map, MAX_VAL_COUNT, "Processing val files")
 
 
 if __name__ == "__main__":

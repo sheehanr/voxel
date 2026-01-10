@@ -38,31 +38,31 @@ def standardize_pil(img, img_size=IMG_SIZE, check_inversion=True):
 
 
 # normalizes dicom pixel range to match regular image files
-def normalize_pixels(pixel_array):
-    pixels = pixel_array.astype(float)  # convert from int to float
+def normalize_pixels(pixel_arr):
+    pixel_arr = pixel_arr.astype(float)  # convert from int to float
 
-    pixels -= np.min(pixels)  # adjust range: start from 0
-    max_val = np.max(pixels)
+    pixel_arr -= np.min(pixel_arr)  # adjust range: start from 0
+    max_val = np.max(pixel_arr)
 
     if max_val == 0:  # check for empty image before dividing
         return None
 
-    pixels /= max_val  # adjust range: 0 to 1
-    pixels *= 255  # adjust range: 0 to 255
+    pixel_arr /= max_val  # adjust range: 0 to 1
+    pixel_arr *= 255  # adjust range: 0 to 255
 
-    return pixels.astype(np.uint8)
+    return pixel_arr.astype(np.uint8)
 
 
 # process dicom; return PIL image
 def load_dcm(dcm_path):
     dcm = pydicom.dcmread(dcm_path)
-    pixels = dcm.pixel_array
+    dcm_arr = dcm.pixel_array
 
     if dcm.PhotometricInterpretation == "MONOCHROME1":  # fix inverted images
-        pixels = np.max(pixels) - pixels
+        dcm_arr = np.max(dcm_arr) - dcm_arr
 
-    normalized_pixels = normalize_pixels(pixels)
-    if normalized_pixels is None:  # empty image
+    normalized_dcm = normalize_pixels(dcm_arr)
+    if normalized_dcm is None:  # empty image
         return None
 
-    return Image.fromarray(normalized_pixels)
+    return Image.fromarray(normalized_dcm)

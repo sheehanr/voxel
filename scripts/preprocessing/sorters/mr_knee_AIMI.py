@@ -26,7 +26,7 @@ DATASET_DIR = DATA_DIR / "downloads" / DATASET_NAME
 SRC_DIR = DATASET_DIR / "MRNet-v1.0"
 
 TRAIN_SRC = SRC_DIR / "train"
-VAL_SRC = SRC_DIR / "val"
+VAL_SRC = SRC_DIR / "valid"
 
 
 def handle_npy(filepaths, dst_dir, tqdm_desc="Processing files"):

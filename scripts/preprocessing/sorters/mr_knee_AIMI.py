@@ -2,6 +2,7 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from tqdm import tqdm
 
 from scripts.preprocessing.utils import (
     get_dst_path,
@@ -28,8 +29,8 @@ TRAIN_SRC = SRC_DIR / "train"
 VAL_SRC = SRC_DIR / "val"
 
 
-def handle_npy(filepaths, dst_dir):
-    for f in filepaths:
+def handle_npy(filepaths, dst_dir, tqdm_desc="Processing files"):
+    for f in tqdm(filepaths, desc=tqdm_desc):
         if f.suffix.lower() != ".npy" or not f.exists():
             continue
 
@@ -60,8 +61,8 @@ def main():
     train_filepaths = get_filepaths(TRAIN_SRC, train_subdirs)
     val_filepaths = get_filepaths(VAL_SRC, val_subdirs)
 
-    handle_npy(train_filepaths, train_dst)
-    handle_npy(val_filepaths, val_dst)
+    handle_npy(train_filepaths, train_dst, "Processing train files")
+    handle_npy(val_filepaths, val_dst, "Processing val files")
 
 
 if __name__ == "__main__":

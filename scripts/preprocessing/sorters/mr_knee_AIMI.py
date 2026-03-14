@@ -60,6 +60,9 @@ def main():
     train_filepaths = get_filepaths(TRAIN_SRC, train_subdirs)
     val_filepaths = get_filepaths(VAL_SRC, val_subdirs)
 
+    handle_npy(train_filepaths, train_dst)
+    handle_npy(val_filepaths, val_dst)
+
 
 if __name__ == "__main__":
     main()

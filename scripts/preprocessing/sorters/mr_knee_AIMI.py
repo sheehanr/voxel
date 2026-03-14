@@ -28,6 +28,29 @@ TRAIN_SRC = SRC_DIR / "train"
 VAL_SRC = SRC_DIR / "val"
 
 
+def handle_npy(filepaths, dst_dir):
+    for f in filepaths:
+        if f.suffix.lower() != ".npy" or not f.exists():
+            continue
+
+        plane = f.parent.name  # "axial"/"coronal"/"sagittal"
+        file_id = f.stem  # "0001"
+
+        vol = np.load(f)
+        for i in range(vol.shape[0]):
+            slice_arr = vol[i]
+            normalized_slice = normalize_pixels(slice_arr)
+            if normalized_slice is None:
+                continue
+
+            slice_img = Image.fromarray(normalized_slice)
+            img = standardize_pil(slice_img, check_inversion=False)
+
+            filename = f"{file_id}_{plane}_{i}"
+            dst_path = get_dst_path(filename, dst_dir, None, None)
+            img.save(dst_path)
+
+
 def main():
     train_dst, val_dst = init_single_dir(CLASS_NAME, TRAIN_DIR, VAL_DIR, SUFFIX)
 

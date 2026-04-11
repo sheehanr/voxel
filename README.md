@@ -40,11 +40,11 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 * **Automatic Sorting:** Developed *ScanSort,* an automated sorting system for uploaded imaging and radiology reports, classifying them by type of scan (modality) and anatomical region using a fine-tuned Convolutional Neural Network **(CNN)** and Natural Language Processing **(NLP)** Transformer.
 * **Imaging Viewer:** Built a comprehensive imaging viewer capable of displaying 2D (X-Rays) and 3D (MRI, CT) imaging slices with native support for the DICOM (.dcm) file format.
   * **Comparison Tool:** Engineered a feature allowing for side-by-side observation of imaging studies to view changes over time.
-  * **Linked Scrolling *(optional)*:** Implemented a feature enabling CT scans with multiple planes to be viewed and navigated concurrently.
-  * **Longitudinal Image Registration *(optional)*:** Leveraged AI to automatically and intelligently highlight changes in medical scans over time.
-* **Radiology Assistant:** Created *VoxeLLM,* an AI-powered assistant that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
+  * **Linked Scrolling:** Implemented a feature enabling CT scans with multiple planes to be viewed and navigated concurrently.
+  * **Longitudinal Image Registration:** Leveraged on-device AI to automatically and intelligently highlight changes in medical scans over time.
+* **Radiology Assistant:** Created *VoxeLLM,* an on-device Large Language Model **(LLM)** that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
   * **Report-to-Image Linking:** Harnessed AI to highlight and link to locations mentioned in the radiology report (e.g. "slice 42" or "upper right lobe").
-* **HIPAA-Compliant:** Established a HIPAA-compliant architecture incorporating local Large Language Model **(LLM)** processing, on-device storage, and biometric authentication (Touch ID/Face ID) to ensure patient privacy.
+* **HIPAA-Compliant:** Established an architecture ensuring patient privacy by utilizing biometric authentication (Touch ID/Face ID) and on-device AI processing and file storage.
 * **User Friendly UI/UX:** Designed a patient-centric **UI/UX**, emphasizing intuitive navigation and a visually engaging, responsive interface consistent with Apple design language.
 
 ---
@@ -65,7 +65,7 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
   * **PET:** Full Body
   * **X-Ray:** Ankle, Chest, Elbow, Finger, Foot, Forearm, Hand, Hip, Humerus, Knee, Shoulder, Wrist, Other
 
-### 2. VoxeLLM (Radiology Assistant)
+### 2. VoxeLLM (Radiology Report Chatbot)
 
 **Goal:** Summarize radiology reports and be able to answer medical queries related to the report while maximizing accuracy and minimizing hallucinations. 
 

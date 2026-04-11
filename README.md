@@ -22,19 +22,6 @@ A patient-centric, HIPAA-compliant iOS app for viewing medical imaging. Features
 
 ---
 
-## Personal Context
-
-Since my cancer diagnosis, I have undergone countless imaging studies, sparking a deep personal interest in radiology. I wanted to analyze my scans outside the doctor's office, but faced significant barriers. The images were DICOM files, which required antiquated software designed for doctors, not patients. Additionally, the reports were full of medical terminology that was impossible to decipher without a medical background.
-
-I realized there was no solution built with the patient in mind. Something that would allow patients like myself to:
-* store scans and reports in one place regardless of provider,
-* view scans and compare them side-by-side to track changes, and
-* understand radiology reports using a local LLM.
-
-Voxel is my answer: a native iOS application designed to enable patients to access their medical scans. *Securely, privately, and intuitively.*
-
----
-
 ## Key Features
 
 ### Clinical-Grade Imaging Viewer
@@ -57,6 +44,19 @@ The app automatically categorizes and labels your medical files to eliminate man
 Understand your radiology reports without the medical jargon.
 * **Report Simplification:** Converts complex clinical language into plain, easy-to-understand English.
 * **Interactive Q&A:** Ask follow-up questions about your findings and get instant, clear explanations.
+
+---
+
+## Personal Context
+
+Since my cancer diagnosis, I have undergone countless imaging studies, sparking a deep personal interest in radiology. I wanted to analyze my scans outside the doctor's office, but faced significant barriers. The images were DICOM files, which required antiquated software designed for doctors, not patients. Additionally, the reports were full of medical terminology that was impossible to decipher without a medical background.
+
+I realized there was no solution built with the patient in mind. Something that would allow patients like myself to:
+* store scans and reports in one place regardless of provider,
+* view scans and compare them side-by-side to track changes, and
+* understand radiology reports using a local LLM.
+
+Voxel is my answer: a native iOS application designed to enable patients to access their medical scans. *Securely, privately, and intuitively.*
 
 ---
 
@@ -97,6 +97,17 @@ Understand your radiology reports without the medical jargon.
 * **Python Libraries:** Kaggle, NumPy, Pandas, Pillow, PyDicom, TQDM
 * **Hardware:** NVIDIA RTX 5080 (Training)
 * **Tools:** Xcode 26.2
+
+---
+
+## Requirements (Placeholders)
+
+* **iOS Development:** Swift X.X.X, Xcode XX.X
+* **Model Engineering:** Python X.X, *see `requirements.txt` for list of Python libraries*
+  * *Note: Discrete NVIDIA GPU is recommended to improve training times.*
+* **Device and Software Version:** Apple iPhone XX or higher running iOS XX.X.X or higher. 
+  * *Note: Apple iPhone XX or higher is recommended to use AI features due to RAM limitations.*
+  * *Note: Apple iPhone XX or higher is required for biometric authentication.*
 
 ---
 
@@ -190,17 +201,6 @@ To train the model for ScanSort, all imaging study datasets were sourced from [K
 ### 2. VoxeLLM (Radiology Assistant)
 
 To train the model for VoxeLLM, 
-
----
-
-## Requirements (Placeholders)
-
-* **iOS Development:** Swift X.X.X, Xcode XX.X
-* **Model Engineering:** Python X.X, *see `requirements.txt` for list of Python libraries*
-  * *Note: Discrete NVIDIA GPU is recommended to improve training times.*
-* **Device and Software Version:** Apple iPhone XX or higher running iOS XX.X.X or higher. 
-  * *Note: Apple iPhone XX or higher is recommended to use AI features due to RAM limitations.*
-  * *Note: Apple iPhone XX or higher is required for biometric authentication.*
 
 ---
 

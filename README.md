@@ -35,17 +35,28 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 
 ---
 
-## Key Features (Projected)
+## Key Features
 
-* **Automatic Sorting:** Developed *ScanSort,* an automated sorting system for uploaded imaging and radiology reports, classifying them by type of scan (modality) and anatomical region using a fine-tuned Convolutional Neural Network **(CNN)** and Natural Language Processing **(NLP)** Transformer.
-* **Imaging Viewer:** Built a comprehensive imaging viewer capable of displaying 2D (X-Rays) and 3D (MRI, CT) imaging slices with native support for the DICOM (.dcm) file format.
-  * **Comparison Tool:** Engineered a feature allowing for side-by-side observation of imaging studies to view changes over time.
-  * **Linked Scrolling:** Implemented a feature enabling CT scans with multiple planes to be viewed and navigated concurrently.
-  * **Longitudinal Image Registration:** Leveraged on-device AI to automatically and intelligently highlight changes in medical scans over time.
-* **Radiology Assistant:** Created *VoxeLLM,* an on-device Large Language Model **(LLM)** that simplifies complex radiology reports into patient-friendly language and allows for follow-up questions.
-  * **Report-to-Image Linking:** Harnessed AI to highlight and link to locations mentioned in the radiology report (e.g. "slice 42" or "upper right lobe").
-* **HIPAA-Compliant:** Established an architecture ensuring patient privacy by utilizing biometric authentication (Touch ID/Face ID) and on-device AI processing and file storage.
-* **User Friendly UI/UX:** Designed a patient-centric **UI/UX**, emphasizing intuitive navigation and a visually engaging, responsive interface consistent with Apple design language.
+### Clinical-Grade Imaging Viewer
+View X-rays, MRIs, and CT scans directly on your device.
+* **Versatile Viewing**: Easily open and view both medical DICOM files and standard image formats.
+* **Side-by-Side Comparison:** Open two different scans at once to see changes over time.
+* **Synchronized Scrolling:** Navigate through MRIs and CT scans smoothly across all angles to get a complete view.
+
+### Privacy-Focused Design
+Your sensitive health information never leaves your device.
+* **On-Device Storage:** All files and processing stay on your phone or computer, not in the cloud.
+* **Biometric Lock:** Secure your records with **Face ID** or **Touch ID** so only you can access them.
+
+### Smart Library Organization
+The app automatically categorizes and labels your medical files to eliminate manual sorting.
+* **Automatic Sorting:** Scans are instantly identified and grouped by body part and scan type.
+* **Fast Search:** Find specific results or dates in seconds using the built-in intelligent search.
+
+### VoxeLLM: Your Personal Health Assistant
+Understand your radiology reports without the medical jargon.
+* **Report Simplification:** Converts complex clinical language into plain, easy-to-understand English.
+* **Interactive Q&A:** Ask follow-up questions about your findings and get instant, clear explanations.
 
 ---
 

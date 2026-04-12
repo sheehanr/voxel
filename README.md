@@ -67,13 +67,10 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 **Goal:** Classify medical imaging files by modality and anatomical region with >95% accuracy, with graceful handling of unrecognized imaging.
 
 * **Base Model:** _____
-* **Training:** Transfer learning on 70,000+ imaging studies using PyTorch.
+* **Training:** Transfer learning on X+ imaging studies using PyTorch.
   * *Achieved a X% reduction in training time by using RTX 5080 (compared to _____).* 
 * **Data Balancing:** Undersampled large datasets at 5,000 images and applied weighted loss techniques to smaller datasets.
 * **Target Classes *(incomplete)*:** Classifies the following 19 specific clinical views:
-  * **CT:** Brain, Chest
-  * **MRI:** Brain, Knee, Spine
-  * **PET:** Full Body
   * **X-Ray:** Ankle, Chest, Elbow, Finger, Foot, Forearm, Hand, Hip, Humerus, Knee, Shoulder, Wrist, Other
 
 ### 2. VoxeLLM (Radiology Report Chatbot)
@@ -116,51 +113,6 @@ Voxel is my answer: a native iOS application designed to enable patients to acce
 ### 1. ScanSort (Automatic Sorting)
 
 To train the model for ScanSort, all imaging study datasets were sourced from [Kaggle](https://www.kaggle.com). 
-
-* **[Brain Stroke CT Dataset](https://www.kaggle.com/datasets/ozguraslank/brain-stroke-ct-dataset)** by Ozgur Aslan
-  * Used for: CT Brain
-  * Original Source: Republic of Türkiye Ministry of Health
-  * Citation: Koç U, Akçapınar Sezer E, Alper Özkaya Y, et al. Artificial intelligence in healthcare competition (TEKNOFEST-2021): Stroke data set. Eurasian J Med., 2022;54(3):248-258.
-  * License: Unknown
-
-* **[CT Medical Images](https://www.kaggle.com/datasets/kmader/siim-medical-images)** by K Scott Mader
-  * Used for: CT Chest
-  * Original Source: The Cancer Imaging Archive (TCIA)
-  * Citations: 
-    1. Albertina, B., Watson, M., Holback, C., Jarosz, R., Kirk, S., Lee, Y., … Lemmerman, J. (2016). Radiology Data from The Cancer Genome Atlas Lung Adenocarcinoma [TCGA-LUAD] collection. The Cancer Imaging Archive. http://doi.org/10.7937/K9/TCIA.2016.JGNIHEP5
-    2. Clark K, Vendt B, Smith K, Freymann J, Kirby J, Koppel P, Moore S, Phillips S, Maffitt D, Pringle M, Tarbox L, Prior F. The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository, Journal of Digital Imaging, Volume 26, Number 6, December, 2013, pp 1045-1057. (paper)
-  * License: [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
-
-* **[Chest CT-Scan images Dataset](https://www.kaggle.com/datasets/mohamedhanyyy/chest-ctscan-images)** by Mohamed Hany
-  * Used for: CT Chest
-  * Original Source: Unknown
-  * License: [ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/)
-  
-* **[IQ-OTH/NCCD - Lung Cancer Dataset](https://www.kaggle.com/datasets/adityamahimkar/iqothnccd-lung-cancer-dataset)** by Aditya Mahimkar
-  * Used for: CT Chest
-  * Original Source: Mendeley Data
-  * Citation: Alyasriy, Hamdalla; AL-Huseiny, Muayed (2021), “The IQ-OTHNCCD lung cancer dataset”, Mendeley Data, V2, doi: [10.17632/bhmdr45bh2.2](https://data.mendeley.com/datasets/bhmdr45bh2/2)
-  * License: Copyright Original Authors
-
-* **[Brain Tumor MRI Dataset](https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset)** by Masoud Nickparvar
-  * Used for: MRI Brain
-  * Original Sources: 
-    1. [Figshare](https://figshare.com/articles/dataset/brain_tumor_dataset/1512427)
-    2. [Brain Tumor Classification (MRI)](https://www.kaggle.com/sartajbhuvaji/brain-tumor-classification-mri/metadata) by Sartaj on Kaggle
-    2. [Br35H :: Brain Tumor Detection 2020](https://www.kaggle.com/datasets/ahmedhamada0/brain-tumor-detection/metadata) by Ahmed Hamada on Kaggle
-  * License: [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/)
-
-* **[MRNet v1](https://www.kaggle.com/datasets/cjinny/mrnet-v1)** by Jincui
-  * Used for: MRI Knee
-  * Original Source: Stanford Center for Artificial Intelligence in Medicine & Imaging (AIMI)
-  * Citation: [MRNet: Knee MRI's](https://doi.org/10.71718/rcbp-8c35)
-  * License: Unknown
-
-* **[RSNA 2024 Lumbar Spine Degenerative Classification](https://www.kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification)** by Radiological Society of North America
-  * Used for: MRI Spine
-  * Original Source: Radiological Society of North America (RSNA)
-  * Citation: Tyler Richards, Jason Talbott, Robyn Ball, Errol Colak, Adam Flanders, Felipe Kitamura, John Mongan, Luciano Prevedello, and Maryam Vazirabad.. RSNA 2024 Lumbar Spine Degenerative Classification. https://kaggle.com/competitions/rsna-2024-lumbar-spine-degenerative-classification, 2024. Kaggle.
-  * License: Unknown
 
 * **[NIH Chest X-rays](https://www.kaggle.com/datasets/nih-chest-xrays/data)** by National Institutes of Health Chest X-Ray Dataset
   * Used for: X-Ray Chest

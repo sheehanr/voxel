@@ -12,6 +12,8 @@ dependencies = [
     "pillow",
     "pydicom",
     "tqdm",
+    "torch",
+    "torchvision",
 ]
 
 [tool.setuptools.packages.find]

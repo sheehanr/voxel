@@ -1,7 +1,16 @@
+from pathlib import Path
+
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
+TRAIN_DIR = DATA_DIR / "train"
+VAL_DIR = DATA_DIR / "val"
+
+CROP_SIZE = 224  # preprocessing scripts made images 256x256
+BATCH_SIZE = 32
 
 
 def setup_data(crop_size, train_dir, val_dir, batch_size):

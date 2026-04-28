@@ -1,14 +1,30 @@
 import torch
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
+
+
+
+def setup_data(crop_size, train_dir, val_dir, batch_size):
+    data_transforms = {
+        "train": transforms.Compose([transforms.RandomCrop(crop_size), transforms.ToTensor()]),
+        "val": transforms.Compose([transforms.CenterCrop(crop_size), transforms.ToTensor()]),
+    }
+
+    image_datasets = {
+        "train": datasets.ImageFolder(train_dir, data_transforms["train"]),
+        "val": datasets.ImageFolder(val_dir, data_transforms["val"]),
+    }
+
+    dataloaders = {
+        "train": DataLoader(image_datasets["train"], batch_size=batch_size, shuffle=True),
+        "val": DataLoader(image_datasets["val"], batch_size=batch_size, shuffle=False),
+    }
+
+    return image_datasets, dataloaders
 
 
 def main():
-    print(f"PyTorch version: {torch.__version__}")
-
-    if torch.cuda.is_available():
-        device_name = torch.cuda.get_device_name(0)
-        print(f"Successfully connected to: {device_name}")
-    else:
-        print("CUDA not found. PyTorch is using the CPU.")
+    setup_data(CROP_SIZE, TRAIN_DIR, VAL_DIR, BATCH_SIZE)
 
 
 if __name__ == "__main__":

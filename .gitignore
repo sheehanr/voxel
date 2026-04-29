@@ -6,5 +6,9 @@ venv/
 __pycache__/
 *.egg-info/
 
+# pytorch
+*.pth
+*.pt
+
 # OS
 .DS_Store

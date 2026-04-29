@@ -1,7 +1,9 @@
 from pathlib import Path
 
+import numpy as np
 import torch
 import torch.nn as nn
+import torch.optim as optim
 from torch.utils.data import DataLoader
 from torchvision import datasets, models, transforms
 
@@ -43,6 +45,24 @@ def setup_model(num_classes, device):
     model = model.to(device)
 
     return model
+
+
+def setup_loss_and_optimizer(model, image_datasets, device):
+    train_targets = image_datasets["train"].targets
+    class_counts = np.bincount(train_targets)
+
+    # increased weights for classes with less images
+    total_samples = len(train_targets)
+    num_classes = len(class_counts)
+    class_weights = total_samples / (num_classes * class_counts)
+
+    class_weights = torch.tensor(class_weights, dtype=torch.float).to(device)
+
+    criterion = nn.CrossEntropyLoss(weight=class_weights)
+
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    return criterion, optimizer
 
 
 def main():

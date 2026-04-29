@@ -1,8 +1,9 @@
 from pathlib import Path
 
 import torch
+import torch.nn as nn
 from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
+from torchvision import datasets, models, transforms
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DATA_DIR = (SCRIPT_DIR / "../../data").resolve()
@@ -30,6 +31,14 @@ def setup_data(crop_size, train_dir, val_dir, batch_size):
     }
 
     return image_datasets, dataloaders
+
+
+def setup_model(num_classes, device):
+    model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)  # using resnet18
+    in_features = model.fc.in_features
+    model.fc = nn.Linear(in_features, num_classes)
+
+    model = model.to(device)
 
 
 def main():

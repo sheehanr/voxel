@@ -43,7 +43,7 @@ def load_model(wts_path, device, classes):
     num_features = model.fc.in_features
     model.fc = nn.Linear(num_features, len(classes))
 
-    model.load_state_dict(torch.load(wts_path, map_loaction=device, weights_only=True))
+    model.load_state_dict(torch.load(wts_path, map_location=device, weights_only=True))
     model = model.to(device)
     model.eval()
     return model

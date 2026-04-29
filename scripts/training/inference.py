@@ -90,7 +90,17 @@ def pick_random_img(data_dir):
 
 
 def main():
-    pass
+    model = load_model(WTS_PATH, DEVICE, CLASSES)
+
+    if len(sys.argv) > 1:
+        img_path = Path(sys.argv[1])
+    else:
+        img_path = pick_random_img(DATA_DIR)
+
+    if img_path and img_path.exists():
+        predict(img_path, model, DEVICE, OG_SIZE, CROP_SIZE, CLASSES)
+    else:
+        print(f"ERROR: Unable to locate the image at path {img_path}")
 
 
 if __name__ == "__main__":

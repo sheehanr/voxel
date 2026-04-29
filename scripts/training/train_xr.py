@@ -40,6 +40,8 @@ def setup_model(num_classes, device):
 
     model = model.to(device)
 
+    return model
+
 
 def main():
     setup_data(CROP_SIZE, TRAIN_DIR, VAL_DIR, BATCH_SIZE)

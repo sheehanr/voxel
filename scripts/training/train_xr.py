@@ -77,7 +77,7 @@ def train_model(model, dataloaders, image_datasets, criterion, optimizer, device
     best_wts = copy.deepcopy(model.state_dict())
 
     for epoch in range(num_epochs):
-        print(f"Epoch {epoch + 1}/{num_epochs}")
+        print(f"\nEpoch {epoch + 1}/{num_epochs}")
         print("-" * 11)
 
         for phase in ["train", "val"]:
@@ -120,7 +120,7 @@ def train_model(model, dataloaders, image_datasets, criterion, optimizer, device
 
                 torch.save(model.state_dict(), "best_acc_model.pth")
 
-    print(f"Training complete. Best accuracy: {best_acc:.4f}")
+    print(f"\nTraining complete. Best accuracy: {best_acc:.4f}")
 
     model.load_state_dict(best_wts)
     return model

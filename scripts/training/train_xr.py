@@ -13,6 +13,8 @@ VAL_DIR = DATA_DIR / "val"
 CROP_SIZE = 224  # preprocessing scripts made images 256x256
 BATCH_SIZE = 32
 
+DEVICE = torch.device("cuda")
+
 
 def setup_data(crop_size, train_dir, val_dir, batch_size):
     data_transforms = {
@@ -44,7 +46,13 @@ def setup_model(num_classes, device):
 
 
 def main():
-    setup_data(CROP_SIZE, TRAIN_DIR, VAL_DIR, BATCH_SIZE)
+    print(f"using {DEVICE}")
+    image_datasets, dataloaders = setup_data(CROP_SIZE, TRAIN_DIR, VAL_DIR, BATCH_SIZE)
+    class_names = image_datasets["train"].classes
+    num_classes = len(class_names)
+
+    model = setup_model(num_classes, DEVICE)
+    print(f"model ported to {DEVICE}")
 
 
 if __name__ == "__main__":

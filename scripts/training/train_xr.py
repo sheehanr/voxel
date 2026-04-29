@@ -66,13 +66,11 @@ def setup_loss_and_optimizer(model, image_datasets, device):
 
 
 def main():
-    print(f"using {DEVICE}")
     image_datasets, dataloaders = setup_data(CROP_SIZE, TRAIN_DIR, VAL_DIR, BATCH_SIZE)
     class_names = image_datasets["train"].classes
     num_classes = len(class_names)
-
     model = setup_model(num_classes, DEVICE)
-    print(f"model ported to {DEVICE}")
+    criterion, optimizer = setup_loss_and_optimizer(model, image_datasets, DEVICE)
 
 
 if __name__ == "__main__":

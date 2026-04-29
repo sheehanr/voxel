@@ -33,8 +33,8 @@ def setup_data(crop_size, train_dir, val_dir, batch_size):
     }
 
     dataloaders = {
-        "train": DataLoader(image_datasets["train"], batch_size=batch_size, shuffle=True),
-        "val": DataLoader(image_datasets["val"], batch_size=batch_size, shuffle=False),
+        "train": DataLoader(image_datasets["train"], batch_size=batch_size, shuffle=True, num_workers=8, pin_memory=True),
+        "val": DataLoader(image_datasets["val"], batch_size=batch_size, shuffle=False, num_workers=8, pin_memory=True),
     }
 
     return image_datasets, dataloaders
